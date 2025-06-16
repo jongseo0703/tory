@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
@@ -12,19 +13,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.sinse.tory.db.common.config.Config;
+
 public class ProudctShip extends JPanel{
-	JButton[]bt;
-	JComboBox[] box;
-	JLabel[]la;
+	JButton[]bt = new JButton[4];
+	JComboBox[] box = new JComboBox[3];
+	JLabel[]la = new JLabel[4];
 	JTextField t_count;
 	JPanel p_img;
 	public ProudctShip() {
-		bt = new JButton[4];
-		box = new JComboBox[3];
-		la = new JLabel[4];
+		bt = new JButton[4]; // 버튼 4개 생성
+		box = new JComboBox[3]; // 콤버박스 3개
+		la = new JLabel[4]; // 라벨 4개
 		t_count = new JTextField();
 		p_img = new JPanel();
 		
+		// 각각 하나씩 자동 생성
 		for(int i=0; i<bt.length;i++) {
 			bt[i] = new JButton();
 		}
@@ -36,7 +40,7 @@ public class ProudctShip extends JPanel{
 		}
 		
 		
-		bt[0].setText("상품정보 수정");
+		bt[0].setText("상품정보 수정"); 
 		bt[1].setText("상품추가");
 		bt[2].setText("출고");
 		bt[3].setText("입고");
@@ -47,27 +51,58 @@ public class ProudctShip extends JPanel{
 		la[3].setText("수량");
 		
 		setLayout(null);
+		
+		// 상위케테고리, 하위 카테고리, 상품명과 3개의 콤보박스의 위치 설정
 		for(int i=0; i<box.length;i++) {
-			la[i].setBounds(350,50+75*i,320,40);
-			box[i].setBounds(350,90+i*70,320,40);
+			la[i].setFont(new Font(null, 3, 15)); // 라벨은 폰트 설정
+			la[i].setBounds(Config.Ship_Main_Width-320,70+85*i,320,40); // 라벨의 위치
+			box[i].setBounds(Config.Ship_Main_Width-320,110+i*80,320,40); // 콤버박스의 위치
 		}
-		la[3].setBounds(ALLBITS, ABORT, WIDTH, HEIGHT);
 		
-		p_img.setBounds(10,50,317,257);
-		p_img.setBackground(Color.cyan);
+		// 수량 라벨과 텍스트박스 위치 설정
+		la[3].setBounds(10, 340, 320, 40);
+		t_count.setBounds(10, 370, 660, 40);
+		
+		// 이미지 패넬 위치와 크기 설정
+		p_img.setBounds(10,80,317,257);
+		p_img.setBackground(Color.lightGray);
+		
+		// 버튼의 폰트 설정
+		for(int i=0; i<bt.length;i++) {
+			bt[i].setFont(new Font(null, 3, 15));
+		}
+		
+		// 버튼들의 위치과 크기 설정
+		bt[0].setBounds(380, 40, 150, 30); // 상품정보 수정
+		bt[1].setBounds(380+160, 40, 116, 30); // 상품 추가
+		bt[2].setBounds(10, 450, 322, 40); // 출고
+		bt[3].setBounds(10+330, 450, 322, 40); //입고
+		
+		// 배경색 설정
+		Color EE = Color.decode("#E5E5E5"); // 엉청 밝은 회색
+		bt[0].setBackground(EE); // 상품정보 수정버튼
+		for(int i =2; i<bt.length;i++) {
+			bt[i].setBackground(EE); // 출고, 입고 버튼
+		}
+		Color EF = Color.decode("#75A5FD"); // 밝은 파랑
+		bt[1].setBackground(EF); // 상품추가 버튼
 		
 		
-		
-		add(bt[0]);
-		add(bt[1]);
-		add(p_img);
+		// 조립
+		add(bt[0]); // 상품정보 수정 버튼
+		add(bt[1]); // 상풍 추가 버튼
+		add(p_img); // 이미지 패널
 		for(int i=0; i<box.length;i++) {
-			add(la[i]);
-			add(box[i]);
+			add(la[i]);// 상위, 하위카테고리, 상품명 라벨
+			add(box[i]);// 상위, 하위카테고리, 상품명 콤버박스
 		}
+		add(la[3]); // 수량 라벨
+		add(t_count); // 수량 적을 텍스트박스
+		add(bt[2]); //출곱 버튼
+		add(bt[3]); // 입구 버튼
 		
 		setBackground(Color.white);
-		setPreferredSize(new Dimension(668,581));
+		setPreferredSize(new Dimension(Config.Ship_Main_Width,Config.Ship_Main_Height)); // config에 들어있는 사이즈
 	}
 
 }

@@ -23,4 +23,9 @@ public class Config {
 			Product_ID+","+Product_Name+","+Product_Price+","+Product_Coclor+Product_Size+
 			","+Product_Space+","+Product_Brand+Product_Img+","+Product_InputDate+","+Product_Detail;
 	
+	
+	// ProductShip 페이지 사이즈
+	public static final int Ship_Main_Width = 668; 
+	public static final int Ship_Main_Height = 581; 
+	
 }
