@@ -1,4 +1,4 @@
-package com.sinse.tory.common.util;
+package com.sinse.tory.db.common.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -95,7 +95,7 @@ public class DatabaseHelper {
 		PreparedStatement pstmt = null;
 		con = dbManager.getConection();
 		StringBuilder sql = new StringBuilder();
-		sql.append("update "+table+" set " + "val"+ "="+reval +" where =" +id);
+		sql.append("update "+table+" set " + val+ "="+reval +" where id =" +id);
 		try {
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.executeUpdate();

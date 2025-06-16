@@ -1,4 +1,4 @@
-package com.sinse.tory.common.config;
+package com.sinse.tory.db.common.config;
 
 public class Config {
 	public static final String url ="jdbc:mysql://localhost:3306/tory"; 

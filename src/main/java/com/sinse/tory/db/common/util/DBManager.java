@@ -1,4 +1,4 @@
-package com.sinse.tory.common.util;
+package com.sinse.tory.db.common.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.sinse.tory.common.config.Config;
+import com.sinse.tory.db.common.config.Config;
 
 public class DBManager {
 	private static DBManager instance;
