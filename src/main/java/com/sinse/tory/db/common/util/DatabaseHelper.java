@@ -15,9 +15,10 @@ public class DatabaseHelper {
 		ResultSet rs =null;
 		con = dbManager.getConection();
 		StringBuilder sql = new StringBuilder();
-		sql.append("select *from "+ table); // 상품이 들어있는 테이블 전체 보기
+		sql.append("select *from ?"); // 상품이 들어있는 테이블 전체 보기
 		try {
 			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, table);
 			rs= pstmt.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -34,9 +35,12 @@ public class DatabaseHelper {
 			ResultSet rs = null;
 			con = dbManager.getConection();
 			StringBuilder sql = new StringBuilder();
-			sql.append("select *from "+table+" where "+val1+" ="+val2);
+			sql.append("select *from ? where ? =?");
 			try {
 				pstmt = con.prepareStatement(sql.toString());
+				pstmt.setString(1, table);
+				pstmt.setString(2, val1);
+				pstmt.setString(3, val2);
 				rs = pstmt.executeQuery();
 				
 			} catch (SQLException e) {
@@ -59,10 +63,11 @@ public class DatabaseHelper {
 			mark.append(",?");
 		}
 		StringBuilder sql = new StringBuilder();
-		sql.append("insert into "+table+"("+colum+") values("+mark+")");
+		sql.append("insert into ?(?) values("+mark+")");
 		try {
 			pstmt = con.prepareStatement(sql.toString());
-			for(int i=1;i <=n; i++) {
+			pstmt.setString(1, table);
+			for(int i=2;i <=n; i++) {
 				pstmt.setString(i, null); // ?안에 넣을 값들 
 									      // null 자리에 list를 넣어 자동으로 들어가게 할 계획
 			}
@@ -80,9 +85,11 @@ public class DatabaseHelper {
 		PreparedStatement pstmt = null;
 		con = dbManager.getConection();
 		StringBuilder sql = new StringBuilder();
-		sql.append("delete from "+table+"where id ="+ id);
+		sql.append("delete from ? where id = ?");
 		try {
 			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, table);
+			pstmt.setString(2, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -95,9 +102,13 @@ public class DatabaseHelper {
 		PreparedStatement pstmt = null;
 		con = dbManager.getConection();
 		StringBuilder sql = new StringBuilder();
-		sql.append("update "+table+" set " + val+ "="+reval +" where id =" +id);
+		sql.append("update ? set ?=? where id = ?");
 		try {
 			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, table);
+			pstmt.setString(2, val);
+			pstmt.setString(3, reval);
+			pstmt.setString(4, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
