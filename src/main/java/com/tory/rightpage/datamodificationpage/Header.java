@@ -42,7 +42,6 @@ public final class Header extends JPanel
 		//
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(0, MARGIN, 0, MARGIN));
-		setBackground(Color.white);
 		add(backButton, BorderLayout.WEST);
 		add(rightPanel, BorderLayout.EAST);
 		
@@ -60,10 +59,9 @@ public final class Header extends JPanel
 		deleteButton.setBorder(Page.EMPTY_BORDER);
 		deleteButton.setPreferredSize(new Dimension(111, HEADER_HEIGHT));
 		deleteButton.setMaximumSize(new Dimension(111, HEADER_HEIGHT));
-		deleteButton.setBorder(getBorder());
 		
 		saveButton.setBorder(Page.EMPTY_BORDER);
 		saveButton.setPreferredSize(new Dimension(98, HEADER_HEIGHT));
 		saveButton.setMaximumSize(new Dimension(98, HEADER_HEIGHT));
-	}	
+	}
 }

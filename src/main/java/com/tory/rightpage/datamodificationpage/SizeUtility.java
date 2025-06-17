@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 public final class SizeUtility
 {
-	public static <T extends JPanel> int getHugSize(T panel)
+	public static <T extends JPanel> int getHugHeight(T panel)
 	{
 		int size = 0;
 		

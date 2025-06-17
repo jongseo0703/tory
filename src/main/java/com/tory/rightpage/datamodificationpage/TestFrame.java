@@ -14,13 +14,14 @@ final class TestFrame extends JFrame
 	private TestFrame()
 	{
 		JPanel leftPage = new JPanel();
+		Page rightPage = new Page();
 		
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(new Dimension(1440, 810));
 		setLayout(new GridLayout(1, 2));
 		add(leftPage);
-		add(new Page());
+		add(rightPage);
 	}
 	
 	
