@@ -29,7 +29,7 @@ public final class Header extends JPanel
 	
 	
 	
-	public Header()
+	public Header(int parentWidth, int parentMargin)
 	{
 		backButton = new JButton("<");
 		rightPanel = new JPanel();
@@ -37,8 +37,8 @@ public final class Header extends JPanel
 		saveButton = new JButton("저장");
 
 		// 크기 직접 조정 
-		setPreferredSize(new Dimension(Page.WIDTH - (2 * Page.HORIZONTAL_MARGIN), HEADER_HEIGHT));
-		setMaximumSize(new Dimension(Page.WIDTH - (2 * Page.HORIZONTAL_MARGIN), HEADER_HEIGHT));
+		setPreferredSize(new Dimension(parentWidth - (2 * parentMargin), HEADER_HEIGHT));
+		setMaximumSize(new Dimension(parentWidth - (2 * parentMargin), HEADER_HEIGHT));
 		//
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(0, MARGIN, 0, MARGIN));

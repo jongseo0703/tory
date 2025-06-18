@@ -3,20 +3,23 @@ package com.tory.rightpage.datamodificationpage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 // 헤더 구역 외 나머지. 
 public final class Content extends JPanel
 {
 	private JPanel simpleDataPanel;	
 	private ImageUploadPanel imageUploadPanel;
-	private JPanel identificationDataPanel;
+	private IdentificationPanel identificationPanel;
 	
-	private JPanel detailDataPanel;
+	private DetailDataTable detailDataTable;
 	
 	private static final int HORIZONTAL_MARGIN = 12;
 	
@@ -26,22 +29,19 @@ public final class Content extends JPanel
 	{
 		simpleDataPanel = new JPanel();
 		imageUploadPanel = new ImageUploadPanel();
-		identificationDataPanel = new JPanel();
-		detailDataPanel = new JPanel();
+		identificationPanel = new IdentificationPanel();
+		detailDataTable = new DetailDataTable();
 		
 		setBackground(Color.white);
 		setBorder(BorderFactory.createEmptyBorder(0, HORIZONTAL_MARGIN, 0, HORIZONTAL_MARGIN));
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new GridLayout(2, 1, 0, 16));
 		
 		add(simpleDataPanel);
-		add(detailDataPanel);
+		add(detailDataTable);
 		
-		simpleDataPanel.setLayout(new BoxLayout(simpleDataPanel, BoxLayout.X_AXIS));
+		simpleDataPanel.setLayout(new GridLayout(1, 2, 16, 0));
 		simpleDataPanel.setBackground(Color.red);
 		simpleDataPanel.add(imageUploadPanel);
-		simpleDataPanel.add(Box.createRigidArea(new Dimension(16, 0)));
-		simpleDataPanel.add(identificationDataPanel);
-		
-		detailDataPanel.setBackground(Color.blue);
+		simpleDataPanel.add(identificationPanel);
 	}
 }

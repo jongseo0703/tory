@@ -33,7 +33,7 @@ public final class Page extends JPanel
 	
 	public Page()
 	{
-		header = new Header();
+		header = new Header(WIDTH, HORIZONTAL_MARGIN);
 		content = new Content();
 		
 		setBackground(Color.gray);
