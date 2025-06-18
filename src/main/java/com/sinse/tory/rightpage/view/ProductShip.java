@@ -8,7 +8,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import com.sinse.tory.db.common.config.Config;
 
 public class ProductShip extends JPanel{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
@@ -109,7 +108,7 @@ public class ProductShip extends JPanel{
 		add(p_center);
 		
 		setBackground(Color.white);
-		setPreferredSize(new Dimension(Config.Ship_Main_Width,Config.Ship_Main_Height));//config에 들어있는 사이즈
+		setPreferredSize(new Dimension(null));//config에 들어있는 사이즈
 	}
 
 }
