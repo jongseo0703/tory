@@ -1,17 +1,12 @@
 package com.tory.rightpage.datamodificationpage;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Insets;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 // 뒤로 가기 버튼, 삭제 버튼 등이 있는 구역
 public final class Header extends JPanel
@@ -36,10 +31,9 @@ public final class Header extends JPanel
 		deleteButton = new JButton("삭제");
 		saveButton = new JButton("저장");
 
-		// 크기 직접 조정 
-		setPreferredSize(new Dimension(parentWidth - (2 * parentMargin), HEADER_HEIGHT));
-		setMaximumSize(new Dimension(parentWidth - (2 * parentMargin), HEADER_HEIGHT));
-		//
+		setPreferredSize(new Dimension(Integer.MAX_VALUE, HEADER_HEIGHT));
+		setMaximumSize(new Dimension(Integer.MAX_VALUE, HEADER_HEIGHT));
+		
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(0, MARGIN, 0, MARGIN));
 		add(backButton, BorderLayout.WEST);
