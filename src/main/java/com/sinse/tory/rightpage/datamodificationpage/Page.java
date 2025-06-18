@@ -36,7 +36,6 @@ public final class Page extends JPanel
 		header = new Header(WIDTH, HORIZONTAL_MARGIN);
 		content = new Content();
 		
-		setBackground(Color.gray);
 		setBorder(BorderFactory.createEmptyBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(header);

@@ -22,6 +22,8 @@ final class TestFrame extends JFrame
 		setLayout(new GridLayout(1, 2));
 		add(leftPage);
 		add(rightPage);
+		
+		leftPage.setBackground(Color.gray);
 	}
 	
 	
