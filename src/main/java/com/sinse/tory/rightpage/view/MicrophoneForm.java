@@ -3,48 +3,38 @@ package com.sinse.tory.rightpage.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Label;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.security.acl.Owner;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 
-import com.sinse.tory.db.common.config.Config;
-
 public class MicrophoneForm extends JPanel{
 	JButton bt;//마이크가 있는 버튼
-	JLabel la_explain;
+	JLabel la_explain;// 설명문이 들어있는 라벨
 	JPanel p_helper;// 도우미창을 활설화 시킬 라벨
-	JWindow d_helper;
-	JWindow w_mic;
-	JTextArea area;
-	
+	JWindow d_helper; // 설명라벨이 부착되에 있는 곳
+	JWindow w_mic;// 버튼을 누르면 나오는 곳
+	JTextArea area;// 음성이식해서 출력될 곳
+	boolean fig = false;
 	public MicrophoneForm() {
 		bt = new JButton() {
 			@Override
@@ -64,7 +54,7 @@ public class MicrophoneForm extends JPanel{
 					g.drawImage(img, 0, 0, 96, 96, this);
 				}
 			};
-		
+		//설명문이 부착될 패널
 		p_helper = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -108,31 +98,39 @@ public class MicrophoneForm extends JPanel{
 		Color ff = Color.decode("#F4F5F6");
 		setBackground(ff);
 		
-		w_mic = new JWindow();
+		//JWindow에 부착한 텍스트에리가 인식할려면 주인인 Frame이 필요하다
+		Frame dummyOwner = new Frame();
+		dummyOwner.setUndecorated(true);
+		dummyOwner.setSize(0, 0);
+		dummyOwner.setLocationRelativeTo(null);
+		dummyOwner.setVisible(true);
+		
+		w_mic = new JWindow(dummyOwner);
 		area = new JTextArea();
 		w_mic.setLayout(new BorderLayout());
-		area.setPreferredSize(new Dimension(getPreferredSize().getSize().width+30,getPreferredSize().getSize().height));
+		area.setPreferredSize(new Dimension(getPreferredSize().getSize().width+30,100));//텍스트에리아 넓이 설정
 		w_mic.setFocusableWindowState(true);
 		area.setBackground(ff);
-		w_mic.add(new JScrollPane(area), BorderLayout.CENTER);
-		area.setLineWrap(true);
-		area.setWrapStyleWord(true);
-		w_mic.pack();
-		
+		w_mic.add(area, BorderLayout.CENTER);
+		w_mic.pack(); // 크기 자동 조절
 		
 		//이벤트 부여
 		//버튼을 클릭하면 버튼이 있는 패널의 높이가 커진다
 		bt.addActionListener(e->{
-//			follow(w_mic,p_helper, -380, 30);
-//			w_mic.setVisible(true);
 			Window parentWindow = SwingUtilities.getWindowAncestor(MicrophoneForm.this);
 			w_mic.setFocusableWindowState(true);
 			w_mic.setFocusable(true);
-			
 			    // 처음 위치 설정
 			follow(w_mic, p_helper, -380, 30);
-			w_mic.setVisible(true);
-			area.requestFocusInWindow(); // 또는 area.requestFocus();
+			if(fig != true) {
+				fig = true;
+				w_mic.setVisible(fig);
+			}
+			else {
+				fig = false;
+				w_mic.setVisible(fig);
+			}
+			SwingUtilities.invokeLater(() -> area.requestFocusInWindow());
 			
 			if (parentWindow != null) {
 			    // 창이 움직일 때마다 팝업 위치 갱신
@@ -147,7 +145,10 @@ public class MicrophoneForm extends JPanel{
 			        }
 			    });
 			}
+			
 		});
+		
+		
 		
 		//물음표그림에 마우스이밴트 연결
 		p_helper.addMouseListener(new MouseAdapter() {
