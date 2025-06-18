@@ -1,4 +1,4 @@
-package com.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodificationpage;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

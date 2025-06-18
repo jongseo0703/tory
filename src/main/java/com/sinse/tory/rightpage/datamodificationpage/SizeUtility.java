@@ -1,4 +1,4 @@
-package com.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodificationpage;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

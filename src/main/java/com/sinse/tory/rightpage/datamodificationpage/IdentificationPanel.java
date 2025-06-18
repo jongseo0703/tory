@@ -1,4 +1,4 @@
-package com.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodificationpage;
 
 import java.awt.Color;
 import java.awt.Component;
