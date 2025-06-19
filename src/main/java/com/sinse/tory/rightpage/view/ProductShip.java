@@ -1,13 +1,25 @@
 package com.sinse.tory.rightpage.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Insets;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+import com.sinse.tory.db.common.util.PageUtil;
 
 public class ProductShip extends JPanel{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
@@ -15,11 +27,22 @@ public class ProductShip extends JPanel{
 	JLabel[]la = new JLabel[4];//라벨 4개
 	JTextField t_count;
 	JPanel p_img;
-	JPanel p_center;
+	JPanel p_form; // 상위카테고리,하위카테고리,상품명이 부착될 곳
+	JPanel[]location = new JPanel[3];
 	public ProductShip() {
 		t_count = new JTextField();
 		p_img = new JPanel();
-		p_center = new JPanel(); //라벨, 버튼, 텍스트박스, 콤보박스가 들어있는 패널
+		p_form = new JPanel();
+		int width = getPreferredSize().getSize().width;//현 패널의 가로넓비
+		/*
+		 * 패널[0]= 상품정보 수정과 추가 버튼
+		 * 패널[1]= 이미지 패널과 폼 패널의 들어갈곳
+		 * 패널[2]= 수량 라벨,텍스트박스, 입고 및 출고 버튼 2개
+		 * */
+		for(int i=0;i<location.length;i++) {
+			location[i] = new JPanel();
+			location[i].setBackground(null);
+		}
 		
 		// 각각 하나씩 자동 생성
 		for(int i=0; i<bt.length;i++) {
@@ -27,11 +50,13 @@ public class ProductShip extends JPanel{
 		}
 		for(int i=0; i<la.length;i++) {
 			la[i] = new JLabel();
+			la[i].setFont(new Font(null, 3, 15)); // 라벨은 폰트 설정
+			
 		}
+		
 		for(int i=0; i<box.length;i++) {
 			box[i] = new JComboBox();
 		}
-		
 		
 		bt[0].setText("상품정보 수정"); 
 		bt[1].setText("상품추가");
@@ -41,27 +66,29 @@ public class ProductShip extends JPanel{
 		la[0].setText("상위카테고리");
 		la[1].setText("하위카테고리");
 		la[2].setText("상품명");
-		la[3].setText("수량");
+		la[3].setText("수량 ");
 		
-		setLayout(null);
+		// 패널들의 크기
+		location[0].setPreferredSize(new Dimension(width,40));
+		location[1].setPreferredSize(new Dimension(width,260));
+		location[2].setPreferredSize(new Dimension(width,260));
 		
-		p_center.setLayout(null);
-		p_center.setBounds(10,80,680,510); //위치조정
-		
-		//상위 카테고리, 하위 카테고리, 상품명인  3개의 콤보박스와 라벨의 위치 설정
+		//상위 카테고리, 하위 카테고리, 상품명인  3개의 콤보박스와 라벨의 크기
+		Dimension d = new Dimension(600,40);
 		for(int i=0; i<box.length;i++) {
-			la[i].setFont(new Font(null, 3, 15)); // 라벨은 폰트 설정
-			la[i].setBounds(p_center.getPreferredSize().getSize().width-330,0+85*i,320,40); //라벨의 위치
-			box[i].setBounds(p_center.getPreferredSize().getSize().width-330,35+i*85,320,40); //콤보박스의 위치
+			la[i].setPreferredSize(d); //라벨의 위치
+			la[i].setMaximumSize(d); //라벨의 위치
+			box[i].setPreferredSize(d); //콤보박스의 위치
+			box[i].setMaximumSize(d);
 		}
-		la[3].setFont(new Font(null, 3, 15));
+	
 		
-		//수량 라벨과 텍스트박스 위치 설정
-		la[3].setBounds(10, 260, 320, 40);
-		t_count.setBounds(10, 290, 660, 40);
+		//수량 라벨과 텍스트박스 크기 설정
+		la[3].setPreferredSize(new Dimension(800,40));
+		t_count.setPreferredSize(new Dimension(800,80));
+		t_count.setMaximumSize(new Dimension(800,80));
 		
-		//이미지 패널의 위치와 크기 설정
-		p_img.setBounds(0,0,317,257);
+		//이미지 패널의 예비용 배경색
 		p_img.setBackground(Color.lightGray);
 		
 		//버튼의 폰트 설정
@@ -69,11 +96,15 @@ public class ProductShip extends JPanel{
 			bt[i].setFont(new Font(null, 3, 15));
 		}
 		
-		//버튼들의 위치와 크기 설정
-		bt[0].setBounds(380, 40, 150, 30); //상품정보 수정
-		bt[1].setBounds(380+160, 40, 116, 30); //상품 추가
-		bt[2].setBounds(10, 450, 322, 40); //출고
-		bt[3].setBounds(10+330, 450, 322, 40);//입고
+		//버튼들의 크기 설정
+		bt[0].setPreferredSize(new Dimension(150,30));//상품정보 수정
+		bt[1].setPreferredSize(new Dimension(150,30));//상품 추가
+		
+		Dimension d2 = new Dimension(350, 40);
+		bt[2].setPreferredSize(d2);//출고
+		bt[2].setMaximumSize(d2);
+		bt[3].setPreferredSize(d2);//입고
+		bt[3].setMaximumSize(d2);
 		
 		//배경색 설정
 		Color EE = Color.decode("#E5E5E5");
@@ -83,7 +114,7 @@ public class ProductShip extends JPanel{
 		}
 		Color EF = Color.decode("#75A5FD");
 		bt[1].setBackground(EF);//상품추가 버튼
-		p_center.setBackground(null);//색경색 제거
+		p_form.setBackground(null);
 		
 		//비활성화 기능
 		//상위카테고리의 값이 정해지기 전까지만 비활성화
@@ -94,21 +125,56 @@ public class ProductShip extends JPanel{
 		
 		
 		//조립
-		add(bt[0]);//상품정보 수정 버튼
-		add(bt[1]);//상품 추가 버튼
-		p_center.add(p_img);//이미지 패널
-		for(int i=0; i<box.length;i++) {
-			p_center.add(la[i]);// 상위카테고리, 하위카테고리, 상품명 라벨
-			p_center.add(box[i]);// 상위카테고리, 하위카테고리, 상품명 콤보박스
+		//location[0]의 안의 상품정보 수정 버튼과 상품추가 버튼 위치 설정
+		 location[0].setLayout(new BoxLayout(location[0], BoxLayout.X_AXIS));
+		 location[0].add(Box.createHorizontalGlue());//오른쪽으로 정렬
+		 location[0].add(bt[0]);
+		 location[0].add(Box.createRigidArea(new Dimension(10,0)));
+		 location[0].add(bt[1]);
+		 location[0].add(Box.createRigidArea(new Dimension(20,0)));
+		 
+		 //location[1]의 이미지 패널의 위치와 폼 패널의 위치 설정
+		 location[1].setLayout(new GridLayout(1,2));
+		 location[1].setBorder(new EmptyBorder(0,10,0,0));
+		 p_form.setLayout(new BoxLayout(p_form, BoxLayout.Y_AXIS));
+		 p_form.setBorder(new EmptyBorder(10,10,10,10));
+		 for(int i=0;i<box.length;i++) {
+			 p_form.add(la[i]);
+			 p_form.add(box[i]);
+			 
+			 la[i].setAlignmentX(Component.RIGHT_ALIGNMENT);
+			 box[i].setAlignmentX(Component.RIGHT_ALIGNMENT);
+		 }
+		 		 
+		 location[1].add(p_img);
+		 location[1].add(p_form);
+		 
+		 //location[2]의 수량라벨, 텍스트박스,입고 및 출고 버튼 위치 정의
+		 location[2].setBorder(new EmptyBorder(10,10,10,10));
+		 location[2].setLayout(new BoxLayout(location[2], BoxLayout.Y_AXIS));
+//		 location[2].add(la[3]);
+		 location[2].add(t_count);
+		 location[2].add(Box.createRigidArea(new Dimension(0,30)));
+		 Box btSpace = Box.createHorizontalBox();
+		 btSpace.add(bt[2]);
+		 btSpace.add(Box.createHorizontalStrut(10));
+		 btSpace.add(bt[3]);
+		 
+		 location[2].add(btSpace);
+		 location[2].add(Box.createRigidArea(new Dimension(0,150)));
+		 
+		 
+		add(Box.createRigidArea(new Dimension(0,40)));
+		for(int i =0;i<location.length;i++) {
+			add(location[i]);
+			location[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+			if(i==0) add(Box.createRigidArea(new Dimension(0,30)));
+			if(i==1) add(la[3]);la[3].setAlignmentX(Component.LEFT_ALIGNMENT); 
+			
 		}
-		p_center.add(la[3]);//수량 라벨
-		p_center.add(t_count);//수량 적을 텍스트박스
-		p_center.add(bt[2]);//출고 버튼
-		p_center.add(bt[3]);//입고 버튼
-		add(p_center);
-		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(Color.white);
-		setPreferredSize(new Dimension(null));//config에 들어있는 사이즈
+	   		setPreferredSize(new Dimension(PageUtil.InputOutput_Width-20,PageUtil.Tory_Hieght-100));
 	}
 
 }
