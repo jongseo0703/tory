@@ -69,9 +69,9 @@ public class ProductShip extends JPanel{
 		la[3].setText("수량 ");
 		
 		// 패널들의 크기
-		location[0].setPreferredSize(new Dimension(width,40));
-		location[1].setPreferredSize(new Dimension(width,260));
-		location[2].setPreferredSize(new Dimension(width,260));
+		location[0].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,40));
+		location[1].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,260));
+		location[2].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,270));
 		
 		//상위 카테고리, 하위 카테고리, 상품명인  3개의 콤보박스와 라벨의 크기
 		Dimension d = new Dimension(600,40);
@@ -170,11 +170,12 @@ public class ProductShip extends JPanel{
 			location[i].setAlignmentX(Component.LEFT_ALIGNMENT);
 			if(i==0) add(Box.createRigidArea(new Dimension(0,30)));
 			if(i==1) add(la[3]);la[3].setAlignmentX(Component.LEFT_ALIGNMENT); 
-			
 		}
+		MicrophoneForm microphoneForm = new MicrophoneForm();
+		add(microphoneForm); microphoneForm.setAlignmentX(Component.LEFT_ALIGNMENT);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(Color.white);
-	   		setPreferredSize(new Dimension(PageUtil.InputOutput_Width-20,PageUtil.Tory_Hieght-100));
+	   		setPreferredSize(new Dimension(PageUtil.InputOutput_Width,PageUtil.Tory_Hieght));
 	}
 
 }
