@@ -3,6 +3,7 @@ package com.sinse.tory.rightpage.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -10,6 +11,8 @@ import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -23,9 +26,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
+
+import com.sinse.tory.db.common.util.PageUtil;
 
 public class MicrophoneForm extends JPanel{
 	JButton bt;//마이크가 있는 버튼
@@ -34,6 +40,8 @@ public class MicrophoneForm extends JPanel{
 	JWindow d_helper; // 설명라벨이 부착되에 있는 곳
 	JWindow w_mic;// 버튼을 누르면 나오는 곳
 	JTextArea area;// 음성이식해서 출력될 곳
+	JScrollPane scroll;
+	
 	boolean fig = false;
 	public MicrophoneForm() {
 		bt = new JButton() {
@@ -92,7 +100,7 @@ public class MicrophoneForm extends JPanel{
 		
 		
 		bt.setPreferredSize(new Dimension(96,96)); // 버튼의 크기
-		setPreferredSize(new Dimension(668,120)); // 현 패널의 크기
+		setPreferredSize(new Dimension(PageUtil.InputOutput_Width,150)); // 현 패널의 크기
 		p_helper.setPreferredSize(new Dimension(24,24)); // 도우미 크기
 		
 		Color ff = Color.decode("#F4F5F6");
@@ -107,11 +115,13 @@ public class MicrophoneForm extends JPanel{
 		
 		w_mic = new JWindow(dummyOwner);
 		area = new JTextArea();
+		scroll = new JScrollPane(area);
 		w_mic.setLayout(new BorderLayout());
-		area.setPreferredSize(new Dimension(getPreferredSize().getSize().width+30,100));//텍스트에리아 넓이 설정
+		scroll.setPreferredSize(new Dimension(getPreferredSize().getSize().width-8,90));//텍스트에리아 넓이 설정
 		w_mic.setFocusableWindowState(true);
-		area.setBackground(ff);
-		w_mic.add(area, BorderLayout.CENTER);
+		scroll.setBackground(Color.blue);
+		scroll.setBorder(null);
+		w_mic.add(scroll, BorderLayout.CENTER);
 		w_mic.pack(); // 크기 자동 조절
 		
 		//이벤트 부여
@@ -121,7 +131,7 @@ public class MicrophoneForm extends JPanel{
 			w_mic.setFocusableWindowState(true);
 			w_mic.setFocusable(true);
 			    // 처음 위치 설정
-			follow(w_mic, p_helper, -380, 30);
+			follow(w_mic, p_helper, PageUtil.InputOutput_Width/2-33, -getPreferredSize().getSize().height/2+110);
 			if(fig != true) {
 				fig = true;
 				w_mic.setVisible(fig);
@@ -129,6 +139,7 @@ public class MicrophoneForm extends JPanel{
 			else {
 				fig = false;
 				w_mic.setVisible(fig);
+				area.setText("");
 			}
 			SwingUtilities.invokeLater(() -> area.requestFocusInWindow());
 			
@@ -137,11 +148,11 @@ public class MicrophoneForm extends JPanel{
 			    parentWindow.addComponentListener(new ComponentAdapter() {
 			        @Override
 			        public void componentMoved(ComponentEvent e) {
-			            follow(w_mic, p_helper, -380, 30);
+			            follow(w_mic, p_helper,PageUtil.InputOutput_Width/2-33, -getPreferredSize().getSize().height/2+110);
 			        }
 			        @Override
 			        public void componentResized(ComponentEvent e) {
-			            follow(w_mic, p_helper, -380, 30);
+			            follow(w_mic, p_helper,PageUtil.InputOutput_Width/2-33, -getPreferredSize().getSize().height/2+110);
 			        }
 			    });
 			}
@@ -183,6 +194,7 @@ public class MicrophoneForm extends JPanel{
             window.setLocation(helperX, helperY);
         }
         
+	
 		
 	}
 	
