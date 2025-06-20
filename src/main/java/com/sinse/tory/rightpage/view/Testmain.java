@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import com.sinse.tory.db.common.util.PageUtil;
+import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
 
 public class Testmain extends JFrame{
 	JPanel leftPage;
@@ -19,7 +20,7 @@ public class Testmain extends JFrame{
 		rightPage.add(pages[0]);
 		rightPage.add(pages[1]);
 		add(rightPage);
-		showPage(1,0);
+		showPage(0,1);
 		setLayout(new GridLayout(1,2));
 		setSize(new Dimension(PageUtil.Tory_Width,PageUtil.Tory_Hieght));
 		setVisible(true);
@@ -31,6 +32,7 @@ public class Testmain extends JFrame{
 	public void creatPage() {
 		pages = new JPanel[2];
 		pages[0] = new ProductShip(this);
+		pages[1] = new DataModificationPage();
 		
 	}
 	public void showPage(int page1,int page2) {
