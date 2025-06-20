@@ -1,8 +1,13 @@
 package com.sinse.tory.rightpage.datamodificationpage;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Label;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -20,18 +25,15 @@ public final class LabelComponentSet extends JPanel
 		label = new JLabel();
 		this.component = component;
 		
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setAlignmentX(LEFT_ALIGNMENT);
-		add(label);
-		add(component);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));		
+		add(label, BorderLayout.NORTH);
+		add(Box.createRigidArea(new Dimension(0, 8)));
+		add(component, BorderLayout.SOUTH);
 		
 		label.setText(labelText);
 		label.setAlignmentX(LEFT_ALIGNMENT);
-		label.setHorizontalAlignment(JLabel.LEFT);
-		int preferredHeight = label.getPreferredSize().height;
-		label.setMaximumSize(new Dimension(Integer.MAX_VALUE, preferredHeight));
+		component.setAlignmentX(LEFT_ALIGNMENT);
 		
-		int componentPreferredHeight = component.getPreferredSize().height;
-		component.setMaximumSize(new Dimension(Integer.MAX_VALUE, componentPreferredHeight));
+		component.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 	}
 }
