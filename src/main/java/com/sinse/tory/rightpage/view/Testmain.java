@@ -1,6 +1,7 @@
 package com.sinse.tory.rightpage.view;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ public class Testmain extends JFrame{
 		add(rightPage);
 		showPage(0,1);
 		setLayout(new GridLayout(1,2));
+		rightPage.setLayout(new CardLayout());
 		setSize(new Dimension(PageUtil.Tory_Width,PageUtil.Tory_Hieght));
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
