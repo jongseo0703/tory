@@ -22,8 +22,6 @@ public final class DataModificationPage extends JPanel
 	private Content content;
 	
 	// TODO : 나중에 공용으로 사용할 상수에 추가해야 함.
-	private static final int WIDTH = 720;
-	private static final int HEIGHT = 810;
 	private static final int HORIZONTAL_MARGIN = 16;
 	private static final int VERTICAL_MARGIN = 48;
 	public static final Border EMPTY_BORDER = BorderFactory.createEmptyBorder(0, 0, 0, 0);
