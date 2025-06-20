@@ -39,22 +39,22 @@ public final class Header extends JPanel
 		add(backButton, BorderLayout.WEST);
 		add(rightPanel, BorderLayout.EAST);
 		
-		backButton.setBorder(Page.EMPTY_BORDER);
+		backButton.setBorder(DataModificationPage.EMPTY_BORDER);
 		backButton.setPreferredSize(new Dimension(HEADER_HEIGHT, HEADER_HEIGHT));
 		backButton.setMaximumSize(new Dimension(HEADER_HEIGHT, HEADER_HEIGHT));
 		
 		rightPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		rightPanel.setBorder(Page.EMPTY_BORDER);
+		rightPanel.setBorder(DataModificationPage.EMPTY_BORDER);
 		rightPanel.add(deleteButton);
 		// setBorder 함수는 패널의 자식 사이의 거리 뿐만 아니라 테두리 부분까지 영량을 미치기 때문에 별도의 여백을 삽입
 		rightPanel.add(Box.createRigidArea(new Dimension(24, 0)));
 		rightPanel.add(saveButton);
 		
-		deleteButton.setBorder(Page.EMPTY_BORDER);
+		deleteButton.setBorder(DataModificationPage.EMPTY_BORDER);
 		deleteButton.setPreferredSize(new Dimension(111, HEADER_HEIGHT));
 		deleteButton.setMaximumSize(new Dimension(111, HEADER_HEIGHT));
 		
-		saveButton.setBorder(Page.EMPTY_BORDER);
+		saveButton.setBorder(DataModificationPage.EMPTY_BORDER);
 		saveButton.setPreferredSize(new Dimension(98, HEADER_HEIGHT));
 		saveButton.setMaximumSize(new Dimension(98, HEADER_HEIGHT));
 	}
