@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import com.sinse.tory.db.common.util.PageUtil;
-import com.sinse.tory.rightpage.datamodificationpage.Page;
 
 public class Testmain extends JFrame{
 	JPanel leftPage;

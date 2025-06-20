@@ -14,7 +14,7 @@ final class TestFrame extends JFrame
 	private TestFrame()
 	{
 		JPanel leftPage = new JPanel();
-		Page rightPage = new Page();
+		DataModificationPage rightPage = new DataModificationPage();
 		
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
