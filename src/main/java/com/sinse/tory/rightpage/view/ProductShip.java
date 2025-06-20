@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.sinse.tory.db.common.util.PageUtil;
+import com.sinse.tory.rightpage.datamodificationpage.Page;
 
 public class ProductShip extends JPanel{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
@@ -29,7 +32,9 @@ public class ProductShip extends JPanel{
 	JPanel p_img;
 	JPanel p_form; // 상위카테고리,하위카테고리,상품명이 부착될 곳
 	JPanel[]location = new JPanel[3];
-	public ProductShip() {
+	Testmain testmain;
+	public ProductShip(Testmain testmain) {
+		this.testmain = testmain;
 		t_count = new JTextField();
 		p_img = new JPanel();
 		p_form = new JPanel();
@@ -163,6 +168,16 @@ public class ProductShip extends JPanel{
 		 location[2].add(btSpace);
 		 location[2].add(Box.createRigidArea(new Dimension(0,150)));
 		 
+		 // 이벤트
+		 bt[1].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				testmain.showPage(1,0);
+			}
+		});
+		 
+		 
+		 
 		 
 		add(Box.createRigidArea(new Dimension(0,40)));
 		for(int i =0;i<location.length;i++) {
@@ -175,7 +190,7 @@ public class ProductShip extends JPanel{
 		add(microphoneForm); microphoneForm.setAlignmentX(Component.LEFT_ALIGNMENT);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(Color.white);
-	   		setPreferredSize(new Dimension(PageUtil.InputOutput_Width,PageUtil.Tory_Hieght));
+	   	setPreferredSize(new Dimension(PageUtil.InputOutput_Width,PageUtil.Tory_Hieght));
 	}
 
 }
