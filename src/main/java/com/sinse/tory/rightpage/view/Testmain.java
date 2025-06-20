@@ -32,7 +32,6 @@ public class Testmain extends JFrame{
 	public void creatPage() {
 		pages = new JPanel[2];
 		pages[0] = new ProductShip(this);
-		pages[1] = new Page();
 		
 	}
 	public void showPage(int page1,int page2) {
