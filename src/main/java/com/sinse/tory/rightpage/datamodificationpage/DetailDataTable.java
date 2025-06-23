@@ -24,13 +24,17 @@ final class DetailDataTable extends JPanel
 		(
 			new TableData[]
 			{
-				new TableData("serial number", getTextField("11111111", false)),
-				new TableData("name", new JComboBox())
+				new TableData("상품 위치", new JComboBox()),
+				new TableData("브랜드", new JComboBox())
 			},
 			new TableData[]
 			{
-				new TableData("brand", new JComboBox()),
-				new TableData("price", getFormattedTextField(15000, true)),
+				new TableData("사이즈", new JComboBox()),
+				new TableData("가격", getFormattedTextField(15000, true)),
+			},
+			new TableData[]
+			{
+				new TableData("수량", getFormattedTextField(15000, true))
 			}
 		);
 	}
@@ -60,7 +64,7 @@ final class DetailDataTable extends JPanel
 			row.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowPreferredHeight));
 		}
 	}
-	// TableData의 생성자의 2번째 매개변수에 넣을 컴포넌트를 생서하여 반환하는 함수
+	// #region TableData의 생성자의 2번째 매개변수에 넣을 컴포넌트를 생서하여 반환하는 함수
 	private JTextField getTextField(String text, boolean enabled)
 	{
 		JTextField textField = new JTextField(text);
@@ -77,5 +81,5 @@ final class DetailDataTable extends JPanel
 		
 		return textField;
 	}
-	//
+	// #endregion
 }

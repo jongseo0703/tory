@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+// 상품 정보 테이블의 한 데이터
 final class TableData extends JPanel
 {
 	private JPanel titlePanel;

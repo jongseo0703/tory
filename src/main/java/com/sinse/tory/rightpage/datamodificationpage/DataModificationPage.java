@@ -34,9 +34,11 @@ public final class DataModificationPage extends JPanel
 		header = new Header(WIDTH, HORIZONTAL_MARGIN);
 		content = new Content();
 		
+		// 안쪽 마진
 		setBorder(BorderFactory.createEmptyBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(header);
+		// 여백
 		add(Box.createRigidArea(new Dimension(0, 32)));
 		add(content);
 	}
