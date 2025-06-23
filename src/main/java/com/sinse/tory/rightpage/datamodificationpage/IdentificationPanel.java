@@ -150,6 +150,7 @@ final class IdentificationPanel extends JPanel
 		
 		nameField.setEnabled(true);
 	}
+	// 매개변수 데이터들로 UI들을 초기화하는 함수.
 	void insertProductIdentifier(TopCategory topCategory, SubCategory subCategory, String name)
 	{
 		topCategoryComboBox.setSelectedItem(topCategory);

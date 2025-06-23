@@ -10,12 +10,34 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.NumberFormatter;
+
+import com.sinse.tory.db.model.Brand;
+import com.sinse.tory.db.model.Location;
 
 // Content 부분의 테이블 영역
 final class DetailDataTable extends JPanel
 {
+	private JComboBox<Location> locationComboBox;
+	private JComboBox<Brand> brandComboBox;
+	// private JComboBox<Size> sizeComboBox;
+	private JFormattedTextField priceField;
+	private JFormattedTextField countField;
+	
+	private JTextField descriptionField;
+	
+	
+	
 	DetailDataTable()
 	{
+		locationComboBox = new JComboBox<Location>();
+		brandComboBox = new JComboBox<Brand>();
+		priceField = getFormattedTextField(true);
+		countField = getFormattedTextField(false);
+		descriptionField = new JTextField();
+		
+		
+		
 		// 열을 세로로 정렬하기 위한 레이아웃
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -24,17 +46,18 @@ final class DetailDataTable extends JPanel
 		(
 			new TableData[]
 			{
-				new TableData("상품 위치", new JComboBox()),
-				new TableData("브랜드", new JComboBox())
+				new TableData("상품 위치", locationComboBox),
+				new TableData("브랜드", brandComboBox)
 			},
 			new TableData[]
 			{
 				new TableData("사이즈", new JComboBox()),
-				new TableData("가격", getFormattedTextField(15000, true)),
+				new TableData("가격", priceField),
+				new TableData("수량", countField)
 			},
 			new TableData[]
 			{
-				new TableData("수량", getFormattedTextField(15000, true))
+				new TableData("설명", descriptionField)
 			}
 		);
 	}
@@ -73,13 +96,21 @@ final class DetailDataTable extends JPanel
 		
 		return textField;
 	}
-	private JFormattedTextField getFormattedTextField(int number, boolean enabled)
+	private JFormattedTextField getFormattedTextField(boolean enabled)
 	{
-		JFormattedTextField textField = new JFormattedTextField(number);
+		JFormattedTextField textField = new JFormattedTextField(new NumberFormatter());
 		
 		textField.setEnabled(enabled);
 		
 		return textField;
 	}
 	// #endregion
+	// 
+	void insertDetailData(Location location, Brand brand, /*TODO : size*/ int price, int count)
+	{
+		locationComboBox.setSelectedItem(location);
+		brandComboBox.setSelectedItem(brand);
+		priceField.setValue(price);
+		countField.setValue(count);
+	}
 }
