@@ -5,11 +5,17 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,22 +27,28 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.model.ProductDetail;
+import com.sinse.tory.db.model.ProductImage;
+import com.sinse.tory.db.repository.ProductImageDAO;
 import com.sinse.tory.rightpage.util.PageMove;
 import com.sinse.tory.rightpage.util.PageUtil;
+import com.sinse.tory.rightpage.util.Pages;
 
-public class ProductShip extends JPanel{
+public class ProductShip extends Pages{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
 	JComboBox[] box = new JComboBox[3];//콤보박스 3개
 	JLabel[]la = new JLabel[4];//라벨 4개
 	JTextField t_count;
 	JPanel p_img;
 	JPanel p_form; // 상위카테고리,하위카테고리,상품명이 부착될 곳
-	JPanel[]location = new JPanel[3];
-	Testmain testmain;
+	JPanel[]location = new JPanel[3]; 
+	Product product;
+	ProductDetail productDetail;
+	ProductImage image;
 	public ProductShip(Testmain testmain) {
-		this.testmain = testmain;
+		super(testmain);
 		t_count = new JTextField();
-		p_img = new JPanel();
 		p_form = new JPanel();
 		int width = getPreferredSize().getSize().width;//현 패널의 가로넓비
 		/*
@@ -62,6 +74,27 @@ public class ProductShip extends JPanel{
 		for(int i=0; i<box.length;i++) {
 			box[i] = new JComboBox();
 		}
+		
+		//상품이미지 출력
+		p_img = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				URL url = this.getClass().getClassLoader().getResource(image.getImageURL()); // 상품이미지 위치(어디있는지 모르겠음)
+				Image image = null;
+				try {
+					BufferedImage buffer = ImageIO.read(url);
+					image = buffer.getScaledInstance(PageUtil.InputOutput_Width/2,260, Image.SCALE_SMOOTH);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				g.drawImage(image, 0, 0,PageUtil.InputOutput_Width/2,260, this);
+			}
+		};
+		
+		
 		
 		bt[0].setText("상품정보 수정"); 
 		bt[1].setText("상품추가");
@@ -92,6 +125,7 @@ public class ProductShip extends JPanel{
 		la[3].setPreferredSize(new Dimension(800,40));
 		t_count.setPreferredSize(new Dimension(800,80));
 		t_count.setMaximumSize(new Dimension(800,80));
+		t_count.setText(Integer.toString(productDetail.getProductQuantity())); // 상품의 사이지별 수량
 		
 		//이미지 패널의 예비용 배경색
 		p_img.setBackground(Color.lightGray);
@@ -190,7 +224,7 @@ public class ProductShip extends JPanel{
 			 
 			 if(resutle) {
 				 // 확인 눌렀을때
-				 System.out.println("확인"); 
+				 
 			 }else {
 				 // 취소를 눌렀을 때
 			 }
