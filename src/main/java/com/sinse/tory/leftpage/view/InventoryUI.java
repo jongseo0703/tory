@@ -33,7 +33,7 @@ public class InventoryUI extends JPanel {
 	JPanel p_grid; // 11x10 재고 격자 패널
 	Color[] columnColors = new Color[] { // 컬럼별 고정 색상 (column index별로 고정 색상 부여)
 			Color.PINK, Color.BLUE, Color.RED, Color.MAGENTA, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN,
-			Color.LIGHT_GRAY, Color.GRAY };
+			Color.LIGHT_GRAY, Color.GRAY};
 	String[] names = { // 카테고리명 배열
 			"티셔츠", "셔츠", "청바지", "신발", "가방", "양말", "가디건", "점퍼", "목도리", "패딩" };
 	JLabel[] categories; // 하단 카테고리 라벨 배열
@@ -44,7 +44,7 @@ public class InventoryUI extends JPanel {
 		setBackground(Color.WHITE);
 
 		/* ---------- 로고 + 시계 (p_clockBar) ---------- */
-		
+
 		// 시계 + 로고를 담을 상단 패널 (고정 높이 60px)
 		p_clockBar = new JPanel(new BorderLayout());
 		p_clockBar.setPreferredSize(new Dimension(960, 60));
@@ -62,11 +62,11 @@ public class InventoryUI extends JPanel {
 
 		// 시계 라벨 설정
 		la_timeLabel = new JLabel();
-		la_timeLabel.setFont(new Font("Gulim", Font.BOLD, 18));
+		la_timeLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 		new Clock(this); // 시계 갱신용 객체 (1초마다 라벨 업데이트)
 
 		// 시계 패널 (오른쪽에 붙이고 아래 여백 15px로 살짝 띄움)
-		JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 15)); 
+		JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 15));
 		timePanel.add(la_timeLabel);
 
 		// 상단바에 로고와 시계 배치
@@ -75,11 +75,10 @@ public class InventoryUI extends JPanel {
 
 		/* ---------- 제목 + 정렬 필터 (p_titleBar) ---------- */
 		p_titleBar = new JPanel(new BorderLayout());
-		p_titleBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60)); // 최대 높이 제한 (콤보박스 크기 늘어남 방지)
 		p_titleBar.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50)); // 상,하,좌,우 각각 여백주기
 
 		la_title = new JLabel("재고 현황", JLabel.CENTER);
-		la_title.setFont(new Font("Gulim", Font.BOLD, 36));
+		la_title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 36));
 
 		// 필터 콤보박스 항목 추가
 		cb_filter = new JComboBox<>();
@@ -98,27 +97,32 @@ public class InventoryUI extends JPanel {
 
 		// 가운데 정렬용 셀 격자를 감싸는 래퍼
 		p_gridWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		
+		// 2행 10열 (1행: 각 열마다 재고 셀 (InventoryCell), 2행: 카테고리명 라벨)
+		// 셀 사이간격 3px
+		p_grid = new JPanel(new GridLayout(2, 10, 3, 3)); 
+		p_grid.setPreferredSize(new Dimension(600, 1200)); // 격자 전체 크기
+		p_grid.setOpaque(false); // 배경 투명
 
-		p_grid = new JPanel(new GridLayout(11, 10, 3, 3)); // 11X10격자(셀 10행 + 라벨 1행), 셀 사이간격 3px
-		p_grid.setPreferredSize(new Dimension(600, 660)); // 격자 전체 크기
-		p_grid.setBackground(Color.WHITE);
+		// grid 상단 (1행): 각 열에 InventoryCell 하나씩 생성 및 추가
+		for (int col = 0; col < 10; col++) {
+			// 초기 재고 0, 카테고리별 색상 적용된 셀 생성
+			InventoryCell cell = new InventoryCell(columnColors[col]);
+			p_grid.add(cell); 
 
-		// 인벤토리 셀 생성: row, col 반복 돌면서 색상 설정
-		for (int row = 0; row < 10; row++) {
-			for (int col = 0; col < 10; col++) {
-				InventoryCell cell = new InventoryCell(columnColors[col]);
-				p_grid.add(cell);
-			}
+			// 랜덤 재고값 (0~10개)s
+			int stock = (int) (Math.random() * 11);
+			
+			cell.stockUpdate(stock);
 		}
 
-		// 마지막 행 : 카테고리명 라벨
+		// grid 하단 : 카테고리명 라벨
 		categories = new JLabel[names.length];
 		for (int i = 0; i < names.length; i++) {
 			categories[i] = new JLabel(names[i], JLabel.CENTER); // 텍스트 중앙 정렬
 			categories[i].setVerticalAlignment(JLabel.TOP);
-			categories[i].setFont(new Font("Gulim", Font.BOLD, 14));
+			categories[i].setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
 			categories[i].setForeground(Color.DARK_GRAY); // 글자색
-			categories[i].setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // 라벨 여백 제거
 
 			p_grid.add(categories[i]);
 		}

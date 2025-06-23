@@ -14,6 +14,8 @@ public class Clock {
     public Clock(InventoryUI inventoryUI) {
     	this.inventoryUI=inventoryUI;
     	
+    	updateTime(); // 프로그램이 실행되자마자 시계 표시 위해
+    	
     	// 타이머 설정 (1초마다 실행)
     	Timer timer = new Timer(1000, e -> updateTime());
     	timer.start();
