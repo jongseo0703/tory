@@ -184,6 +184,7 @@ FROM Brand b
 JOIN SubCategory sc ON b.sub_category_id = sc.sub_category_id;
 
 -- Product INSERT
+-- 상의 INSERT
 INSERT INTO Product(product_name, product_price, product_description, location_id)
 VALUES
 ('스투시 티셔츠', 39000, '스투시의 기본 반팔 티셔츠입니다.',
@@ -194,7 +195,26 @@ VALUES
 
 ('스투시 니트', 65000, '겨울용 두꺼운 니트웨어입니다.',
  (SELECT location_id FROM Location WHERE location_name = '13' LIMIT 1)),
+ 
+('스투시 그래픽 티셔츠', 45000, '프린팅이 들어간 스투시 티셔츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '11' LIMIT 1)),
 
+('폴로 스트라이프 셔츠', 85000, '스트라이프 패턴의 셔츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '12' LIMIT 1)),
+
+('스투시 반집업 니트', 99000, '반집업 스타일의 스투시 니트입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '13' LIMIT 1)),
+ 
+('스투시 그래픽 후드', 59000, '편안한 그래픽 후드티입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '11' LIMIT 1)),
+ 
+('폴로 클래식 티셔츠', 45000, '폴로 브랜드 기본 반팔 티셔츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '12' LIMIT 1));
+ 
+ 
+-- 하의 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('리바이스 청바지', 89000, '리바이스의 정통 데님 팬츠입니다.',
  (SELECT location_id FROM Location WHERE location_name = '24' LIMIT 1)),
 
@@ -203,7 +223,40 @@ VALUES
 
 ('무신사 스웻팬츠', 43000, '데일리용 조거 스웻팬츠입니다.',
  (SELECT location_id FROM Location WHERE location_name = '26' LIMIT 1)),
+ 
+('리바이스 와이드진', 98000, '넉넉한 핏의 와이드 진입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '24' LIMIT 1)),
 
+('무신사스탠다드 슬랙스 블랙', 49000, '기본 블랙 슬랙스입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '25' LIMIT 1)),
+
+('무신사스탠다드 스웻 조거팬츠', 43000, '신축성 좋은 조거 팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '26' LIMIT 1)),
+
+('리바이스 스트레이트진', 97000, '기본 스트레이트 핏의 청바지입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '24' LIMIT 1)),
+ 
+('무신사 스탠다드 데님', 49000, '베이직 데님 팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '24' LIMIT 1)),
+ 
+('스투시 카고 팬츠', 53000, '트렌디한 카고 팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '26' LIMIT 1)),
+ 
+('폴로 치노 팬츠', 55000, '폴로 브랜드 치노 팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '25' LIMIT 1)),
+ 
+('리바이스 슬림 팬츠', 60000, '리바이스 슬림 핏 팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '24' LIMIT 1)),
+ 
+('무신사 스탠다드 조거팬츠', 47000, '편안한 조거팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '26' LIMIT 1)),
+ 
+('스투시 트레이닝 팬츠', 42000, '캐주얼 트레이닝 팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '26' LIMIT 1));
+ 
+-- 아우터 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('노스페이스 롱패딩', 179000, '노스페이스 구스다운 패딩입니다.',
  (SELECT location_id FROM Location WHERE location_name = '37' LIMIT 1)),
 
@@ -212,7 +265,19 @@ VALUES
 
 ('스투시 청자켓', 98000, '빈티지 느낌의 청자켓입니다.',
  (SELECT location_id FROM Location WHERE location_name = '39' LIMIT 1)),
-
+ 
+('노스페이스 푸퍼 자켓', 199000, '노스페이스 푸퍼 스타일 자켓입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '37' LIMIT 1)),
+ 
+('아크테릭스 소프트쉘', 210000, '방풍 소프트쉘 자켓입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '38' LIMIT 1)),
+ 
+('스투시 윈드브레이커', 98000, '경량 윈드브레이커입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '39' LIMIT 1));
+ 
+-- 신발 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('뉴발란스 운동화', 129000, '990v6 운동화입니다.',
  (SELECT location_id FROM Location WHERE location_name = '410' LIMIT 1)),
 
@@ -221,7 +286,31 @@ VALUES
 
 ('그라더스 부츠', 159000, '가죽 첼시 부츠입니다.',
  (SELECT location_id FROM Location WHERE location_name = '412' LIMIT 1)),
-
+ 
+('나이키 에어맥스', 130000, '나이키 인기 에어맥스 운동화입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '410' LIMIT 1)),
+ 
+('아디다스 울트라부스트', 150000, '아디다스 울트라부스트 운동화입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '410' LIMIT 1)),
+ 
+('뉴발란스 574', 90000, '클래식 뉴발란스 574 모델입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '410' LIMIT 1)),
+ 
+('닥터마틴 첼시 부츠', 200000, '클래식 첼시 부츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '412' LIMIT 1)),
+ 
+('그라더스 더비슈즈', 180000, '더비 스타일 가죽 신발입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '411' LIMIT 1)),
+ 
+('아디다스 슬립온', 85000, '편안한 슬립온 운동화입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '410' LIMIT 1)),
+ 
+('나이키 조던', 160000, '나이키 조던 시리즈입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '410' LIMIT 1));
+ 
+-- 가방 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('노스페이스 백팩', 79000, '여행용 백팩입니다.',
  (SELECT location_id FROM Location WHERE location_name = '513' LIMIT 1)),
 
@@ -230,7 +319,22 @@ VALUES
 
 ('르메르 숄더백', 189000, '미니멀한 디자인의 숄더백입니다.',
  (SELECT location_id FROM Location WHERE location_name = '515' LIMIT 1)),
+ 
+('노스페이스 메신저백', 85000, '실용적인 메신저백입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '513' LIMIT 1)),
+ 
+('프라이탁 백팩 미니', 120000, '컴팩트 백팩입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '513' LIMIT 1)),
+ 
+('르메르 크로스백', 95000, '미니 크로스백입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '515' LIMIT 1)),
+ 
+('무신사 숄더백', 65000, '캐주얼 숄더백입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '515' LIMIT 1));
 
+-- 액세서리 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('티파니 목걸이', 490000, '하트 펜던트 목걸이입니다.',
  (SELECT location_id FROM Location WHERE location_name = '616' LIMIT 1)),
 
@@ -239,7 +343,16 @@ VALUES
 
 ('크롬하츠 반지', 990000, '실버 팬던트 반지입니다.',
  (SELECT location_id FROM Location WHERE location_name = '618' LIMIT 1)),
+ 
+('티파니 반지', 450000, '티파니 실버 반지입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '618' LIMIT 1)),
+ 
+('크롬하츠 팔찌', 580000, '은팔찌 디자인입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '617' LIMIT 1));
 
+-- 모자 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('슈프림 볼캡', 79000, '로고 볼캡입니다.',
  (SELECT location_id FROM Location WHERE location_name = '719' LIMIT 1)),
 
@@ -248,7 +361,25 @@ VALUES
 
 ('엠엘비 스냅백', 69000, '뉴욕 양키즈 로고가 들어간 스냅백입니다.',
  (SELECT location_id FROM Location WHERE location_name = '721' LIMIT 1)),
+ 
+('슈프림 캠프캡', 89000, '캠프 스타일의 슈프림 볼캡입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '719' LIMIT 1)),
 
+('엠엘비 비니', 39000, '겨울용 MLB 비니입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '720' LIMIT 1)),
+ 
+('슈프림 버킷햇', 72000, '슈프림 버킷햇입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '719' LIMIT 1)),
+ 
+('엠엘비 스냅백 블랙', 69000, '블랙 스냅백입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '721' LIMIT 1)),
+ 
+('아디다스 비니', 43000, '겨울용 비니입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '720' LIMIT 1));
+ 
+-- 이너웨어 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('캘빈클라인 팬티', 29000, '3팩 남성 드로즈입니다.',
  (SELECT location_id FROM Location WHERE location_name = '822' LIMIT 1)),
 
@@ -257,7 +388,13 @@ VALUES
 
 ('유니클로 양말', 9900, '기본 크루삭스 3팩입니다.',
  (SELECT location_id FROM Location WHERE location_name = '824' LIMIT 1)),
+ 
+('유니클로 드로즈', 15000, '편안한 남성 드로즈입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '822' LIMIT 1));
 
+-- 원피스 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('버버리 미니원피스', 359000, '버버리 체크 미니 드레스입니다.',
  (SELECT location_id FROM Location WHERE location_name = '925' LIMIT 1)),
 
@@ -265,8 +402,11 @@ VALUES
  (SELECT location_id FROM Location WHERE location_name = '926' LIMIT 1)),
 
 ('르메르 맥시원피스', 299000, '롱 플로럴 드레스입니다.',
- (SELECT location_id FROM Location WHERE location_name = '927' LIMIT 1)),
+ (SELECT location_id FROM Location WHERE location_name = '927' LIMIT 1));
 
+-- 운동복 INSERT
+INSERT INTO Product(product_name, product_price, product_description, location_id)
+VALUES
 ('나이키 레깅스', 39000, '운동용 하이웨이스트 레깅스입니다.',
  (SELECT location_id FROM Location WHERE location_name = '1028' LIMIT 1)),
 
@@ -274,9 +414,30 @@ VALUES
  (SELECT location_id FROM Location WHERE location_name = '1029' LIMIT 1)),
 
 ('아디다스 트레이닝 상의', 69000, '지퍼 후디 스타일입니다.',
- (SELECT location_id FROM Location WHERE location_name = '1030' LIMIT 1));
+ (SELECT location_id FROM Location WHERE location_name = '1030' LIMIT 1)),
  
- -- ProductDetail INSERT
+('나이키 트레이닝 자켓', 99000, '가벼운 트레이닝 자켓입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '1028' LIMIT 1)),
+ 
+('아디다스 후디', 85000, '클래식 후디입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '1030' LIMIT 1)),
+ 
+('나이키 하프팬츠', 42000, '여름용 통기성 좋은 하프팬츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '1028' LIMIT 1)),
+
+('아디다스 조거팬츠', 53000, '클래식 삼선 조거 스타일입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '1029' LIMIT 1)),
+
+('아디다스 스포츠 브라', 39000, '운동 시 편안한 스포츠 브라입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '1030' LIMIT 1)),
+ 
+('아디다스 트레이닝 티셔츠', 39000, '트레이닝용 티셔츠입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '1030' LIMIT 1)),
+ 
+('나이키 러닝 타이즈', 40000, '러닝용 타이즈입니다.',
+ (SELECT location_id FROM Location WHERE location_name = '1028' LIMIT 1));
+ 
+-- ProductDetail INSERT
 INSERT INTO ProductDetail(product_size_name, product_quantity, product_id)
 VALUES 
 ('S', 20, 1),
@@ -308,7 +469,51 @@ VALUES
 ('L', 20, 27),
 ('S', 20, 28),
 ('M', 20, 29),
-('L', 20, 30);
+('L', 20, 30),
+('M', 20, 31),
+('M', 20, 32),
+('M', 20, 33),
+('M', 20, 34),
+('M', 20, 35),
+('M', 20, 36),
+('M', 20, 37),
+('M', 20, 38),
+('M', 20, 39),
+('M', 20, 40),
+('L', 20, 41),
+('S', 20, 42),
+('M', 20, 43),
+('L', 20, 44),
+('M', 20, 45),
+('M', 20, 46),
+('M', 20, 47),
+('M', 20, 48),
+('M', 20, 49),
+('M', 20, 50),
+('M', 20, 51),
+('M', 20, 52),
+('M', 20, 53),
+('M', 20, 54),
+('L', 20, 55),
+('S', 20, 56),
+('M', 20, 57),
+('L', 20, 58),
+('M', 20, 59),
+('M', 20, 60),
+('M', 20, 61),
+('M', 20, 62),
+('M', 20, 63),
+('M', 20, 64),
+('M', 20, 65),
+('M', 20, 66),
+('M', 20, 67),
+('M', 20, 68),
+('M', 20, 69),
+('M', 20, 70),
+('M', 20, 71),
+('M', 20, 72),
+('M', 20, 73),
+('M', 20, 74);
 
 -- ProductImage INSERT
 INSERT INTO ProductImage(image_url, product_id)
@@ -342,7 +547,50 @@ VALUES
 ('/images/product27.jpg', 27),
 ('/images/product28.jpg', 28),
 ('/images/product29.jpg', 29),
-('/images/product30.jpg', 30);
+('/images/product30.jpg', 30),
+('/images/product31.jpg', 31),
+('/images/product32.jpg', 32),
+('/images/product33.jpg', 33),
+('/images/product34.jpg', 34),
+('/images/product35.jpg', 35),
+('/images/product36.jpg', 36),
+('/images/product37.jpg', 37),
+('/images/product38.jpg', 38),
+('/images/product39.jpg', 39),
+('/images/product40.jpg', 40),
+('/images/product41.jpg', 41),
+('/images/product42.jpg', 42),
+('/images/product43.jpg', 43),
+('/images/product44.jpg', 44),
+('/images/product45.jpg', 45),
+('/images/product46.jpg', 46),
+('/images/product47.jpg', 47),
+('/images/product48.jpg', 48),
+('/images/product49.jpg', 49),
+('/images/product50.jpg', 50),
+('/images/product51.jpg', 51),
+('/images/product52.jpg', 52),
+('/images/product53.jpg', 53),
+('/images/product54.jpg', 54),
+('/images/product55.jpg', 55),
+('/images/product56.jpg', 56),
+('/images/product57.jpg', 57),
+('/images/product58.jpg', 58),
+('/images/product59.jpg', 59),
+('/images/product60.jpg', 60),
+('/images/product62.jpg', 62),
+('/images/product63.jpg', 63),
+('/images/product64.jpg', 64),
+('/images/product65.jpg', 65),
+('/images/product66.jpg', 66),
+('/images/product67.jpg', 67),
+('/images/product68.jpg', 68),
+('/images/product69.jpg', 69),
+('/images/product70.jpg', 70),
+('/images/product71.jpg', 71),
+('/images/product72.jpg', 72),
+('/images/product73.jpg', 73),
+('/images/product74.jpg', 74);
 
 -- InventoryLog INSERT
 INSERT INTO InventoryLog(change_type, quantity, product_detail_id)
@@ -376,4 +624,48 @@ VALUES
 ('IN', 10, 27),
 ('IN', 10, 28),
 ('IN', 10, 29),
-('IN', 10, 30);
+('IN', 10, 30),
+('IN', 10, 31),
+('IN', 10, 32),
+('IN', 10, 33),
+('IN', 10, 34),
+('IN', 10, 35),
+('IN', 10, 36),
+('IN', 10, 37),
+('IN', 10, 38),
+('IN', 10, 39),
+('IN', 10, 40),
+('IN', 10, 41),
+('IN', 10, 42),
+('IN', 10, 43),
+('IN', 10, 44),
+('IN', 10, 45),
+('IN', 10, 46),
+('IN', 10, 47),
+('IN', 10, 48),
+('IN', 10, 49),
+('IN', 10, 50),
+('IN', 10, 51),
+('IN', 10, 52),
+('IN', 10, 53),
+('IN', 10, 54),
+('IN', 10, 55),
+('IN', 10, 56),
+('IN', 10, 57),
+('IN', 10, 58),
+('IN', 10, 59),
+('IN', 10, 60),
+('IN', 10, 61),
+('IN', 10, 62),
+('IN', 10, 63),
+('IN', 10, 64),
+('IN', 10, 65),
+('IN', 10, 66),
+('IN', 10, 67),
+('IN', 10, 68),
+('IN', 10, 69),
+('IN', 10, 70),
+('IN', 10, 71),
+('IN', 10, 72),
+('IN', 10, 73),
+('IN', 10, 74);
