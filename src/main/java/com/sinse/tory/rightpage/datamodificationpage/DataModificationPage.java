@@ -31,7 +31,7 @@ public final class DataModificationPage extends JPanel
 	
 	public DataModificationPage()
 	{
-		header = new Header(WIDTH, HORIZONTAL_MARGIN);
+		header = new Header();
 		content = new Content();
 		
 		// 안쪽 마진
