@@ -1,11 +1,6 @@
 package com.sinse.tory.rightpage.datamodificationpage;
 
 import java.awt.Dimension;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.util.List;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -14,8 +9,6 @@ import javax.swing.JTextField;
 
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
-import com.sinse.tory.db.repository.SubCategoryDAO;
-import com.sinse.tory.db.repository.TopCategoryDAO;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameField;
 
 final class IdentificationPanel extends JPanel
@@ -54,32 +47,10 @@ final class IdentificationPanel extends JPanel
 		add(subCategory);
 		add(Box.createRigidArea(new Dimension(0, 12)));
 		add(name);
-		
-		// top category 이름 초기화
-		initializeTopCategoryComboBoxItem();
 	}
 	
 	
 	
-	private void initializeTopCategoryComboBoxItem()
-	{
-		TopCategoryDAO topCategoryDAO = new TopCategoryDAO();
-		List<TopCategory> topCategorys = topCategoryDAO.selectAll();
-		
-		
-		
-		// combo box item 초기화
-		TopCategory dummy = new TopCategory();
-		dummy.setTopCategoryId(0);
-		dummy.setTopCategoryName("선택 하세요.");
-		
-		topCategoryComboBox.addItem(dummy);
-		for(int i = 0; i < topCategorys.size(); i++)
-		{
-			topCategoryComboBox.addItem(topCategorys.get(i));
-		}
-		//
-	}
 	// 매개변수 데이터들로 UI들을 초기화하는 함수.
 	void insertProductIdentifier(TopCategory topCategory, SubCategory subCategory, String name)
 	{

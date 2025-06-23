@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.SubCategoryDAO;
+import com.sinse.tory.db.repository.TopCategoryDAO;
 
 abstract class IdentifierUpdate<T extends JComponent>
 {
@@ -41,11 +42,33 @@ abstract class IdentifierUpdate<T extends JComponent>
 				onSelectSubCategory((SubCategory)itemEvent.getItem());
 			}
 		});
-		// #endregion
+		// #endregion		
+		
+		// top category 이름 초기화
+		initializeTopCategoryComboBoxItem();
 	}
 	
 	
 	
+	private void initializeTopCategoryComboBoxItem()
+	{
+		TopCategoryDAO topCategoryDAO = new TopCategoryDAO();
+		List<TopCategory> topCategorys = topCategoryDAO.selectAll();
+		
+		
+		
+		// combo box item 초기화
+		TopCategory dummy = new TopCategory();
+		dummy.setTopCategoryId(0);
+		dummy.setTopCategoryName("선택 하세요.");
+		
+		topCategoryComboBox.addItem(dummy);
+		for(int i = 0; i < topCategorys.size(); i++)
+		{
+			topCategoryComboBox.addItem(topCategorys.get(i));
+		}
+		//
+	}
 	// top category 선택 이벤트
 	private void onSelectTopCategory(TopCategory selectedTopCategory)
 	{
