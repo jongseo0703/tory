@@ -9,16 +9,76 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 //선언한 라이브러리 패키지 임포트
 import com.sinse.tory.db.common.exception.UpdatedQuantityException;
 import com.sinse.tory.db.common.util.DBManager;
 import com.sinse.tory.db.model.InventoryLog;
+import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.model.ProductDetail;
+import com.sinse.tory.db.model.ProductImage;
 
 //ProductDetail 모델을 처리하기 위한 DAO
 public class ProductDetailDAO {
 	//싱글톤 패턴인 DBManager 클래스를 통해 하나의 인스턴스인 dbManger생성
 	DBManager dbManager = DBManager.getInstance();
+	
+	public ProductDetail selectDetailInfo(int productDetailId) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ProductDetail detail = null;
+
+		con = dbManager.getConnection();
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT pd.product_size_name, pd.product_quantity, ");
+		sql.append("       p.product_description, pi.image_url ");
+		sql.append("FROM ProductDetail pd ");
+		sql.append("JOIN Product p ON pd.product_id = p.product_id ");
+		sql.append("LEFT JOIN ProductImage pi ON p.product_id = pi.product_id ");
+		sql.append("WHERE pd.product_detail_id = ?");
+		
+		try {
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, productDetailId);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				// ProductDetail 객체 생성
+				detail = new ProductDetail();
+				detail.setProductSizeName(rs.getString("product_size_name"));
+				detail.setProductQuantity(rs.getInt("product_quantity"));
+
+				// Product 객체 생성 및 정보 설정
+				Product product = new Product();
+				product.setDescription(rs.getString("product_description"));
+
+				// ProductImage 객체 생성 및 URL 설정
+				ProductImage productImage = new ProductImage();
+				productImage.setImageURL(rs.getString("image_url"));
+				List<ProductImage> imageList = new ArrayList<>();
+				imageList.add(productImage);
+
+				// Product에 이미지 리스트 설정
+				product.setProductImages(imageList);
+
+				// ProductDetail에 Product 설정
+				detail.setProduct(product);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbManager.release(pstmt, rs);
+		}
+
+		return detail;
+	}
+
+
 	
 	//현재 수량을 조회하는 메서드
 	public int selectCurrentQuantity(int productDetailId) {
@@ -32,7 +92,7 @@ public class ProductDetailDAO {
 		//String 으로 sql 을 만들면 객체의 낭비가 생기기때문에 StringBuilder 객체 이용.
 		StringBuilder sql = new StringBuilder();
 		//select 절
-		sql.append("select product_quantity");
+		sql.append("select product_size_name, product_quantity");
 		//from 절
 		sql.append(" from ProductDetail");
 		//where 절

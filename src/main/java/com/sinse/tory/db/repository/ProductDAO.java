@@ -53,18 +53,18 @@ public class ProductDAO {
 		sql.append(" p.product_id, p.product_name,");
 		sql.append(" l.location_id, l.location_name,");
 		sql.append(" b.brand_id, b.brand_name,");
-		sql.append(" s.subcategory_id, s.subcategory_name,");
-		sql.append(" t.topcategory_id, t.topcategory_name,");
+		sql.append(" s.sub_category_id, s.sub_category_name,");
+		sql.append(" t.top_category_id, t.top_category_name,");
 		sql.append(" pd.product_detail_id, pd.product_size_name,");
 		sql.append(" pd.product_quantity,");
-		sql.append(" pi.productimage_id, pi.image_url");
+		sql.append(" pi.product_image_id, pi.image_url");
 		//from 절(조인)
 		sql.append(" from Product p, Location l, Brand b, SubCategory s, TopCategory t, ProductDetail pd, ProductImage pi");
 		//where 절(각 아이디가 같아야 해당되는 아이템을 가져옴)
 		sql.append(" where p.location_id = l.location_id and");
 		sql.append(" l.brand_id = b.brand_id and");
-		sql.append(" b.subcategory_id = s.subcategory_id and");
-		sql.append(" s.topcategory_id = t.topcategory_id and");
+		sql.append(" b.sub_category_id = s.sub_category_id and");
+		sql.append(" s.top_category_id = t.top_category_id and");
 		sql.append(" p.product_id = pd.product_id and");
 		sql.append(" p.product_id = pi.product_id");
 		
@@ -100,15 +100,15 @@ public class ProductDAO {
 					
 					SubCategory subCategory = new SubCategory();
 					//subcategory_id컬럼의 데이터를 가져와서 저장
-					subCategory.setSubCategoryId(rs.getInt("subcategory_id"));
+					subCategory.setSubCategoryId(rs.getInt("sub_category_id"));
 					//subcategory_name컬럼의 데이터를 가져와서 저장
-					subCategory.setSubCategoryName(rs.getString("subcategory_name"));
+					subCategory.setSubCategoryName(rs.getString("sub_category_name"));
 					
 					TopCategory topCategory = new TopCategory();
 					//topcategory_id컬럼의 데이터를 가져와서 저장
-					topCategory.setTopCategoryId(rs.getInt("topcategory_id"));
+					topCategory.setTopCategoryId(rs.getInt("top_category_id"));
 					//topcategory_name컬럼의 데이터를 가져와서 저장
-					topCategory.setTopCategoryName(rs.getString("topcategory_name"));
+					topCategory.setTopCategoryName(rs.getString("top_category_name"));
 					
 					//연결
 					subCategory.setTopCategory(topCategory);
@@ -132,7 +132,7 @@ public class ProductDAO {
 				
 				ProductImage productImage = new ProductImage();
 				//productimage_id컬럼의 데이터를 가져와서 저장
-				productImage.setProductImageId(rs.getInt("productimage_id"));
+				productImage.setProductImageId(rs.getInt("product_image_id"));
 				//image_url컬럼의 데이터를 가져와서 저장
 				productImage.setImageURL(rs.getString("image_url"));
 				
@@ -173,18 +173,18 @@ public class ProductDAO {
 		sql.append(" p.product_id, p.product_name,");
 		sql.append(" l.location_id, l.location_name,");
 		sql.append(" b.brand_id, b.brand_name,");
-		sql.append(" s.subcategory_id, s.subcategory_name,");
-		sql.append(" t.topcategory_id, t.topcategory_name,");
+		sql.append(" s.sub_category_id, s.sub_category_name,");
+		sql.append(" t.top_category_id, t.top_category_name,");
 		sql.append(" pd.product_detail_id, pd.product_size_name,");
 		sql.append(" pd.product_quantity,");
-		sql.append(" pi.productimage_id, pi.image_url");
+		sql.append(" pi.product_image_id, pi.image_url");
 		//from 절(조인)
 		sql.append(" from Product p, Location l, Brand b, SubCategory s, TopCategory t, ProductDetail pd, ProductImage pi");
 		//where 절(각 아이디가 같아야 해당되는 아이템을 가져옴)
 		sql.append(" where p.location_id = l.location_id and");
 		sql.append(" l.brand_id = b.brand_id and");
-		sql.append(" b.subcategory_id = s.subcategory_id and");
-		sql.append(" s.topcategory_id = t.topcategory_id and");
+		sql.append(" b.sub_category_id = s.sub_category_id and");
+		sql.append(" s.top_category_id = t.top_category_id and");
 		sql.append(" p.product_id = pd.product_id and");
 		sql.append(" p.product_id = pi.product_id and");
 		sql.append(" p.product_id = ?");
@@ -223,15 +223,15 @@ public class ProductDAO {
 					
 					SubCategory subCategory = new SubCategory();
 					//subcategory_id컬럼의 데이터를 가져와서 저장
-					subCategory.setSubCategoryId(rs.getInt("subcategory_id"));
+					subCategory.setSubCategoryId(rs.getInt("sub_category_id"));
 					//subcategory_name컬럼의 데이터를 가져와서 저장
-					subCategory.setSubCategoryName(rs.getString("subcategory_name"));
+					subCategory.setSubCategoryName(rs.getString("sub_category_name"));
 					
 					TopCategory topCategory = new TopCategory();
 					//topcategory_id컬럼의 데이터를 가져와서 저장
-					topCategory.setTopCategoryId(rs.getInt("topcategory_id"));
+					topCategory.setTopCategoryId(rs.getInt("top_category_id"));
 					//topcategory_name컬럼의 데이터를 가져와서 저장
-					topCategory.setTopCategoryName(rs.getString("topcategory_name"));
+					topCategory.setTopCategoryName(rs.getString("top_category_name"));
 					
 					//연결
 					subCategory.setTopCategory(topCategory);
@@ -255,7 +255,7 @@ public class ProductDAO {
 				
 				ProductImage productImage = new ProductImage();
 				//productimage_id컬럼의 데이터를 가져와서 저장
-				productImage.setProductImageId(rs.getInt("productimage_id"));
+				productImage.setProductImageId(rs.getInt("product_image_id"));
 				//image_url컬럼의 데이터를 가져와서 저장
 				productImage.setImageURL(rs.getString("image_url"));
 				
@@ -296,22 +296,22 @@ public class ProductDAO {
 		sql.append(" p.product_id, p.product_name,");
 		sql.append(" l.location_id, l.location_name,");
 		sql.append(" b.brand_id, b.brand_name,");
-		sql.append(" s.subcategory_id, s.subcategory_name,");
-		sql.append(" t.topcategory_id, t.topcategory_name,");
+		sql.append(" s.sub_category_id, s.sub_category_name,");
+		sql.append(" t.top_category_id, t.top_category_name,");
 		sql.append(" pd.product_detail_id, pd.product_size_name,");
 		sql.append(" pd.product_quantity,");
-		sql.append(" pi.productimage_id, pi.image_url");
+		sql.append(" pi.product_image_id, pi.image_url");
 		//from 절(조인)
 		sql.append(" from Product p, Location l, Brand b, SubCategory s, TopCategory t, ProductDetail pd, ProductImage pi");
 		//where 절(각 아이디가 같아야 해당되는 아이템을 가져옴)
 		sql.append(" where p.location_id = l.location_id and");
 		sql.append(" l.brand_id = b.brand_id and");
-		sql.append(" b.subcategory_id = s.subcategory_id and");
-		sql.append(" s.topcategory_id = t.topcategory_id and");
+		sql.append(" b.sub_category_id = s.sub_category_id and");
+		sql.append(" s.top_category_id = t.top_category_id and");
 		sql.append(" p.product_id = pd.product_id and");
 		sql.append(" p.product_id = pi.product_id");
 		//order by 절
-		sql.append(" order by case t.topcategory_name");
+		sql.append(" order by case t.top_category_name");
 		sql.append(" when '상의' then 1");
 		sql.append(" when '하의' then 2");
 		sql.append(" when '신발' then 3");
@@ -350,15 +350,15 @@ public class ProductDAO {
 					
 					SubCategory subCategory = new SubCategory();
 					//subcategory_id컬럼의 데이터를 가져와서 저장
-					subCategory.setSubCategoryId(rs.getInt("subcategory_id"));
+					subCategory.setSubCategoryId(rs.getInt("sub_category_id"));
 					//subcategory_name컬럼의 데이터를 가져와서 저장
-					subCategory.setSubCategoryName(rs.getString("subcategory_name"));
+					subCategory.setSubCategoryName(rs.getString("sub_category_name"));
 					
 					TopCategory topCategory = new TopCategory();
 					//topcategory_id컬럼의 데이터를 가져와서 저장
-					topCategory.setTopCategoryId(rs.getInt("topcategory_id"));
+					topCategory.setTopCategoryId(rs.getInt("top_category_id"));
 					//topcategory_name컬럼의 데이터를 가져와서 저장
-					topCategory.setTopCategoryName(rs.getString("topcategory_name"));
+					topCategory.setTopCategoryName(rs.getString("top_category_name"));
 					
 					//연결
 					subCategory.setTopCategory(topCategory);
@@ -382,7 +382,7 @@ public class ProductDAO {
 				
 				ProductImage productImage = new ProductImage();
 				//productimage_id컬럼의 데이터를 가져와서 저장
-				productImage.setProductImageId(rs.getInt("productimage_id"));
+				productImage.setProductImageId(rs.getInt("product_image_id"));
 				//image_url컬럼의 데이터를 가져와서 저장
 				productImage.setImageURL(rs.getString("image_url"));
 				
