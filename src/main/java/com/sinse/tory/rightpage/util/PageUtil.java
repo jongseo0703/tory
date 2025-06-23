@@ -1,4 +1,4 @@
-package com.sinse.tory.db.common.util;
+package com.sinse.tory.rightpage.util;
 
 import javax.swing.JPanel;
 

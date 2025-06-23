@@ -34,7 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 
-import com.sinse.tory.db.common.util.PageUtil;
+import com.sinse.tory.rightpage.util.PageUtil;
 
 public class MicrophoneForm extends JPanel{
 	JButton bt;//마이크가 있는 버튼

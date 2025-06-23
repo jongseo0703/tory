@@ -10,9 +10,9 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sinse.tory.db.common.util.PageMove;
-import com.sinse.tory.db.common.util.PageUtil;
 import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
+import com.sinse.tory.rightpage.util.PageMove;
+import com.sinse.tory.rightpage.util.PageUtil;
 
 public class Testmain extends JFrame{
 	JPanel leftPage;

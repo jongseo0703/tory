@@ -21,8 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sinse.tory.db.common.util.PageMove;
-import com.sinse.tory.db.common.util.PageUtil;
+import com.sinse.tory.rightpage.util.PageMove;
+import com.sinse.tory.rightpage.util.PageUtil;
 
 public class ProductShip extends JPanel{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
