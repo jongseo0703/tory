@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+// 이미지 업로드 패널
 final class ImageUploadPanel extends JPanel
 {
 	private JButton uploadButton;

@@ -64,7 +64,7 @@ final class DetailDataTable extends JPanel
 			row.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowPreferredHeight));
 		}
 	}
-	// TableData의 생성자의 2번째 매개변수에 넣을 컴포넌트를 생서하여 반환하는 함수
+	// #region TableData의 생성자의 2번째 매개변수에 넣을 컴포넌트를 생서하여 반환하는 함수
 	private JTextField getTextField(String text, boolean enabled)
 	{
 		JTextField textField = new JTextField(text);
@@ -81,5 +81,5 @@ final class DetailDataTable extends JPanel
 		
 		return textField;
 	}
-	//
+	// #endregion
 }

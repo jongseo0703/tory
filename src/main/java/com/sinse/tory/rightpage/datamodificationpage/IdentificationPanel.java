@@ -1,14 +1,9 @@
 package com.sinse.tory.rightpage.datamodificationpage;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
-import java.util.EventListener;
 import java.util.List;
 
 import javax.swing.Box;
@@ -27,12 +22,17 @@ final class IdentificationPanel extends JPanel
 	private LabelComponentSet topCategory;
 	private LabelComponentSet subCategory;
 	private LabelComponentSet name;
-	
+
+	// #region 선택한 카테고리들 저장
 	private TopCategory selectedTopCategory;
 	private SubCategory selectedSubCategory;
+	// #endregion
+	
+	// #region 상품 식별 정보 UI
 	private JComboBox<TopCategory> topCategoryComboBox;
 	private JComboBox<SubCategory> subCategoryComboBox;
 	private JTextField nameField;
+	// #endregion
 	
 	
 	
@@ -49,24 +49,8 @@ final class IdentificationPanel extends JPanel
 		selectedTopCategory = null;
 		selectedSubCategory = null;
 		
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(topCategory);
-		add(Box.createRigidArea(new Dimension(0, 12)));
-		add(subCategory);
-		add(Box.createRigidArea(new Dimension(0, 12)));
-		add(name);
-		
-		updateTopCategoryComboBox();
-	}
-	
-	
-	
-	private void updateTopCategoryComboBox()
-	{
-		TopCategoryDAO topCategoryDAO = new TopCategoryDAO();
-		List<TopCategory> topCategorys = topCategoryDAO.selectAll();
-		
-		topCategoryComboBox.addItemListener((itemEvent)->
+		// #region 카테고리 선택 이벤트 추가
+		topCategoryComboBox.addItemListener((itemEvent) ->
 		{
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
 			{
@@ -74,30 +58,34 @@ final class IdentificationPanel extends JPanel
 			}
 			
 		});
-		subCategoryComboBox.addItemListener((itemEvent)->
+		subCategoryComboBox.addItemListener((itemEvent) ->
 		{
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
 			{
 				onSelectSubCategory((SubCategory)itemEvent.getItem());
 			}
 		});
-		nameField.addFocusListener(new FocusListener()
-		{
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void focusLost(FocusEvent e)
-			{
-				System.out.println("focus lost");
-				logSelectionState();
-			}
-			
-		});
+		// #endregion
+		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(topCategory);
+		add(Box.createRigidArea(new Dimension(0, 12)));
+		add(subCategory);
+		add(Box.createRigidArea(new Dimension(0, 12)));
+		add(name);
+		
+		// top category 이름 초기화
+		initializeTopCategoryComboBoxItem();
+	}
+	
+	
+	
+	private void initializeTopCategoryComboBoxItem()
+	{
+		TopCategoryDAO topCategoryDAO = new TopCategoryDAO();
+		List<TopCategory> topCategorys = topCategoryDAO.selectAll();
+		
+		
 		
 		// combo box item 초기화
 		TopCategory dummy = new TopCategory();
@@ -111,32 +99,35 @@ final class IdentificationPanel extends JPanel
 		}
 		//
 	}
+	// top category 선택 이벤트
 	private void onSelectTopCategory(TopCategory selectedTopCategory)
 	{
 		this.selectedTopCategory = selectedTopCategory;
 		subCategoryComboBox.removeAllItems();
 		
+		// 더미를 선택했을 때 하위 카테고리, 이름 입력 컴포넌트 비활성화
 		if (selectedTopCategory.getTopCategoryId() == 0)
 		{
 			disableSubComponentOfTopCategory();
-			logSelectionState();
 			return;
 		}
 		
 		subCategoryComboBox.setEnabled(true);
 		updateSubCategoryItem();
-		logSelectionState();
 	}
+	// 하위 카테고리, 이름 입력 컴포넌트 비활성화
 	private void disableSubComponentOfTopCategory()
 	{
 		selectedSubCategory = null;
 		subCategoryComboBox.setEnabled(false);
 		disableSubComponentOfSubCategory();
 	}
+	// 이름 입력 컴포넌트 비활성화
 	private void disableSubComponentOfSubCategory()
 	{
 		nameField.setEnabled(false);
 	}
+	// 하위 카테고리 콤보 박스 요소 최신화
 	private void updateSubCategoryItem()
 	{
 		SubCategoryDAO subCategoryDAO = new SubCategoryDAO();
@@ -153,6 +144,7 @@ final class IdentificationPanel extends JPanel
 			subCategoryComboBox.addItem(subCategorys.get(i));
 		}
 	}
+	// 하위 카테고리 콤보 박스 선택 이벤트
 	private void onSelectSubCategory(SubCategory selectedSubCategory)
 	{
 		this.selectedSubCategory = selectedSubCategory;
@@ -161,13 +153,12 @@ final class IdentificationPanel extends JPanel
 		if (selectedSubCategory.getSubCategoryId() == 0)
 		{
 			disableSubComponentOfSubCategory();
-			logSelectionState();
 			return;
 		}
 		
 		nameField.setEnabled(true);
-		logSelectionState();
 	}
+	// 현재 선택 상태 확인
 	private void logSelectionState()
 	{
 		System.out.println("===============================================");

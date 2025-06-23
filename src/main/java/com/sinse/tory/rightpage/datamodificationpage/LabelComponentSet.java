@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+// 라벨과 함께 있는 컴포넌트
 public final class LabelComponentSet extends JPanel
 {
 	private JLabel label;
