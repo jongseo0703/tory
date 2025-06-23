@@ -1,24 +1,39 @@
 package com.sinse.tory.rightpage.view;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.sinse.tory.db.common.util.PageMove;
 import com.sinse.tory.db.common.util.PageUtil;
 import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
 
 public class Testmain extends JFrame{
 	JPanel leftPage;
 	JPanel rightPage ;
-	JPanel[]pages;
+	List<JPanel> pages;
+	PageMove pageShow;
+	ProductShip productShip;
+	DataModificationPage dataModificationPage;
 	public Testmain() {
+		productShip = new ProductShip(this);
+		dataModificationPage = new DataModificationPage();
 		rightPage = new JPanel();
 		leftPage = new JPanel();
+		rightPage.setLayout(new CardLayout());
+		
+		
 		creatPage();
+		for(int i=0;i<pages.size();i++) {
+			rightPage.add(pages.get(i));
+		}
 		add(leftPage);
-		rightPage.add(pages[0]);
-		rightPage.add(pages[1]);
 		add(rightPage);
 		showPage(0,1);
 		setLayout(new GridLayout(1,2));
@@ -26,17 +41,18 @@ public class Testmain extends JFrame{
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-	public static void main(String[] args) {
-		new Testmain();
-	}
 	public void creatPage() {
-		pages = new JPanel[2];
-		pages[0] = new ProductShip(this);
-		pages[1] = new DataModificationPage();
+		pages = new ArrayList<>();
+		pages.add(productShip);
+		pages.add(dataModificationPage);
 		
 	}
 	public void showPage(int page1,int page2) {
-		pages[page1].setVisible(true);
-		pages[page2].setVisible(false);
+		pages.get(page1).setVisible(true);
+		pages.get(page2).setVisible(false);
+	}
+	
+	public static void main(String[] args) {
+		new Testmain();
 	}
 }

@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.sinse.tory.db.common.util.PageMove;
 import com.sinse.tory.db.common.util.PageUtil;
 
 public class ProductShip extends JPanel{
@@ -174,7 +175,26 @@ public class ProductShip extends JPanel{
 				testmain.showPage(1,0);
 			}
 		});
-		 
+		 bt[2].addActionListener(e->{
+			 boolean resutle = ShowMessage.showConfirm(testmain,"출고하기","출고하기겠습니까?");
+			 
+			 if(resutle) {
+				 // 확인 눌렀을때
+				System.out.println("확인"); 
+			 }else {
+				// 취소를 눌렀을 때
+			}
+		 });
+		 bt[3].addActionListener(e->{
+			 boolean resutle = ShowMessage.showConfirm(testmain,"입고하기","입고하기겠습니까?");
+			 
+			 if(resutle) {
+				 // 확인 눌렀을때
+				 System.out.println("확인"); 
+			 }else {
+				 // 취소를 눌렀을 때
+			 }
+		 });
 		 
 		 
 		 
@@ -185,7 +205,7 @@ public class ProductShip extends JPanel{
 			if(i==0) add(Box.createRigidArea(new Dimension(0,30)));
 			if(i==1) add(la[3]);la[3].setAlignmentX(Component.LEFT_ALIGNMENT); 
 		}
-		MicrophoneForm microphoneForm = new MicrophoneForm();
+		MicrophoneForm microphoneForm = new MicrophoneForm(testmain);
 		add(microphoneForm); microphoneForm.setAlignmentX(Component.LEFT_ALIGNMENT);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(Color.white);

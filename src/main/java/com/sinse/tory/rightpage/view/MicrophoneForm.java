@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Window;
@@ -23,6 +24,8 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,9 +44,10 @@ public class MicrophoneForm extends JPanel{
 	JWindow w_mic;// 버튼을 누르면 나오는 곳
 	JTextArea area;// 음성이식해서 출력될 곳
 	JScrollPane scroll;
-	
+	Testmain testmain;
 	boolean fig = false;
-	public MicrophoneForm() {
+	public MicrophoneForm(Testmain testmain) {
+		this.testmain = testmain;
 		bt = new JButton() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -51,7 +55,7 @@ public class MicrophoneForm extends JPanel{
 				setBorderPainted(false);//버튼의 윤각 지우기
 				setContentAreaFilled(false);
 				Image img = null;
-				URL url=this.getClass().getClassLoader().getResource("images/mic.png");//main/resources/images/안에있는 예비용 이미지
+				URL url=this.getClass().getClassLoader().getResource("images/Mic.png");//main/resources/images/안에있는 예비용 이미지
 				try {
 					BufferedImage bufferImage= ImageIO.read(url);//예비 마이크 이미지
 					img = bufferImage.getScaledInstance(96, 96, Image.SCALE_SMOOTH);
@@ -98,7 +102,6 @@ public class MicrophoneForm extends JPanel{
 		d_helper.setAlwaysOnTop(true);//항상 위에 있게 설정
 		d_helper.pack();//크기를 자동으로 조절
 		
-		
 		bt.setPreferredSize(new Dimension(96,96)); // 버튼의 크기
 		setPreferredSize(new Dimension(PageUtil.InputOutput_Width,150)); // 현 패널의 크기
 		p_helper.setPreferredSize(new Dimension(24,24)); // 도우미 크기
@@ -106,20 +109,13 @@ public class MicrophoneForm extends JPanel{
 		Color ff = Color.decode("#F4F5F6");
 		setBackground(ff);
 		
-		//JWindow에 부착한 텍스트에리가 인식할려면 주인인 Frame이 필요하다
-		Frame dummyOwner = new Frame();
-		dummyOwner.setUndecorated(true);
-		dummyOwner.setSize(0, 0);
-		dummyOwner.setLocationRelativeTo(null);
-		dummyOwner.setVisible(true);
-		
-		w_mic = new JWindow(dummyOwner);
+		w_mic = new JWindow(testmain);
 		area = new JTextArea();
 		scroll = new JScrollPane(area);
 		w_mic.setLayout(new BorderLayout());
 		scroll.setPreferredSize(new Dimension(getPreferredSize().getSize().width-8,90));//텍스트에리아 넓이 설정
 		w_mic.setFocusableWindowState(true);
-		scroll.setBackground(Color.blue);
+		area.setBackground(ff);
 		scroll.setBorder(null);
 		w_mic.add(scroll, BorderLayout.CENTER);
 		w_mic.pack(); // 크기 자동 조절
@@ -127,36 +123,50 @@ public class MicrophoneForm extends JPanel{
 		//이벤트 부여
 		//버튼을 클릭하면 버튼이 있는 패널의 높이가 커진다
 		bt.addActionListener(e->{
-			Window parentWindow = SwingUtilities.getWindowAncestor(MicrophoneForm.this);
-			w_mic.setFocusableWindowState(true);
-			w_mic.setFocusable(true);
-			    // 처음 위치 설정
-			follow(w_mic, p_helper, PageUtil.InputOutput_Width/2-33, -getPreferredSize().getSize().height/2+110);
-			if(fig != true) {
-				fig = true;
-				w_mic.setVisible(fig);
-			}
-			else {
-				fig = false;
-				w_mic.setVisible(fig);
-				area.setText("");
-			}
-			SwingUtilities.invokeLater(() -> area.requestFocusInWindow());
-			
-			if (parentWindow != null) {
-			    // 창이 움직일 때마다 팝업 위치 갱신
-			    parentWindow.addComponentListener(new ComponentAdapter() {
-			        @Override
-			        public void componentMoved(ComponentEvent e) {
-			            follow(w_mic, p_helper,PageUtil.InputOutput_Width/2-33, -getPreferredSize().getSize().height/2+110);
-			        }
-			        @Override
-			        public void componentResized(ComponentEvent e) {
-			            follow(w_mic, p_helper,PageUtil.InputOutput_Width/2-33, -getPreferredSize().getSize().height/2+110);
-			        }
-			    });
-			}
-			
+			//MicrophoneForm.this는 현재 객체 참조
+			//getWindowAncestor(받은 컴포넌트)는 받는 컴포넌트가 포함된 최상위 window 반환
+			//SwingUtilitiesd는 Swing작업을 편하게 해주는 정석 헬퍼세트
+			//스레드 문제·부모창 찾기·좌표 꼬임을 처리할 수 있게 해준다
+			Window parentWindow = SwingUtilities.getWindowAncestor(MicrophoneForm.this);		
+			  //w_mic 속성 설정
+		    w_mic.setFocusableWindowState(true);//키보드입력이나 클릭 반응 허용
+		    w_mic.setFocusable(true);//포커스를 받을 준비되도록 허용 
+
+		    fig = !fig; //버튼 하나로 팝업창 열고닫기 하기위한 논리값 
+		    w_mic.setVisible(fig);
+		    area.setText(fig ? area.getText() : ""); //끄면 텍스트 초기화
+		    SwingUtilities.invokeLater(() -> area.requestFocusInWindow());
+
+		    if (parentWindow != null) {
+		        // 팝업창 위치/크기 계산하는 함수
+		        Runnable updateHelperLocationAndSize = () -> {
+		            Point panelOnScreen = MicrophoneForm.this.getLocationOnScreen();
+
+		            int newWidth = parentWindow.getWidth() / 2 - 10; //팝업창의 넓이
+		            int newHeight = parentWindow.getHeight() / 7;// 팝업창의 높이
+		            w_mic.setSize(newWidth, newHeight);
+		            
+		            w_mic.setLocation(
+		            		panelOnScreen.x, //팝업창의 x값
+		            		panelOnScreen.y -newHeight //팡업창의 y값
+		            		);
+		        };
+		        updateHelperLocationAndSize.run();//메서드 호출
+
+		        // 한 번만 리스너 등록
+		        parentWindow.removeComponentListener(parentWindow.getComponentListeners().length > 0 ? parentWindow.getComponentListeners()[0] : null);
+		        parentWindow.addComponentListener(new java.awt.event.ComponentAdapter() {
+		            @Override
+		            public void componentMoved(ComponentEvent e) {
+		                updateHelperLocationAndSize.run();
+		            }
+
+		            @Override
+		            public void componentResized(ComponentEvent e) {
+		                updateHelperLocationAndSize.run();
+		            }
+		        });
+		    }
 		});
 		
 		
@@ -165,7 +175,7 @@ public class MicrophoneForm extends JPanel{
 		p_helper.addMouseListener(new MouseAdapter() {
 			//마우스와 접촉하면 설명다이얼그램이 보이게 한다
 			public void mouseEntered(MouseEvent e) {				
-				follow(d_helper, p_helper,30,80);
+				follow(d_helper, p_helper,30,0);
 		        d_helper.setVisible(true);
 				
 			}
@@ -175,7 +185,7 @@ public class MicrophoneForm extends JPanel{
 			}
 		});
 		
-		
+		setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 		add(bt);
 		add(p_helper);
 		setVisible(true);
@@ -184,18 +194,38 @@ public class MicrophoneForm extends JPanel{
      // 부모 창 위치 구하기
         Window parentWindow = SwingUtilities.getWindowAncestor(MicrophoneForm.this);
         if (parentWindow != null) {
-            Point windowLocation = parentWindow.getLocationOnScreen();
-            Point helperLocal = p.getLocation(); // MicrophoneForm 내부 위치
 
-            // 설명창 위치 계산
-            int helperX = windowLocation.x + helperLocal.x + x;
-            int helperY = windowLocation.y + MicrophoneForm.this.getY() + y - window.getHeight();
+            // 팝업 위치 갱신 함수
+            Runnable updateHelperLocation = () -> {
+                // 패널의 화면 위치 계산
+                Point panelOnScreen = MicrophoneForm.this.getLocationOnScreen();
+                int helperX = panelOnScreen.x + p.getX() + x;
+                int helperY = panelOnScreen.y + p.getY() + y - window.getHeight();
+                
+                window.setLocation(helperX, helperY);
+            };
+            updateHelperLocation.run();
 
-            window.setLocation(helperX, helperY);
-        }
-        
+            // 한 번만 리스너 등록 (중복 등록 방지)
+            for (ComponentListener listener : parentWindow.getComponentListeners()) {
+                if (listener instanceof ComponentAdapter) {
+                    parentWindow.removeComponentListener(listener);
+                }
+            }
+
+            parentWindow.addComponentListener(new java.awt.event.ComponentAdapter() {
+                @Override
+                public void componentMoved(ComponentEvent e) {
+                    updateHelperLocation.run();
+                }
+
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    updateHelperLocation.run();
+                }
+            });
 	
-		
+        }
 	}
 	
 }
