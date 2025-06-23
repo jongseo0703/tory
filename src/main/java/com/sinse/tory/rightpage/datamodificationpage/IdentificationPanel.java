@@ -24,8 +24,6 @@ final class IdentificationPanel extends JPanel
 	private LabelComponentSet name;
 
 	// #region 선택한 카테고리들 저장
-	private TopCategory selectedTopCategory;
-	private SubCategory selectedSubCategory;
 	// #endregion
 	
 	// #region 상품 식별 정보 UI
@@ -45,9 +43,6 @@ final class IdentificationPanel extends JPanel
 		topCategory = new LabelComponentSet("상위 카테고리", topCategoryComboBox, true);
 		subCategory = new LabelComponentSet("하위 카테고리", subCategoryComboBox, false);
 		name = new LabelComponentSet("상품 명", nameField, false);
-		
-		selectedTopCategory = null;
-		selectedSubCategory = null;
 		
 		// #region 카테고리 선택 이벤트 추가
 		topCategoryComboBox.addItemListener((itemEvent) ->
@@ -102,7 +97,6 @@ final class IdentificationPanel extends JPanel
 	// top category 선택 이벤트
 	private void onSelectTopCategory(TopCategory selectedTopCategory)
 	{
-		this.selectedTopCategory = selectedTopCategory;
 		subCategoryComboBox.removeAllItems();
 		
 		// 더미를 선택했을 때 하위 카테고리, 이름 입력 컴포넌트 비활성화
@@ -118,7 +112,6 @@ final class IdentificationPanel extends JPanel
 	// 하위 카테고리, 이름 입력 컴포넌트 비활성화
 	private void disableSubComponentOfTopCategory()
 	{
-		selectedSubCategory = null;
 		subCategoryComboBox.setEnabled(false);
 		disableSubComponentOfSubCategory();
 	}
@@ -131,7 +124,7 @@ final class IdentificationPanel extends JPanel
 	private void updateSubCategoryItem()
 	{
 		SubCategoryDAO subCategoryDAO = new SubCategoryDAO();
-		List<SubCategory> subCategorys = subCategoryDAO.selectByTop(selectedTopCategory);
+		List<SubCategory> subCategorys = subCategoryDAO.selectByTop((TopCategory)topCategoryComboBox.getSelectedItem());
 		
 		SubCategory dummy = new SubCategory();
 		dummy.setSubCategoryId(0);
@@ -147,7 +140,6 @@ final class IdentificationPanel extends JPanel
 	// 하위 카테고리 콤보 박스 선택 이벤트
 	private void onSelectSubCategory(SubCategory selectedSubCategory)
 	{
-		this.selectedSubCategory = selectedSubCategory;
 		nameField.setText(null);
 		
 		if (selectedSubCategory.getSubCategoryId() == 0)
@@ -158,12 +150,21 @@ final class IdentificationPanel extends JPanel
 		
 		nameField.setEnabled(true);
 	}
+	void insertProductIdentifier(TopCategory topCategory, SubCategory subCategory, String name)
+	{
+		topCategoryComboBox.setSelectedItem(topCategory);
+		subCategoryComboBox.setSelectedItem(subCategory);
+		nameField.setText(name);
+	}
+	
+	
+	
 	// 현재 선택 상태 확인
 	private void logSelectionState()
 	{
 		System.out.println("===============================================");
-		System.out.println(selectedTopCategory);
-		System.out.println(selectedSubCategory);
+		System.out.println((TopCategory)topCategoryComboBox.getSelectedItem());
+		System.out.println((SubCategory)subCategoryComboBox.getSelectedItem());
 		System.out.println("Text : " + nameField.getText());
 	}
 }
