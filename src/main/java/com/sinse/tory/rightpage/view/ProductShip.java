@@ -172,7 +172,7 @@ public class ProductShip extends JPanel{
 		 bt[1].addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				testmain.showPage(1,0);
+				testmain.pageMove.showPage(1,0);
 			}
 		});
 		 bt[2].addActionListener(e->{
