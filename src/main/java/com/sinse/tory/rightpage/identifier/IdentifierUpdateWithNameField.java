@@ -16,8 +16,13 @@ public final class IdentifierUpdateWithNameField extends IdentifierUpdate<JTextF
 	
 	
 	@Override
-	protected void clear(JTextField name)
+	protected void clearNameComponent(JTextField name)
 	{
 		name.setText(null);
+	}
+	@Override
+	protected void updateNameComponent(JTextField name)
+	{
+		
 	}
 }

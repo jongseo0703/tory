@@ -73,6 +73,7 @@ abstract class IdentifierUpdate<T extends JComponent>
 	private void onSelectTopCategory(TopCategory selectedTopCategory)
 	{
 		subCategoryComboBox.removeAllItems();
+		clearNameComponent(name);
 		
 		// 더미를 선택했을 때 하위 카테고리, 이름 입력 컴포넌트 비활성화
 		if (selectedTopCategory.getTopCategoryId() == 0)
@@ -115,7 +116,7 @@ abstract class IdentifierUpdate<T extends JComponent>
 	// 하위 카테고리 콤보 박스 선택 이벤트
 	private void onSelectSubCategory(SubCategory selectedSubCategory)
 	{
-		clear(name);
+		clearNameComponent(name);
 		
 		if (selectedSubCategory.getSubCategoryId() == 0)
 		{
@@ -124,6 +125,8 @@ abstract class IdentifierUpdate<T extends JComponent>
 		}
 		
 		name.setEnabled(true);
+		updateNameComponent(name);
 	}
-	protected abstract void clear(T name);
+	protected abstract void clearNameComponent(T name);
+	protected abstract void updateNameComponent(T name);
 }
