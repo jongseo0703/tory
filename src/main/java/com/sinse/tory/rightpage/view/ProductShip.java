@@ -174,7 +174,26 @@ public class ProductShip extends JPanel{
 				testmain.showPage(1,0);
 			}
 		});
-		 
+		 bt[2].addActionListener(e->{
+			 boolean resutle = ShowMessage.showConfirm(testmain,"출고하기","출고하기겠습니까?");
+			 
+			 if(resutle) {
+				 // 확인 눌렀을때
+				System.out.println("확인"); 
+			 }else {
+				// 취소를 눌렀을 때
+			}
+		 });
+		 bt[3].addActionListener(e->{
+			 boolean resutle = ShowMessage.showConfirm(testmain,"입고하기","입고하기겠습니까?");
+			 
+			 if(resutle) {
+				 // 확인 눌렀을때
+				 System.out.println("확인"); 
+			 }else {
+				 // 취소를 눌렀을 때
+			 }
+		 });
 		 
 		 
 		 
