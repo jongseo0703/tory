@@ -24,6 +24,7 @@ public final class Header extends JPanel
 	private static final int HEADER_HEIGHT = 29;
 	// 패널 좌우 마진
 	private static final int MARGIN = 16;
+	private static final int BUTTON_WIDTH_MARGIN = 24;
 	
 	
 	
@@ -61,13 +62,18 @@ public final class Header extends JPanel
 		rightPanel.add(Box.createRigidArea(new Dimension(24, 0)));
 		rightPanel.add(saveButton);
 		
-		deleteButton.setBorder(DataModificationPage.EMPTY_BORDER);
-		deleteButton.setPreferredSize(new Dimension(111, HEADER_HEIGHT));
-		deleteButton.setMaximumSize(new Dimension(111, HEADER_HEIGHT));
-		
-		saveButton.setBorder(DataModificationPage.EMPTY_BORDER);
-		saveButton.setPreferredSize(new Dimension(98, HEADER_HEIGHT));
-		saveButton.setMaximumSize(new Dimension(98, HEADER_HEIGHT));
+		updateButtonSize(deleteButton);
+		updateButtonSize(saveButton);
+	}
+	
+	
+	
+	private void updateButtonSize(JButton button)
+	{
+		button.setBorder(BorderFactory.createEmptyBorder(0, BUTTON_WIDTH_MARGIN, 0, BUTTON_WIDTH_MARGIN));
+		int buttonPreferredWidth = button.getPreferredSize().width;
+		button.setPreferredSize(new Dimension(buttonPreferredWidth, HEADER_HEIGHT));
+		button.setMaximumSize(new Dimension(buttonPreferredWidth, HEADER_HEIGHT));
 	}
 	
 	
