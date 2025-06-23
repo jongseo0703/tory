@@ -3,6 +3,9 @@ package com.sinse.tory.rightpage.datamodificationpage;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -24,7 +27,7 @@ public final class Header extends JPanel
 	
 	
 	
-	public Header(int parentWidth, int parentMargin)
+	public Header()
 	{
 		backButton = new JButton("<");
 		rightPanel = new JPanel();
@@ -42,6 +45,14 @@ public final class Header extends JPanel
 		backButton.setBorder(DataModificationPage.EMPTY_BORDER);
 		backButton.setPreferredSize(new Dimension(HEADER_HEIGHT, HEADER_HEIGHT));
 		backButton.setMaximumSize(new Dimension(HEADER_HEIGHT, HEADER_HEIGHT));
+		backButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				
+			}
+		});
 		
 		rightPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		rightPanel.setBorder(DataModificationPage.EMPTY_BORDER);
@@ -57,5 +68,12 @@ public final class Header extends JPanel
 		saveButton.setBorder(DataModificationPage.EMPTY_BORDER);
 		saveButton.setPreferredSize(new Dimension(98, HEADER_HEIGHT));
 		saveButton.setMaximumSize(new Dimension(98, HEADER_HEIGHT));
+	}
+	
+	
+	
+	private void updateToSearchPage()
+	{
+		
 	}
 }
