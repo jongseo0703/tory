@@ -14,26 +14,35 @@ import javax.swing.text.NumberFormatter;
 
 import com.sinse.tory.db.model.Brand;
 import com.sinse.tory.db.model.Location;
+import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.model.ProductDetail;
+import com.sinse.tory.db.model.SubCategory;
+import com.sinse.tory.db.model.TopCategory;
+import com.sinse.tory.db.repository.BrandDAO;
+import com.sinse.tory.db.repository.LocationDAO;
+import com.sinse.tory.rightpage.db.repository.RightPageBrandDAO;
+import com.sinse.tory.rightpage.db.repository.RightPageLocationDAO;
 
 // Content 부분의 테이블 영역
 final class DetailDataTable extends JPanel
 {
 	private JComboBox<Location> locationComboBox;
 	private JComboBox<Brand> brandComboBox;
-	// private JComboBox<Size> sizeComboBox;
+	private JTextField sizeField;
 	private JFormattedTextField priceField;
-	private JFormattedTextField countField;
+	private JFormattedTextField quantityField;
 	
 	private JTextField descriptionField;
 	
 	
 	
-	DetailDataTable()
+	DetailDataTable(ProductDetail productDetail)
 	{
 		locationComboBox = new JComboBox<Location>();
 		brandComboBox = new JComboBox<Brand>();
+		sizeField = new JTextField();
 		priceField = getFormattedTextField(true);
-		countField = getFormattedTextField(false);
+		quantityField = getFormattedTextField(false);
 		descriptionField = new JTextField();
 		
 		
@@ -51,17 +60,26 @@ final class DetailDataTable extends JPanel
 			},
 			new TableData[]
 			{
-				new TableData("사이즈", new JComboBox()),
+				new TableData("사이즈", sizeField),
 				new TableData("가격", priceField),
-				new TableData("수량", countField)
+				new TableData("수량", quantityField)
 			},
 			new TableData[]
 			{
 				new TableData("설명", descriptionField)
 			}
 		);
+		
+		if (productDetail != null)
+		{
+			insertDetailData(productDetail);
+		}
+		else
+		{
+			initializeTable();
+		}
 	}
-	
+
 	
 	
 	// 테이블에 TableData를 추가하는 함수
@@ -87,30 +105,88 @@ final class DetailDataTable extends JPanel
 			row.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowPreferredHeight));
 		}
 	}
-	// #region TableData의 생성자의 2번째 매개변수에 넣을 컴포넌트를 생서하여 반환하는 함수
-	private JTextField getTextField(String text, boolean enabled)
-	{
-		JTextField textField = new JTextField(text);
-		
-		textField.setEnabled(enabled);
-		
-		return textField;
-	}
 	private JFormattedTextField getFormattedTextField(boolean enabled)
 	{
-		JFormattedTextField textField = new JFormattedTextField(new NumberFormatter());
+		NumberFormatter numberFormatter = new NumberFormatter();
+		JFormattedTextField textField = new JFormattedTextField(numberFormatter);
 		
+		numberFormatter.setValueClass(Integer.class);
 		textField.setEnabled(enabled);
 		
 		return textField;
 	}
 	// #endregion
 	// 
-	void insertDetailData(Location location, Brand brand, /*TODO : size*/ int price, int count)
+	void insertDetailData(ProductDetail productDetail)
 	{
-		locationComboBox.setSelectedItem(location);
-		brandComboBox.setSelectedItem(brand);
-		priceField.setValue(price);
-		countField.setValue(count);
+		locationComboBox.setSelectedItem(productDetail.getProduct().getLocation());
+		brandComboBox.setSelectedItem(productDetail.getProduct().getLocation().getBrand());
+		sizeField.setText(productDetail.getProductSizeName());
+		priceField.setValue(productDetail.getProduct().getProductPrice());
+		quantityField.setValue(productDetail.getProductQuantity());
+		descriptionField.setText(productDetail.getProduct().getDescription());
+	}
+	private void initializeTable()
+	{
+		initializeLocationComboBox();
+		initializeBrandComboBox();
+		quantityField.setValue(0);
+	}
+	private void initializeLocationComboBox()
+	{
+		Location dummy = new Location();
+		dummy.setLocationId(0);
+		dummy.setLocationName("선택 하세요.");
+		
+		locationComboBox.addItem(dummy);
+		for (Location location : RightPageLocationDAO.selectAllName())
+		{
+			locationComboBox.addItem(location);
+		}
+	}
+	private void initializeBrandComboBox()
+	{
+		Brand dummy = new Brand();
+		dummy.setBrandId(0);
+		dummy.setBrandName("선택 하세요.");
+		
+		brandComboBox.addItem(dummy);
+		for (Brand brand : RightPageBrandDAO.selectAllName())
+		{
+			brandComboBox.addItem(brand);
+		}
+	}
+	boolean isInputAll()
+	{
+		return
+			locationComboBox.getSelectedIndex() != 0 &&
+			brandComboBox.getSelectedIndex() != 0 &&
+			sizeField.getText().isEmpty() == false &&
+			priceField.getValue() != null;
+	}
+	ProductDetail createProductDetailFromInputted(SubCategory subCategory, String productName)
+	{
+		Brand selectedBrand = (Brand)brandComboBox.getSelectedItem();
+		Location selectedLocation = (Location)locationComboBox.getSelectedItem();
+		
+		Brand brand = new Brand();
+		Location location = new Location();
+		Product product = new Product();
+		ProductDetail productDetail = new ProductDetail();
+		
+		brand.setBrandId(selectedBrand.getBrandId());
+		brand.setSubCategory(subCategory);
+		brand.setBrandName(selectedBrand.getBrandName());
+		location.setLocationId(selectedLocation.getLocationId());
+		location.setBrand(brand);
+		location.setLocationName(selectedLocation.getLocationName());
+		product.setLocation(location);
+		product.setProductPrice(((Number) priceField.getValue()).intValue());
+		product.setDescription(descriptionField.getText());
+		product.setProductName(productName);
+		productDetail.setProduct(product);
+		productDetail.setProductSizeName(sizeField.getText());
+		
+		return productDetail;
 	}
 }

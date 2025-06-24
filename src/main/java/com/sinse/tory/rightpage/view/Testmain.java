@@ -37,7 +37,7 @@ public class Testmain extends JFrame{
 	{
 		pageMove = new PageMove();
 		productShip = new ProductShip(this);
-		dataModificationPage = new DataModificationPage(pageMove);
+		dataModificationPage = new DataModificationPage(pageMove, null);
 		
 		creatPage();
 		rightPage = new JPanel();

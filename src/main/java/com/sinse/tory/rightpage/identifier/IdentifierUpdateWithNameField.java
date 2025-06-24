@@ -3,6 +3,8 @@ package com.sinse.tory.rightpage.identifier;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
+import com.sinse.tory.db.model.Brand;
+import com.sinse.tory.db.model.Location;
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
 
