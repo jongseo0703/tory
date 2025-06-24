@@ -14,6 +14,7 @@ import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.LocationDAO;
 import com.sinse.tory.db.repository.ProductDAO;
+import com.sinse.tory.db.repository.SubCategoryDAO;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameField;
 
 final class IdentificationPanel extends JPanel
@@ -70,7 +71,27 @@ final class IdentificationPanel extends JPanel
 	}
 	boolean isSelectAll()
 	{
-		return nameField.getText() != null;
+		return nameField.getText().isEmpty() == false;
+	}
+	SubCategory createSubCategoryFromInputted()
+	{
+		TopCategory selectedTopCategory = (TopCategory)topCategoryComboBox.getSelectedItem();
+		SubCategory selectedSubCategory = (SubCategory)subCategoryComboBox.getSelectedItem();
+		TopCategory topCategory = new TopCategory();
+		SubCategory subCategory = new SubCategory();
+		SubCategoryDAO subCategoryDAO = new SubCategoryDAO();
+		
+		topCategory.setTopCategoryId(selectedTopCategory.getTopCategoryId());
+		topCategory.setTopCategoryName(selectedTopCategory.getTopCategoryName());
+		subCategory.setSubCategoryId(selectedSubCategory.getSubCategoryId());
+		subCategory.setSubCategoryName(selectedSubCategory.getSubCategoryName());
+		subCategory.setTopCategory(topCategory);
+		
+		return subCategory;
+	}
+	String getProductName()
+	{
+		return nameField.getText();
 	}
 	
 	

@@ -14,7 +14,10 @@ import javax.swing.text.NumberFormatter;
 
 import com.sinse.tory.db.model.Brand;
 import com.sinse.tory.db.model.Location;
+import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
+import com.sinse.tory.db.model.SubCategory;
+import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.BrandDAO;
 import com.sinse.tory.db.repository.LocationDAO;
 import com.sinse.tory.rightpage.db.repository.RightPageBrandDAO;
@@ -104,8 +107,10 @@ final class DetailDataTable extends JPanel
 	}
 	private JFormattedTextField getFormattedTextField(boolean enabled)
 	{
-		JFormattedTextField textField = new JFormattedTextField(new NumberFormatter());
+		NumberFormatter numberFormatter = new NumberFormatter();
+		JFormattedTextField textField = new JFormattedTextField(numberFormatter);
 		
+		numberFormatter.setValueClass(Integer.class);
 		textField.setEnabled(enabled);
 		
 		return textField;
@@ -156,7 +161,32 @@ final class DetailDataTable extends JPanel
 		return
 			locationComboBox.getSelectedIndex() != 0 &&
 			brandComboBox.getSelectedIndex() != 0 &&
-			sizeField.getText() != null &&
+			sizeField.getText().isEmpty() == false &&
 			priceField.getValue() != null;
+	}
+	ProductDetail createProductDetailFromInputted(SubCategory subCategory, String productName)
+	{
+		Brand selectedBrand = (Brand)brandComboBox.getSelectedItem();
+		Location selectedLocation = (Location)locationComboBox.getSelectedItem();
+		
+		Brand brand = new Brand();
+		Location location = new Location();
+		Product product = new Product();
+		ProductDetail productDetail = new ProductDetail();
+		
+		brand.setBrandId(selectedBrand.getBrandId());
+		brand.setSubCategory(subCategory);
+		brand.setBrandName(selectedBrand.getBrandName());
+		location.setLocationId(selectedLocation.getLocationId());
+		location.setBrand(brand);
+		location.setLocationName(selectedLocation.getLocationName());
+		product.setLocation(location);
+		product.setProductPrice(((Number) priceField.getValue()).intValue());
+		product.setDescription(descriptionField.getText());
+		product.setProductName(productName);
+		productDetail.setProduct(product);
+		productDetail.setProductSizeName(sizeField.getText());
+		
+		return productDetail;
 	}
 }

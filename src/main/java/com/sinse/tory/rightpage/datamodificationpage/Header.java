@@ -82,7 +82,7 @@ public final class Header extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				dataManagementFromTable.add();
+				dataManagementFromTable.add(pageMove);
 			}
 		});
 	}
