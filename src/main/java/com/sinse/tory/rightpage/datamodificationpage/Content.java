@@ -12,6 +12,10 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.sinse.tory.db.model.ProductDetail;
+import com.sinse.tory.db.repository.ProductDAO;
+import com.sinse.tory.db.repository.ProductDetailDAO;
+
 // 헤더 구역 외 나머지. 
 public final class Content extends JPanel
 {
@@ -27,12 +31,12 @@ public final class Content extends JPanel
 	
 	
 	
-	public Content()
+	public Content(ProductDetail productDetail)
 	{
 		simpleDataPanel = new JPanel();
 		imageUploadPanel = new ImageUploadPanel();
-		identificationPanel = new IdentificationPanel();
-		detailDataTable = new DetailDataTable();
+		identificationPanel = new IdentificationPanel(productDetail);
+		detailDataTable = new DetailDataTable(productDetail);
 		
 		// 내부 동서남북 마진
 		setBorder(BorderFactory.createEmptyBorder(0, HORIZONTAL_MARGIN, 0, HORIZONTAL_MARGIN));
@@ -46,5 +50,12 @@ public final class Content extends JPanel
 		simpleDataPanel.setLayout(new GridLayout(1, 2, 16, 0));
 		simpleDataPanel.add(imageUploadPanel);
 		simpleDataPanel.add(identificationPanel);
+	}
+	
+	
+	
+	public DataManagementFromTable createDataManagementFromTable()
+	{
+		return new DataManagementFromTable(imageUploadPanel, identificationPanel, detailDataTable);
 	}
 }
