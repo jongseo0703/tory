@@ -9,7 +9,7 @@ import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.ProductDAO;
 import com.sinse.tory.db.repository.SubCategoryDAO;
-import com.sinse.tory.rightpage.db.repository.RightPageProductDAO;
+import com.sinse.tory.rightpage.db.repository.RightPageProductDetailDAO;
 
 public final class IdentifierUpdateWithNameComboBox extends IdentifierUpdate<JComboBox<Product>>
 {
@@ -33,7 +33,7 @@ public final class IdentifierUpdateWithNameComboBox extends IdentifierUpdate<JCo
 	@Override
 	protected void updateNameComponent(JComboBox<Product> name)
 	{
-		List<Product> products = RightPageProductDAO.selectProductName((SubCategory)subCategoryComboBox.getSelectedItem());
+		List<Product> products = RightPageProductDetailDAO.selectProductDetail((SubCategory)subCategoryComboBox.getSelectedItem());
 		
 		Product dummy = new Product();
 		dummy.setProductName("선택 하세요.");
