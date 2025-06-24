@@ -36,7 +36,7 @@ public class BrandDAO {
 		//String 으로 sql 을 만들면 객체의 낭비가 생기기때문에 StringBuilder 객체 이용.
 		StringBuilder sql = new StringBuilder();
 		//선택된 SubCategory 에 매칭되는 정보만을 가져오기 위한 쿼리문
-		sql.append("select brand_id, brand_name, subcategory_id from Brand where subcategory_id = ?");
+		sql.append("select brand_id, brand_name, sub_category_id from Brand where subc_ategory_id = ?");
 		
 		try {
 			//만든 쿼리를 실행.
