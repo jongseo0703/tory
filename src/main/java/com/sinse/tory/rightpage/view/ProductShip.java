@@ -251,11 +251,10 @@ public class ProductShip extends Pages{
 			if(i==0) add(Box.createRigidArea(new Dimension(0,30)));
 			if(i==1) add(la[3]);la[3].setAlignmentX(Component.LEFT_ALIGNMENT); 
 		}
-		MicrophoneForm microphoneForm = new MicrophoneForm(testmain);
-		add(microphoneForm); microphoneForm.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(Color.white);
-	   	setPreferredSize(new Dimension(PageUtil.InputOutput_Width,PageUtil.Tory_Hieght));
+	   	//setPreferredSize(new Dimension(PageUtil.InputOutput_Width,PageUtil.Tory_Hieght));
 	}
 
 }
