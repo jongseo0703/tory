@@ -5,19 +5,20 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.ProductDAO;
 import com.sinse.tory.db.repository.SubCategoryDAO;
-import com.sinse.tory.rightpage.db.repository.RightPageProductDAO;
+import com.sinse.tory.rightpage.db.repository.RightPageProductDetailDAO;
 
-public final class IdentifierUpdateWithNameComboBox extends IdentifierUpdate<JComboBox<Product>>
+public final class IdentifierUpdateWithNameComboBox extends IdentifierUpdate<JComboBox<ProductDetail>>
 {
 	private JComboBox<SubCategory> subCategoryComboBox;
 	
 	
 	
-	public IdentifierUpdateWithNameComboBox(JComboBox<TopCategory> topCategoryComboBox, JComboBox<SubCategory> subCategoryComboBox, JComboBox<Product> name)
+	public IdentifierUpdateWithNameComboBox(JComboBox<TopCategory> topCategoryComboBox, JComboBox<SubCategory> subCategoryComboBox, JComboBox<ProductDetail> name)
 	{
 		super(topCategoryComboBox, subCategoryComboBox, name);
 		this.subCategoryComboBox = subCategoryComboBox;
@@ -26,20 +27,23 @@ public final class IdentifierUpdateWithNameComboBox extends IdentifierUpdate<JCo
 	
 	
 	@Override
-	protected void clearNameComponent(JComboBox<Product> name)
+	protected void clearNameComponent(JComboBox<ProductDetail> name)
 	{
 		name.removeAllItems();
 	}
 	@Override
-	protected void updateNameComponent(JComboBox<Product> name)
+	protected void updateNameComponent(JComboBox<ProductDetail> name)
 	{
-		List<Product> products = RightPageProductDAO.selectProductName((SubCategory)subCategoryComboBox.getSelectedItem());
+		List<ProductDetail> products = RightPageProductDetailDAO.selectProductDetail((SubCategory)subCategoryComboBox.getSelectedItem());
 		
-		Product dummy = new Product();
-		dummy.setProductName("선택 하세요.");
+		ProductDetail dummy = new ProductDetail();
+		Product product = new Product();
+		
+		product.setProductName("선택 하세요.");
+		dummy.setProduct(product);
+		dummy.setProductSizeName("");
 		
 		name.addItem(dummy);
-		System.out.println("======================================");
 		for(int i = 0; i < products.size(); i++)
 		{
 			name.addItem(products.get(i));
