@@ -33,11 +33,11 @@ import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.ProductImage;
 import com.sinse.tory.db.repository.ProductDetailDAO;
-import com.sinse.tory.db.repository.ProductImageDAO;
 import com.sinse.tory.db.repository.TopCategoryDAO;
 import com.sinse.tory.rightpage.util.PageMove;
 import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.util.Pages;
+import com.sinse.tory.rightpage.util.ProductImageDAO;
 import com.sinse.tory.rightpage.util.UpdateCount;
 
 public class ProductShip extends Pages{
@@ -52,13 +52,17 @@ public class ProductShip extends Pages{
 	ProductDetail productDetail;
 	ProductImage productImage;
 	ProductDetailDAO productDetailDAO;
-	
+	ProductImageDAO imageDAO;
 	int itemId =0;
 	public ProductShip(Testmain testmain) {
 		super(testmain);
 		t_count = new JTextField();
 		p_form = new JPanel();
 		productDetail = new ProductDetail();
+		productDetailDAO = new ProductDetailDAO();
+		productImage = new ProductImage();
+		imageDAO = new ProductImageDAO();
+		
 		int width = getPreferredSize().getSize().width;//현 패널의 가로넓비
 		/*
 		 * 패널[0]= 상품정보 수정과 추가 버튼
@@ -93,7 +97,8 @@ public class ProductShip extends Pages{
 				
 				if(productImage !=null && productImage.getImageURL() != null) {
 				url = this.getClass().getClassLoader().getResource(productImage.getImageURL()); // 상품이미지 위치
-				}else {					
+				}
+				if(url == null) {					
 					url =this.getClass().getClassLoader().getResource("images/torylogo.png");//이미지가 없을 경우 
 				}
 				Image image = null;
@@ -180,19 +185,19 @@ public class ProductShip extends Pages{
 		box[2].addItemListener((ItemEvent e)->{
 			if(e.getStateChange() == ItemEvent.SELECTED && box[2].getSelectedIndex()>0) {				
 				t_count.setEnabled(true);//수량을 적을 텍스트박스			 
-				productDetailDAO = new ProductDetailDAO();
 				itemId = identifierUpdateWithNameComboBox.getItemID();
 				productDetail = productDetailDAO.selectDetailInfo(itemId);
+				productImage = imageDAO.selectAll(itemId);
 				t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
-				
+				bt[2].setEnabled(true);
+				bt[3].setEnabled(true);
+				System.out.println(productImage.getImageURL());
 			}
 
 		});
 		
-		String result = (productDetail == null) ? "비여있음" : "안 비여있음";
-		System.out.println(result);
-		System.out.println(productDetail.getProductQuantity());
-		
+		bt[2].setEnabled(false);
+		bt[3].setEnabled(false);
 		t_count.setEnabled(false);//수량을 적을 텍스트박스			 
 		
 		//조립
@@ -241,29 +246,35 @@ public class ProductShip extends Pages{
 				testmain.pageMove.showPage(1,0);
 			}
 		});
-		 if(itemId >0) {			 
+		 
+		 UpdateCount updateCount = new UpdateCount();
+		 
 			 bt[2].addActionListener(e->{
 				 boolean resutle = ShowMessage.showConfirm(testmain,"출고하기","출고하기겠습니까?");
-				 
+				 // 확인 눌렀을때
 				 if(resutle) {
-					 // 확인 눌렀을때
-					 // 업데이트 처리필요
-					 
-				 }else {
-					 // 취소를 눌렀을 때
+					 String inOut = "OUT";
+					 int count = productDetail.getProductQuantity()- Integer.parseInt(t_count.getText());
+					 System.out.println(count);
+					 System.out.println(itemId);
+					 System.out.println(Integer.parseInt(t_count.getText()));
+					updateCount.update(count, itemId);
+					updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
 				 }
 			 });
 			 bt[3].addActionListener(e->{
 				 boolean resutle = ShowMessage.showConfirm(testmain,"입고하기","입고하기겠습니까?");
 				 
+				 // 확인 눌렀을때
 				 if(resutle) {
-					 // 확인 눌렀을때
-					 
-				 }else {
-					 // 취소를 눌렀을 때
+					 String inOut = "IN";
+					 int count = productDetail.getProductQuantity()+ Integer.parseInt(t_count.getText());
+					 System.out.println(count);
+					 System.out.println(itemId);
+					 updateCount.update(count, itemId);
+					 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
 				 }
 			 });
-		 }
 		 
 		 
 		 
