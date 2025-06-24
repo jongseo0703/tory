@@ -16,37 +16,30 @@ public class UpdateCount {
 	PreparedStatement pstmt;
 	ResultSet rs;
 	DBManager dbManager;
-	ProductDetail productDetail;
 	
-	public void updateCount(String number, String id, ProductDetail productDetail) {
-		this.productDetail = productDetail;
+	public int selectCout(int id) {
 		con = dbManager.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("update productdetail"
-				+ "set product_quantity = ?"
-				+ "where product_id = ?");
+		sql.append("select * from productdetail where product_id =?");
+		int itemcount =0;
 		try {
 			pstmt = con.prepareStatement(sql.toString());
-			pstmt.setString(1, number);
-			pstmt.setString(2,id);
-			int update = pstmt.executeUpdate();
-			if(update>0) {
-				sql.delete(0, sql.length());
-				sql.append("select product_quantity fron productdetail where product_id =?"); //select문
-				pstmt =con.prepareStatement(sql.toString());
-				pstmt.setString(1, id);
-				rs = pstmt.executeQuery();
-				productDetail.setProductQuantity(rs.getInt("product_quantity"));
+			pstmt.setString(1, Integer.toString(id));
+			rs= pstmt.executeQuery();
+			while(rs.next()) {
+			itemcount = rs.getInt("product_quantity");
 				
 			}
 			
+			
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally {
+		}finally {
 			dbManager.release(pstmt, rs);
 		}
 		
+		return itemcount;
 	}
 
 }

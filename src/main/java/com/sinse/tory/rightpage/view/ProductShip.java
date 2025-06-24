@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -31,11 +32,13 @@ import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.ProductImage;
+import com.sinse.tory.db.repository.ProductDetailDAO;
 import com.sinse.tory.db.repository.ProductImageDAO;
 import com.sinse.tory.db.repository.TopCategoryDAO;
 import com.sinse.tory.rightpage.util.PageMove;
 import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.util.Pages;
+import com.sinse.tory.rightpage.util.UpdateCount;
 
 public class ProductShip extends Pages{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
@@ -48,10 +51,14 @@ public class ProductShip extends Pages{
 	Product product;
 	ProductDetail productDetail;
 	ProductImage productImage;
+	ProductDetailDAO productDetailDAO;
+	
+	int itemId =0;
 	public ProductShip(Testmain testmain) {
 		super(testmain);
 		t_count = new JTextField();
 		p_form = new JPanel();
+		productDetail = new ProductDetail();
 		int width = getPreferredSize().getSize().width;//현 패널의 가로넓비
 		/*
 		 * 패널[0]= 상품정보 수정과 추가 버튼
@@ -169,9 +176,24 @@ public class ProductShip extends Pages{
 		//비활성화 기능
 		//상위카테고리의 값이 정해지기 전까지만 비활성화
 		//값이 차례대로 입력될 수 있도록 
-		 IdentifierUpdateWithNameComboBox identifierUpdateWithNameComboBox = new IdentifierUpdateWithNameComboBox(box[0], box[1], box[2]);
-		 t_count.setEnabled(false);//수량을 적을 텍스트박스
+		IdentifierUpdateWithNameComboBox identifierUpdateWithNameComboBox = new IdentifierUpdateWithNameComboBox(box[0], box[1], box[2]);
+		box[2].addItemListener((ItemEvent e)->{
+			if(e.getStateChange() == ItemEvent.SELECTED && box[2].getSelectedIndex()>0) {				
+				t_count.setEnabled(true);//수량을 적을 텍스트박스			 
+				productDetailDAO = new ProductDetailDAO();
+				itemId = identifierUpdateWithNameComboBox.getItemID();
+				productDetail = productDetailDAO.selectDetailInfo(itemId);
+				t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
+				
+			}
+
+		});
 		
+		String result = (productDetail == null) ? "비여있음" : "안 비여있음";
+		System.out.println(result);
+		System.out.println(productDetail.getProductQuantity());
+		
+		t_count.setEnabled(false);//수량을 적을 텍스트박스			 
 		
 		//조립
 		//location[0]의 안의 상품정보 수정 버튼과 상품추가 버튼 위치 설정
@@ -219,28 +241,29 @@ public class ProductShip extends Pages{
 				testmain.pageMove.showPage(1,0);
 			}
 		});
-		 bt[2].addActionListener(e->{
-			 boolean resutle = ShowMessage.showConfirm(testmain,"출고하기","출고하기겠습니까?");
-			 
-			 if(resutle) {
-				 // 확인 눌렀을때
-				 // 업데이트 처리필요
-//				t_count.setText(Integer.toString(productDetail.getProductQuantity()));//늘어난 수량 확인
-			 }else {
-				// 취소를 눌렀을 때
-			}
-		 });
-		 bt[3].addActionListener(e->{
-			 boolean resutle = ShowMessage.showConfirm(testmain,"입고하기","입고하기겠습니까?");
-			 
-			 if(resutle) {
-				 // 확인 눌렀을때
-//				 t_count.setText(Integer.toString(productDetail.getProductQuantity()));//줄려든 수량 확인
+		 if(itemId >0) {			 
+			 bt[2].addActionListener(e->{
+				 boolean resutle = ShowMessage.showConfirm(testmain,"출고하기","출고하기겠습니까?");
 				 
-			 }else {
-				 // 취소를 눌렀을 때
-			 }
-		 });
+				 if(resutle) {
+					 // 확인 눌렀을때
+					 // 업데이트 처리필요
+					 
+				 }else {
+					 // 취소를 눌렀을 때
+				 }
+			 });
+			 bt[3].addActionListener(e->{
+				 boolean resutle = ShowMessage.showConfirm(testmain,"입고하기","입고하기겠습니까?");
+				 
+				 if(resutle) {
+					 // 확인 눌렀을때
+					 
+				 }else {
+					 // 취소를 눌렀을 때
+				 }
+			 });
+		 }
 		 
 		 
 		 
