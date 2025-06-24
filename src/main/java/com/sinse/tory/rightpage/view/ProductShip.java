@@ -96,27 +96,26 @@ public class ProductShip extends Pages{
 				URL url = null;
 				
 				if(productImage !=null && productImage.getImageURL() != null) {
-				url = this.getClass().getClassLoader().getResource(productImage.getImageURL()); // 상품이미지 위치
+					String path = productImage.getImageURL();
+					path = path.replaceFirst("^/", "");
+					url = this.getClass().getClassLoader().getResource(path); // 상품이미지 위치
 				}
 				if(url == null) {					
 					url =this.getClass().getClassLoader().getResource("images/torylogo.png");//이미지가 없을 경우 
 				}
 				Image image = null;
 				try {
-					
 					BufferedImage buffer = ImageIO.read(url);
-					image = buffer.getScaledInstance(PageUtil.InputOutput_Width/2,260, Image.SCALE_SMOOTH);					
-					
-					
+					image = buffer.getScaledInstance(PageUtil.InputOutput_Width/2,260, Image.SCALE_SMOOTH);	
+					System.out.println(url);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				g.drawImage(image, 0, 0,PageUtil.InputOutput_Width/2,260, this);
+				if(image != null) g.drawImage(image, 0, 0,PageUtil.InputOutput_Width/2,260, this);
+				repaint();
 			}
 		};
-		
-		
 		
 		bt[0].setText("상품정보 수정"); 
 		bt[1].setText("상품추가");
@@ -141,14 +140,11 @@ public class ProductShip extends Pages{
 			box[i].setPreferredSize(d); //콤보박스의 위치
 			box[i].setMaximumSize(d);
 		}
-	
 		
 		//수량 라벨과 텍스트박스 크기 설정
 		la[3].setPreferredSize(new Dimension(800,40));
 		t_count.setPreferredSize(new Dimension(800,80));
 		t_count.setMaximumSize(new Dimension(800,80));
-		
-//		t_count.setText(Integer.toString(productDetail.getProductQuantity())); // 상품의 사이지별 수량
 		
 		//이미지 패널의 예비용 배경색
 		p_img.setBackground(Color.lightGray);
@@ -191,7 +187,6 @@ public class ProductShip extends Pages{
 				t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
 				bt[2].setEnabled(true);
 				bt[3].setEnabled(true);
-				System.out.println(productImage.getImageURL());
 			}
 
 		});
