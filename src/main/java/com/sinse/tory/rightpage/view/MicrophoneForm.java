@@ -1,3 +1,4 @@
+
 package com.sinse.tory.rightpage.view;
 
 import java.awt.BorderLayout;
@@ -34,9 +35,10 @@ import javax.swing.JTextArea;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 
-import com.sinse.tory.db.common.util.PageUtil;
+import com.sinse.tory.rightpage.util.PageUtil;
+import com.sinse.tory.rightpage.util.Pages;
 
-public class MicrophoneForm extends JPanel{
+public class MicrophoneForm extends Pages{
 	JButton bt;//마이크가 있는 버튼
 	JLabel la_explain;// 설명문이 들어있는 라벨
 	JPanel p_helper;// 도우미창을 활설화 시킬 라벨
@@ -44,10 +46,9 @@ public class MicrophoneForm extends JPanel{
 	JWindow w_mic;// 버튼을 누르면 나오는 곳
 	JTextArea area;// 음성이식해서 출력될 곳
 	JScrollPane scroll;
-	Testmain testmain;
 	boolean fig = false;
 	public MicrophoneForm(Testmain testmain) {
-		this.testmain = testmain;
+		super(testmain);
 		bt = new JButton() {
 			@Override
 			protected void paintComponent(Graphics g) {
