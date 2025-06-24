@@ -31,6 +31,7 @@ import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.ProductImage;
 import com.sinse.tory.db.repository.ProductImageDAO;
+import com.sinse.tory.db.repository.TopCategoryDAO;
 import com.sinse.tory.rightpage.util.PageMove;
 import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.util.Pages;
@@ -45,7 +46,7 @@ public class ProductShip extends Pages{
 	JPanel[]location = new JPanel[3]; 
 	Product product;
 	ProductDetail productDetail;
-	ProductImage image;
+	ProductImage productImage;
 	public ProductShip(Testmain testmain) {
 		super(testmain);
 		t_count = new JTextField();
@@ -80,11 +81,19 @@ public class ProductShip extends Pages{
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				URL url = this.getClass().getClassLoader().getResource(image.getImageURL()); // 상품이미지 위치(어디있는지 모르겠음)
+				URL url = null;
+				
+				if(productImage !=null && productImage.getImageURL() != null) {
+				url = this.getClass().getClassLoader().getResource(productImage.getImageURL()); // 상품이미지 위치
+				}else {					
+					url =this.getClass().getClassLoader().getResource("images/torylogo.png");//이미지가 없을 경우 
+				}
 				Image image = null;
 				try {
+					
 					BufferedImage buffer = ImageIO.read(url);
-					image = buffer.getScaledInstance(PageUtil.InputOutput_Width/2,260, Image.SCALE_SMOOTH);
+					image = buffer.getScaledInstance(PageUtil.InputOutput_Width/2,260, Image.SCALE_SMOOTH);					
+					
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -125,7 +134,8 @@ public class ProductShip extends Pages{
 		la[3].setPreferredSize(new Dimension(800,40));
 		t_count.setPreferredSize(new Dimension(800,80));
 		t_count.setMaximumSize(new Dimension(800,80));
-		t_count.setText(Integer.toString(productDetail.getProductQuantity())); // 상품의 사이지별 수량
+		
+//		t_count.setText(Integer.toString(productDetail.getProductQuantity())); // 상품의 사이지별 수량
 		
 		//이미지 패널의 예비용 배경색
 		p_img.setBackground(Color.lightGray);
@@ -214,7 +224,8 @@ public class ProductShip extends Pages{
 			 
 			 if(resutle) {
 				 // 확인 눌렀을때
-				System.out.println("확인"); 
+				 // 업데이트 처리필요
+//				t_count.setText(Integer.toString(productDetail.getProductQuantity()));//늘어난 수량 확인
 			 }else {
 				// 취소를 눌렀을 때
 			}
@@ -224,6 +235,7 @@ public class ProductShip extends Pages{
 			 
 			 if(resutle) {
 				 // 확인 눌렀을때
+//				 t_count.setText(Integer.toString(productDetail.getProductQuantity()));//줄려든 수량 확인
 				 
 			 }else {
 				 // 취소를 눌렀을 때

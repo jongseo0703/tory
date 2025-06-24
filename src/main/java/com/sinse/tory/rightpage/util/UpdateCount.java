@@ -11,7 +11,7 @@ import com.sinse.tory.db.repository.ProductDAO;
 import com.sinse.tory.db.repository.ProductDetailDAO;
 import com.sinse.tory.db.repository.ProductImageDAO;
 
-public class RighteImageDAO {
+public class UpdateCount {
 	Connection con;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -32,7 +32,12 @@ public class RighteImageDAO {
 			int update = pstmt.executeUpdate();
 			if(update>0) {
 				sql.delete(0, sql.length());
-				sql.append(""); //select문 필요
+				sql.append("select product_quantity fron productdetail where product_id =?"); //select문
+				pstmt =con.prepareStatement(sql.toString());
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				productDetail.setProductQuantity(rs.getInt("product_quantity"));
+				
 			}
 			
 		} catch (SQLException e) {
