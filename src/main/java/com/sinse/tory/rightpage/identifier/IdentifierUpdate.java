@@ -16,7 +16,7 @@ abstract class IdentifierUpdate<T extends JComponent>
 {
 	private JComboBox<TopCategory> topCategoryComboBox;
 	private JComboBox<SubCategory> subCategoryComboBox;
-	private T name;
+	protected T name;
 	
 	
 	
