@@ -55,9 +55,7 @@ public class SubCategory {
 	//디버깅용 toString() 메서드 오버라이딩
 	@Override
 	public String toString() {
-		return "SubCategory{id=" + subCategoryId + 
-				", name='" + subCategoryName + "'" +
-				", topCategory=" + topCategory.getTopCategoryName() + "}";
+		return getSubCategoryName();
 	}
 	
 }

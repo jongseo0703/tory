@@ -115,12 +115,7 @@ public class Product {
 	//디버깅용 toString() 메서드 오버라이딩
 	@Override
 	public String toString() {
-		return "Product{id=" + productId +
-				", name='" + productName + "'" +
-				", location=" + location.getLocationName() +
-				", brand=" + location.getBrand().getBrandName() +
-				", subCategory=" + location.getBrand().getSubCategory().getSubCategoryName() +
-				", topCategory=" + location.getBrand().getSubCategory().getTopCategory().getTopCategoryName() + "}";
+		return getProductName();
 	}
 	
 }

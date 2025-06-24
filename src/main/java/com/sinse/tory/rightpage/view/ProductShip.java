@@ -27,8 +27,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sinse.tory.db.common.util.PageMove;
-import com.sinse.tory.db.common.util.PageUtil;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;

@@ -42,7 +42,7 @@ public class TopCategory {
 	//디버깅용 toString() 메서드 오버라이딩
 	@Override
 	public String toString() {
-		return "TopCategory{id=" + topCategoryId + ", name='" + topCategoryName + "'}";
+		return getTopCategoryName();
 	}
 	
 }
