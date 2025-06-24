@@ -7,8 +7,14 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.sinse.tory.db.model.Location;
+import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
+import com.sinse.tory.db.repository.LocationDAO;
+import com.sinse.tory.db.repository.ProductDAO;
+import com.sinse.tory.db.repository.SubCategoryDAO;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameField;
 
 final class IdentificationPanel extends JPanel
@@ -29,7 +35,7 @@ final class IdentificationPanel extends JPanel
 	
 	
 	
-	IdentificationPanel()
+	IdentificationPanel(ProductDetail productDetail)
 	{
 		topCategoryComboBox = new JComboBox<TopCategory>();
 		subCategoryComboBox = new JComboBox<SubCategory>();
@@ -47,17 +53,47 @@ final class IdentificationPanel extends JPanel
 		add(subCategory);
 		add(Box.createRigidArea(new Dimension(0, 12)));
 		add(name);
+		
+		if (productDetail != null)
+		{
+			insertProductIdentifier(productDetail.getProduct());
+		}
 	}
 	
 	
 	
 	// 매개변수 데이터들로 UI들을 초기화하는 함수.
-	void insertProductIdentifier(TopCategory topCategory, SubCategory subCategory, String name)
+	void insertProductIdentifier(Product product)
 	{
-		topCategoryComboBox.setSelectedItem(topCategory);
-		subCategoryComboBox.setSelectedItem(subCategory);
-		nameField.setText(name);
+		topCategoryComboBox.setSelectedItem(product.getLocation().getBrand().getSubCategory().getTopCategory());
+		subCategoryComboBox.setSelectedItem(product.getLocation().getBrand().getSubCategory());
+		nameField.setText(product.getProductName());
 	}
+	boolean isSelectAll()
+	{
+		return nameField.getText().isEmpty() == false;
+	}
+	SubCategory createSubCategoryFromInputted()
+	{
+		TopCategory selectedTopCategory = (TopCategory)topCategoryComboBox.getSelectedItem();
+		SubCategory selectedSubCategory = (SubCategory)subCategoryComboBox.getSelectedItem();
+		TopCategory topCategory = new TopCategory();
+		SubCategory subCategory = new SubCategory();
+		SubCategoryDAO subCategoryDAO = new SubCategoryDAO();
+		
+		topCategory.setTopCategoryId(selectedTopCategory.getTopCategoryId());
+		topCategory.setTopCategoryName(selectedTopCategory.getTopCategoryName());
+		subCategory.setSubCategoryId(selectedSubCategory.getSubCategoryId());
+		subCategory.setSubCategoryName(selectedSubCategory.getSubCategoryName());
+		subCategory.setTopCategory(topCategory);
+		
+		return subCategory;
+	}
+	String getProductName()
+	{
+		return nameField.getText();
+	}
+	
 	
 	
 	

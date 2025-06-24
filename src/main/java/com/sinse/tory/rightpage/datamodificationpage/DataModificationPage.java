@@ -13,6 +13,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.rightpage.util.PageMove;
 
 // 우측 페이지에서 마이크 영역을 제외한 영역들의 객체들을 모두 포함하는 객체
@@ -31,13 +33,13 @@ public final class DataModificationPage extends JPanel
 	
 	
 	
-	public DataModificationPage(PageMove pageMove)
+	public DataModificationPage(PageMove pageMove, ProductDetail productDetail)
 	{
-		header = new Header(pageMove);
-		content = new Content();
+		content = new Content(productDetail);
+		header = new Header(pageMove, content.createDataManagementFromTable());
 		
 		// 안쪽 마진
-		setBorder(BorderFactory.createEmptyBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
+		//setBorder(BorderFactory.createEmptyBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(header);
 		// 여백

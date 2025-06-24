@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,5 +83,79 @@ public final class RightPageProductDetailDAO
 		}
 		
 		return list;
+	}
+	public static void insert(ProductDetail productDetail)
+	{
+		DBManager dbManager = DBManager.getInstance();
+		Connection con = null; //커넥션 객체 초기화
+		PreparedStatement pstmt = null;
+		con = dbManager.getConnection();
+		StringBuilder sql = new StringBuilder();
+		ResultSet rs = null;
+		
+		try
+		{
+	        con.setAutoCommit(false); // 트랜잭션 시작
+
+	        Product product = productDetail.getProduct();
+	        Location location = product.getLocation();
+
+	        if (location == null || location.getLocationId() == 0)
+	        {
+	            throw new IllegalArgumentException("Product에 유효한 Location이 필요합니다.");
+	        }
+
+	        // 1. insert into product
+	        String productSql = "INSERT INTO product (product_name, product_price, product_description, location_id) VALUES (?, ?, ?, ?)";
+	        pstmt = con.prepareStatement(productSql, Statement.RETURN_GENERATED_KEYS);
+	        pstmt.setString(1, product.getProductName());
+	        pstmt.setInt(2, product.getProductPrice());
+	        pstmt.setString(3, product.getDescription());
+	        pstmt.setInt(4, location.getLocationId());
+	        pstmt.executeUpdate();
+
+	        rs = pstmt.getGeneratedKeys();
+	        if (rs.next())
+	        {
+	            int productId = rs.getInt(1);
+	            product.setProductId(productId); // 자바 객체에도 반영
+	        }
+	        else
+	        {
+	            throw new SQLException("Product insert 실패: 생성된 key 없음");
+	        }
+
+	        pstmt.close();
+
+	        // 2. insert into productdetail
+	        String detailSql = "INSERT INTO productdetail (product_size_name, product_quantity, product_id) VALUES (?, ?, ?)";
+	        pstmt = con.prepareStatement(detailSql);
+	        pstmt.setString(1, productDetail.getProductSizeName());
+	        pstmt.setInt(2, productDetail.getProductQuantity());
+	        pstmt.setInt(3, product.getProductId());
+	        pstmt.executeUpdate();
+
+	        con.commit(); // 트랜잭션 성공
+
+	    }
+		catch (Exception e)
+		{
+	        e.printStackTrace();
+	        try
+	        {
+	            if (con != null)
+	            {
+	            	con.rollback();
+	            }
+	        }
+	        catch (SQLException rollbackEx)
+	        {
+	            rollbackEx.printStackTrace();
+	        }
+	    }
+		finally
+		{
+	        dbManager.release(pstmt, rs);
+	    }
 	}
 }

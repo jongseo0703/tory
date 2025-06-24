@@ -55,11 +55,7 @@ public class Location {
 	//디버깅용 toString() 메서드 오버라이딩
 	@Override
 	public String toString() {
-		return "Location{id=" + locationId +
-				", name='" + locationName + "'" +
-				", brand=" + brand.getBrandName() +
-				", subCategory=" + brand.getSubCategory().getSubCategoryName() +
-				", topCategory=" + brand.getSubCategory().getTopCategory().getTopCategoryName() + "}";
+		return getLocationName();
 	}
 	
 }
