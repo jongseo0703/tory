@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.sinse.tory.db.common.util.PageMove;
 import com.sinse.tory.db.common.util.PageUtil;
+import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 
 public class ProductShip extends JPanel{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
@@ -124,8 +125,7 @@ public class ProductShip extends JPanel{
 		//비활성화 기능
 		//상위카테고리의 값이 정해지기 전까지만 비활성화
 		//값이 차례대로 입력될 수 있도록 
-		 box[1].setEnabled(false);//하위카테고리
-		 box[2].setEnabled(false);//상품명
+		 IdentifierUpdateWithNameComboBox identifierUpdateWithNameComboBox = new IdentifierUpdateWithNameComboBox(box[0], box[1], box[2]);
 		 t_count.setEnabled(false);//수량을 적을 텍스트박스
 		
 		

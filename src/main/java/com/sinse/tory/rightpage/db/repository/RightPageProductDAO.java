@@ -21,7 +21,12 @@ import com.sinse.tory.db.repository.ProductDAO;
 
 public final class RightPageProductDAO
 {
-	public static List<Product> select(SubCategory subCategoryToGetID)
+	/**
+	 * 
+	 * @param subCategoryToGetID
+	 * @return id, name만 가지고 있는 product
+	 */
+	public static List<Product> selectProductName(SubCategory subCategoryToGetID)
 	{
 		DBManager dbManager = DBManager.getInstance();
 		Connection con = null; //커넥션 객체 초기화
@@ -39,21 +44,14 @@ public final class RightPageProductDAO
 		//String 으로 sql 을 만들면 객체의 낭비가 생기기때문에 StringBuilder 객체 이용.
 		StringBuilder sql = new StringBuilder();
 		
-		sql.append("select");
-		sql.append(" p.product_id, p.product_name,					");
-		sql.append(" l.location_id, l.location_name,				");
-		sql.append(" b.brand_id, b.brand_name,						");
-		sql.append(" s.sub_category_id, s.sub_category_name,		");
-		sql.append(" t.top_category_id, t.top_category_name,		");
-		sql.append(" pd.product_detail_id, pd.product_size_name,	");
-		sql.append(" pd.product_quantity,							");
-		sql.append(" pi.product_image_id, pi.image_url				");
+		sql.append("select ");
+		sql.append("p.product_id, p.product_name ");
 		//from 절(조인)
-		sql.append(" from Product p, Location l, Brand b, SubCategory s, TopCategory t, ProductDetail pd, ProductImage pi	");
-		sql.append(" where p.location_id = l.location_id and																");
-		sql.append(" l.brand_id = b.brand_id and																			");
-		sql.append(" b.sub_category_id = ?;																					");
-		
+		sql.append("from Product p, Location l, Brand b, SubCategory s ");
+		sql.append("where s.sub_category_id = b.sub_category_id and ");
+		sql.append("b.brand_id = l.brand_id and ");
+		sql.append("l.location_id = p.location_id and ");
+		sql.append("s.sub_category_id = ?;");
 		try
 		{
 			//만든 쿼리를 실행.
@@ -76,43 +74,9 @@ public final class RightPageProductDAO
 					product.setProductId(rs.getInt("product_id"));
 					product.setProductName(rs.getString("product_name"));
 					
-					Location location = new Location();
-					location.setLocationId(rs.getInt("location_id"));
-					location.setLocationName(rs.getString("location_name"));
-					
-					Brand brand = new Brand();
-					brand.setBrandId(rs.getInt("brand_id"));
-					brand.setBrandName(rs.getString("brand_name"));
-					
-					SubCategory subCategory = new SubCategory();
-					subCategory.setSubCategoryId(rs.getInt("sub_category_id"));
-					subCategory.setSubCategoryName(rs.getString("sub_category_name"));
-					
-					TopCategory topCategory = new TopCategory();
-					topCategory.setTopCategoryId(rs.getInt("top_category_id"));
-					topCategory.setTopCategoryName(rs.getString("top_category_name"));
-					
-					subCategory.setTopCategory(topCategory);
-					brand.setSubCategory(subCategory);
-					location.setBrand(brand);
-					product.setLocation(location);
-					
 					productMap.put(productId, product);
 					list.add(product);
 				}
-				
-				ProductDetail productDetail = new ProductDetail();
-				productDetail.setProductDetailId(rs.getInt("product_detail_id"));
-				productDetail.setProductSizeName(rs.getString("product_size_name"));
-				productDetail.setProductQuantity(rs.getInt("product_quantity"));
-				
-				ProductImage productImage = new ProductImage();
-				productImage.setProductImageId(rs.getInt("product_image_id"));
-				productImage.setImageURL(rs.getString("image_url"));
-				
-				//연결
-				product.getProductDetails().add(productDetail);
-				product.getProductImages().add(productImage);	
 			}
 		}
 		catch(SQLException e)

@@ -33,7 +33,7 @@ public final class IdentifierUpdateWithNameComboBox extends IdentifierUpdate<JCo
 	@Override
 	protected void updateNameComponent(JComboBox<Product> name)
 	{
-		List<Product> products = RightPageProductDAO.select((SubCategory)subCategoryComboBox.getSelectedItem());
+		List<Product> products = RightPageProductDAO.selectProductName((SubCategory)subCategoryComboBox.getSelectedItem());
 		
 		Product dummy = new Product();
 		dummy.setProductName("선택 하세요.");
@@ -42,7 +42,6 @@ public final class IdentifierUpdateWithNameComboBox extends IdentifierUpdate<JCo
 		System.out.println("======================================");
 		for(int i = 0; i < products.size(); i++)
 		{
-			System.out.println(products.get(i));
 			name.addItem(products.get(i));
 		}
 	}
