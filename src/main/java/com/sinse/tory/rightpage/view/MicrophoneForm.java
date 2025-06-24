@@ -104,7 +104,8 @@ public class MicrophoneForm extends Pages{
 		d_helper.pack();//크기를 자동으로 조절
 		
 		bt.setPreferredSize(new Dimension(96,96)); // 버튼의 크기
-		setPreferredSize(new Dimension(PageUtil.InputOutput_Width,150)); // 현 패널의 크기
+		setPreferredSize(new Dimension(0,150)); // 현 패널의 크기
+		setMaximumSize(new Dimension(Integer.MAX_VALUE,150)); // 현 패널의 크기
 		p_helper.setPreferredSize(new Dimension(24,24)); // 도우미 크기
 		
 		Color ff = Color.decode("#F4F5F6");
