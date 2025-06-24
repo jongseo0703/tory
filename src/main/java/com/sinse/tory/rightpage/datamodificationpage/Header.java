@@ -11,6 +11,8 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.sinse.tory.rightpage.util.PageMove;
+
 // 뒤로 가기 버튼, 삭제 버튼 등이 있는 구역
 public final class Header extends JPanel
 {
@@ -28,7 +30,7 @@ public final class Header extends JPanel
 	
 	
 	
-	public Header()
+	public Header(PageMove pageMove)
 	{
 		backButton = new JButton("<");
 		rightPanel = new JPanel();
@@ -51,7 +53,7 @@ public final class Header extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				
+				pageMove.showPage(0, 1);
 			}
 		});
 		

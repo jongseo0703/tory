@@ -22,14 +22,15 @@ public class Testmain extends JFrame{
 	DataModificationPage dataModificationPage;
 	PageMove pageMove;
 	public Testmain() {
+		pageMove = new PageMove();
 		productShip = new ProductShip(this);
-		dataModificationPage = new DataModificationPage();
+		dataModificationPage = new DataModificationPage(pageMove);
+		
+		creatPage();
 		rightPage = new JPanel();
 		leftPage = new JPanel();
 		rightPage.setLayout(new CardLayout());
 		
-		
-		creatPage();
 		for(int i=0;i<pageMove.list.size();i++) {
 			rightPage.add(pageMove.list.get(i));
 		}
@@ -42,7 +43,6 @@ public class Testmain extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	public void creatPage() {
-		pageMove = new PageMove();
 		pageMove.list.add(productShip);
 		pageMove.list.add(dataModificationPage);
 		
