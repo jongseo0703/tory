@@ -129,4 +129,17 @@ abstract class IdentifierUpdate<T extends JComponent>
 	}
 	protected abstract void clearNameComponent(T name);
 	protected abstract void updateNameComponent(T name);
+	public int getSelectedTopCategoryID()
+	{
+		return ((TopCategory)topCategoryComboBox.getSelectedItem()).getTopCategoryId();
+	}
+	public int getSelectedSubCategoryID()
+	{
+		return ((SubCategory)subCategoryComboBox.getSelectedItem()).getSubCategoryId();
+	}
+	public void reset() {
+		topCategoryComboBox.setSelectedIndex(0);
+		subCategoryComboBox.removeAllItems();
+		clearNameComponent(name);
+	}
 }

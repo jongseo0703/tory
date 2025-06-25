@@ -36,7 +36,7 @@ final class DetailDataTable extends JPanel
 	
 	
 	
-	DetailDataTable(ProductDetail productDetail)
+	DetailDataTable()
 	{
 		locationComboBox = new JComboBox<Location>();
 		brandComboBox = new JComboBox<Brand>();
@@ -70,14 +70,7 @@ final class DetailDataTable extends JPanel
 			}
 		);
 		
-		if (productDetail != null)
-		{
-			insertDetailData(productDetail);
-		}
-		else
-		{
-			initializeTable();
-		}
+		initializeTable();
 	}
 
 	
@@ -119,12 +112,30 @@ final class DetailDataTable extends JPanel
 	// 
 	void insertDetailData(ProductDetail productDetail)
 	{
-		locationComboBox.setSelectedItem(productDetail.getProduct().getLocation());
-		brandComboBox.setSelectedItem(productDetail.getProduct().getLocation().getBrand());
+		selectLocationById(productDetail.getProduct().getLocation().getLocationId());
+		selectBrandById(productDetail.getProduct().getLocation().getBrand().getBrandId());
 		sizeField.setText(productDetail.getProductSizeName());
 		priceField.setValue(productDetail.getProduct().getProductPrice());
 		quantityField.setValue(productDetail.getProductQuantity());
 		descriptionField.setText(productDetail.getProduct().getDescription());
+	}
+	private void selectLocationById(int targetId) {
+	    for (int i = 0; i < locationComboBox.getItemCount(); i++) {
+	        Location item = locationComboBox.getItemAt(i);
+	        if (item.getLocationId() == targetId) {
+	        	locationComboBox.setSelectedIndex(i);
+	            return;
+	        }
+	    }
+	}
+	private void selectBrandById(int targetId) {
+	    for (int i = 0; i < brandComboBox.getItemCount(); i++) {
+	        Brand item = brandComboBox.getItemAt(i);
+	        if (item.getBrandId() == targetId) {
+	        	brandComboBox.setSelectedIndex(i);
+	            return;
+	        }
+	    }
 	}
 	private void initializeTable()
 	{
@@ -188,5 +199,13 @@ final class DetailDataTable extends JPanel
 		productDetail.setProductSizeName(sizeField.getText());
 		
 		return productDetail;
+	}
+	void reset()
+	{
+		brandComboBox.setSelectedIndex(0);
+		locationComboBox.setSelectedIndex(0);
+		priceField.setValue((Number)0);
+		sizeField.setText("");
+		descriptionField.setText("");
 	}
 }
