@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
@@ -40,7 +39,9 @@ import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.util.Pages;
 import com.sinse.tory.rightpage.util.ProductImageDAO;
 import com.sinse.tory.rightpage.util.UpdateCount;
-
+/*
+ * 입고와 출고 기능이 있는 페이지
+ * */
 public class ProductShip extends Pages{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
 	JComboBox[] box = new JComboBox[3];//콤보박스 3개
@@ -98,6 +99,7 @@ public class ProductShip extends Pages{
 				
 				if(productImage !=null && productImage.getImageURL() != null) {
 					String path = productImage.getImageURL();
+					//이미지경로에서 맨 앞에 있는 '/'제거
 					path = path.replaceFirst("^/", "");
 					url = this.getClass().getClassLoader().getResource(path); // 상품이미지 위치
 				}
@@ -181,7 +183,7 @@ public class ProductShip extends Pages{
 		box[2].addItemListener((ItemEvent e)->{
 			if(e.getStateChange() == ItemEvent.SELECTED && box[2].getSelectedIndex()>0) {				
 				t_count.setEnabled(true);//수량을 적을 텍스트박스			 
-				itemId = identifierUpdateWithNameComboBox.getItemID();
+				itemId = identifierUpdateWithNameComboBox.getItemID(); // product_id 받기
 				productDetail = productDetailDAO.selectDetailInfo(itemId);
 				productImage = imageDAO.selectAll(itemId);
 				t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
@@ -235,7 +237,11 @@ public class ProductShip extends Pages{
 		 location[2].add(Box.createRigidArea(new Dimension(0,150)));
 		 
 		 // 이벤트
+		 bt[0].addActionListener((e)->{
+			 //상품수정으로 가는 버튼
+		 });
 		 bt[1].addActionListener(new ActionListener() {
+			 // 상품추가로 가는 버튼
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				testmain.pageMove.showPage(1,0);
@@ -243,13 +249,16 @@ public class ProductShip extends Pages{
 		});
 		 
 		 UpdateCount updateCount = new UpdateCount();
-		 
+		 //t_count 안에 원하는 입출고 수량을 입력
 			 bt[2].addActionListener(e->{
+				 //출고버튼
 				 boolean resutle = ShowMessage.showConfirm(testmain,"출고하기","출고하기겠습니까?");
 				 int count =0;
 				 // 확인 눌렀을때
 				 if(resutle) {
+					 //change_type 중 OUT
 					 String inOut = "OUT";
+					 //보유한 수량보다 출고수량이 크거나 출고가 0이 아닐때만 수행하도록 조건부여
 					 if(productDetail.getProductQuantity() != 0
 							 &&productDetail.getProductQuantity()>=Integer.parseInt(t_count.getText())
 							 &&Integer.parseInt(t_count.getText())!=0 ) {
@@ -270,11 +279,17 @@ public class ProductShip extends Pages{
 				 
 				 // 확인 눌렀을때
 				 if(resutle) {
+					 //change_type 중 IN
 					 String inOut = "IN";
-					 int count = productDetail.getProductQuantity()+ Integer.parseInt(t_count.getText());
-					 updateCount.update(count, itemId);
-					 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
-					 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
+					 // 입고수량이 0이 아닐때만 수행하도록 조건부여
+					 if(Integer.parseInt(t_count.getText()) !=0) {
+						 int count = productDetail.getProductQuantity()+ Integer.parseInt(t_count.getText());
+						 updateCount.update(count, itemId);
+						 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
+						 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));						 
+					 }else {
+						 JOptionPane.showMessageDialog(this, "입고 수량을 다시 입력해 주세요");						
+					}
 				 }
 			 });
 		 

@@ -19,7 +19,7 @@ public class UpdateCount {
 		PreparedStatement pstmt = null;
 		con = dbManager.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("update productdetail  set product_quantity = ? where product_detail_id = ?");
+		sql.append("update productdetail  set product_quantity = ? where product_id = ?");
 		try {
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.setInt(1, count);
