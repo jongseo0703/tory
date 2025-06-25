@@ -9,7 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
+import com.sinse.tory.rightpage.datamodification.view.DataModificationPage;
 import com.sinse.tory.rightpage.util.PageMove;
 import com.sinse.tory.rightpage.util.PageUtil;
 
@@ -30,7 +30,7 @@ public class Testmain extends JFrame{
 	public Testmain()
 	{
 		pageMove = new PageMove();
-		dataModificationPage = new DataModificationPage(pageMove, null);
+		dataModificationPage = new DataModificationPage(pageMove);
 		productShip = new ProductShip(this, dataModificationPage);
 		
 		creatPage();

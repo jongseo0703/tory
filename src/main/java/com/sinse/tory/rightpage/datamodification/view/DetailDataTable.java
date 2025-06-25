@@ -1,10 +1,7 @@
-package com.sinse.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodification.view;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -17,15 +14,13 @@ import com.sinse.tory.db.model.Location;
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.SubCategory;
-import com.sinse.tory.db.model.TopCategory;
-import com.sinse.tory.db.repository.BrandDAO;
-import com.sinse.tory.db.repository.LocationDAO;
 import com.sinse.tory.rightpage.db.repository.RightPageBrandDAO;
 import com.sinse.tory.rightpage.db.repository.RightPageLocationDAO;
 
-// Content 부분의 테이블 영역
-final class DetailDataTable extends JPanel
-{
+/**
+ *  Content 부분의 테이블 영역 
+ * */
+final class DetailDataTable extends JPanel {
 	private JComboBox<Location> locationComboBox;
 	private JComboBox<Brand> brandComboBox;
 	private JTextField sizeField;
@@ -36,8 +31,7 @@ final class DetailDataTable extends JPanel
 	
 	
 	
-	DetailDataTable()
-	{
+	DetailDataTable() {
 		locationComboBox = new JComboBox<Location>();
 		brandComboBox = new JComboBox<Brand>();
 		sizeField = new JTextField();
@@ -51,21 +45,17 @@ final class DetailDataTable extends JPanel
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		// 테이블에 열을 채우는 과정.
-		addRow
-		(
-			new TableData[]
-			{
+		addRow (
+			new TableData[] {
 				new TableData("상품 위치", locationComboBox),
 				new TableData("브랜드", brandComboBox)
 			},
-			new TableData[]
-			{
+			new TableData[] {
 				new TableData("사이즈", sizeField),
 				new TableData("가격", priceField),
 				new TableData("수량", quantityField)
 			},
-			new TableData[]
-			{
+			new TableData[] {
 				new TableData("설명", descriptionField)
 			}
 		);
@@ -75,17 +65,16 @@ final class DetailDataTable extends JPanel
 
 	
 	
-	// 테이블에 TableData를 추가하는 함수
-	// 한 열에 n개의 TableData를 삽입할 수 있음
-	private void addRow(TableData[]... tableDatas)
-	{
+	/**
+	 * 테이블에 TableData를 추가하는 함수. 한 열에 n개의 TableData를 삽입할 수 있음
+	 * @param tableDatas
+	 */
+	private void addRow(TableData[]... tableDatas) {
 		// 삽입할 열의 수만큼 반복
-		for (int i = 0; i < tableDatas.length; i++)
-		{
+		for (int i = 0; i < tableDatas.length; i++) {
 			// 열 패널
 			JPanel row = new JPanel();
-			for (int j = 0; j < tableDatas[i].length; j++)
-			{
+			for (int j = 0; j < tableDatas[i].length; j++) {
 				// 현재 열에 TableData 삽입
 				row.add(tableDatas[i][j]);
 			}
@@ -98,8 +87,7 @@ final class DetailDataTable extends JPanel
 			row.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowPreferredHeight));
 		}
 	}
-	private JFormattedTextField getFormattedTextField(boolean enabled)
-	{
+	private JFormattedTextField getFormattedTextField(boolean enabled) {
 		NumberFormatter numberFormatter = new NumberFormatter();
 		JFormattedTextField textField = new JFormattedTextField(numberFormatter);
 		
@@ -108,10 +96,7 @@ final class DetailDataTable extends JPanel
 		
 		return textField;
 	}
-	// #endregion
-	// 
-	void insertDetailData(ProductDetail productDetail)
-	{
+	void insertDetailData(ProductDetail productDetail) {
 		selectLocationById(productDetail.getProduct().getLocation().getLocationId());
 		selectBrandById(productDetail.getProduct().getLocation().getBrand().getBrandId());
 		sizeField.setText(productDetail.getProductSizeName());
@@ -137,14 +122,12 @@ final class DetailDataTable extends JPanel
 	        }
 	    }
 	}
-	private void initializeTable()
-	{
+	private void initializeTable() {
 		initializeLocationComboBox();
 		initializeBrandComboBox();
 		quantityField.setValue(0);
 	}
-	private void initializeLocationComboBox()
-	{
+	private void initializeLocationComboBox() {
 		Location dummy = new Location();
 		dummy.setLocationId(0);
 		dummy.setLocationName("선택 하세요.");
@@ -155,8 +138,7 @@ final class DetailDataTable extends JPanel
 			locationComboBox.addItem(location);
 		}
 	}
-	private void initializeBrandComboBox()
-	{
+	private void initializeBrandComboBox() {
 		Brand dummy = new Brand();
 		dummy.setBrandId(0);
 		dummy.setBrandName("선택 하세요.");
@@ -167,16 +149,14 @@ final class DetailDataTable extends JPanel
 			brandComboBox.addItem(brand);
 		}
 	}
-	boolean isInputAll()
-	{
+	boolean isInputAll() {
 		return
 			locationComboBox.getSelectedIndex() != 0 &&
 			brandComboBox.getSelectedIndex() != 0 &&
 			sizeField.getText().isEmpty() == false &&
 			priceField.getValue() != null;
 	}
-	ProductDetail createProductDetailFromInputted(SubCategory subCategory, String productName)
-	{
+	ProductDetail createProductDetailFromInputted(SubCategory subCategory, String productName) {
 		Brand selectedBrand = (Brand)brandComboBox.getSelectedItem();
 		Location selectedLocation = (Location)locationComboBox.getSelectedItem();
 		
@@ -200,8 +180,7 @@ final class DetailDataTable extends JPanel
 		
 		return productDetail;
 	}
-	void reset()
-	{
+	void reset() {
 		brandComboBox.setSelectedIndex(0);
 		locationComboBox.setSelectedIndex(0);
 		priceField.setValue((Number)0);

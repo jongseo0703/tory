@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 
+import com.sinse.tory.db.model.ProductDetail;
+import com.sinse.tory.rightpage.datamodification.view.DataModificationPage;
+
 
 public class PageMove {
 	JPanel rightPage;
@@ -14,5 +17,11 @@ public class PageMove {
 	public void showPage(int page1,int page2) {
 		list.get(page1).setVisible(true);
 		list.get(page2).setVisible(false);
+	}
+	public void showDataModificationPage(ProductDetail productDetail)
+	{
+		list.get(0).setVisible(false);
+		list.get(1).setVisible(true);
+		((DataModificationPage)list.get(1)).onShow(productDetail);
 	}
 }

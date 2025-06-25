@@ -5,40 +5,31 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JTextField;
-
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.SubCategoryDAO;
 import com.sinse.tory.db.repository.TopCategoryDAO;
 
-abstract class IdentifierUpdate<T extends JComponent>
-{
+abstract class IdentifierUpdate<T extends JComponent> {
 	private JComboBox<TopCategory> topCategoryComboBox;
 	private JComboBox<SubCategory> subCategoryComboBox;
 	protected T name;
-	
-	
-	
-	IdentifierUpdate(JComboBox<TopCategory> topCategoryComboBox, JComboBox<SubCategory> subCategoryComboBox, T name)
-	{
+
+	IdentifierUpdate(JComboBox<TopCategory> topCategoryComboBox, JComboBox<SubCategory> subCategoryComboBox, T name) {
 		this.topCategoryComboBox = topCategoryComboBox;
 		this.subCategoryComboBox = subCategoryComboBox;
 		this.name = name;
 		
 		// #region 카테고리 선택 이벤트 추가
-		topCategoryComboBox.addItemListener((itemEvent) ->
-		{
+		topCategoryComboBox.addItemListener((itemEvent) -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
 			{
 				onSelectTopCategory((TopCategory)itemEvent.getItem());
 			}
 			
 		});
-		subCategoryComboBox.addItemListener((itemEvent) ->
-		{
-			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
-			{
+		subCategoryComboBox.addItemListener((itemEvent) -> {
+			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				onSelectSubCategory((SubCategory)itemEvent.getItem());
 			}
 		});
@@ -50,8 +41,7 @@ abstract class IdentifierUpdate<T extends JComponent>
 	
 	
 	
-	private void initializeTopCategoryComboBoxItem()
-	{
+	private void initializeTopCategoryComboBoxItem() {
 		TopCategoryDAO topCategoryDAO = new TopCategoryDAO();
 		List<TopCategory> topCategorys = topCategoryDAO.selectAll();
 		
@@ -63,21 +53,18 @@ abstract class IdentifierUpdate<T extends JComponent>
 		dummy.setTopCategoryName("선택 하세요.");
 		
 		topCategoryComboBox.addItem(dummy);
-		for(int i = 0; i < topCategorys.size(); i++)
-		{
+		for(int i = 0; i < topCategorys.size(); i++) {
 			topCategoryComboBox.addItem(topCategorys.get(i));
 		}
 		//
 	}
 	// top category 선택 이벤트
-	private void onSelectTopCategory(TopCategory selectedTopCategory)
-	{
+	private void onSelectTopCategory(TopCategory selectedTopCategory) {
 		subCategoryComboBox.removeAllItems();
 		clearNameComponent(name);
 		
 		// 더미를 선택했을 때 하위 카테고리, 이름 입력 컴포넌트 비활성화
-		if (selectedTopCategory.getTopCategoryId() == 0)
-		{
+		if (selectedTopCategory.getTopCategoryId() == 0) {
 			disableSubComponentOfTopCategory();
 			return;
 		}
@@ -86,19 +73,16 @@ abstract class IdentifierUpdate<T extends JComponent>
 		updateSubCategoryItem();
 	}
 	// 하위 카테고리, 이름 입력 컴포넌트 비활성화
-	private void disableSubComponentOfTopCategory()
-	{
+	private void disableSubComponentOfTopCategory() {
 		subCategoryComboBox.setEnabled(false);
 		disableSubComponentOfSubCategory();
 	}
 	// 이름 입력 컴포넌트 비활성화
-	private void disableSubComponentOfSubCategory()
-	{
+	private void disableSubComponentOfSubCategory() {
 		name.setEnabled(false);
 	}
 	// 하위 카테고리 콤보 박스 요소 최신화
-	private void updateSubCategoryItem()
-	{
+	private void updateSubCategoryItem() {
 		SubCategoryDAO subCategoryDAO = new SubCategoryDAO();
 		List<SubCategory> subCategorys = subCategoryDAO.selectByTop((TopCategory)topCategoryComboBox.getSelectedItem());
 		
@@ -108,18 +92,15 @@ abstract class IdentifierUpdate<T extends JComponent>
 		dummy.setTopCategory(null);
 		
 		subCategoryComboBox.addItem(dummy);
-		for(int i = 0; i < subCategorys.size(); i++)
-		{
+		for(int i = 0; i < subCategorys.size(); i++) {
 			subCategoryComboBox.addItem(subCategorys.get(i));
 		}
 	}
 	// 하위 카테고리 콤보 박스 선택 이벤트
-	private void onSelectSubCategory(SubCategory selectedSubCategory)
-	{
+	private void onSelectSubCategory(SubCategory selectedSubCategory) {
 		clearNameComponent(name);
 		
-		if (selectedSubCategory.getSubCategoryId() == 0)
-		{
+		if (selectedSubCategory.getSubCategoryId() == 0) {
 			disableSubComponentOfSubCategory();
 			return;
 		}
@@ -129,12 +110,10 @@ abstract class IdentifierUpdate<T extends JComponent>
 	}
 	protected abstract void clearNameComponent(T name);
 	protected abstract void updateNameComponent(T name);
-	public int getSelectedTopCategoryID()
-	{
+	public int getSelectedTopCategoryID() {
 		return ((TopCategory)topCategoryComboBox.getSelectedItem()).getTopCategoryId();
 	}
-	public int getSelectedSubCategoryID()
-	{
+	public int getSelectedSubCategoryID() {
 		return ((SubCategory)subCategoryComboBox.getSelectedItem()).getSubCategoryId();
 	}
 	public void reset() {

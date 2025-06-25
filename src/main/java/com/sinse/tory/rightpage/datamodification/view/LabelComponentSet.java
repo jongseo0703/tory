@@ -1,12 +1,7 @@
-package com.sinse.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodification.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Label;
-
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -14,15 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 // 라벨과 함께 있는 컴포넌트
-public final class LabelComponentSet extends JPanel
-{
+public final class LabelComponentSet extends JPanel {
 	private JLabel label;
 	private JComponent component;
 	
-	
-	
-	public LabelComponentSet(String labelText, JComponent component, boolean enabled)
-	{
+	public LabelComponentSet(String labelText, JComponent component, boolean enabled) {
 		label = new JLabel();
 		this.component = component;
 		
