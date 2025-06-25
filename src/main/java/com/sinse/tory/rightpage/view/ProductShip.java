@@ -1,49 +1,41 @@
 package com.sinse.tory.rightpage.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sinse.tory.rightpage.datamodification.view.DataModificationPage;
-import com.sinse.tory.rightpage.db.repository.RightPageProductDetailDAO;
-import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.ProductImage;
-import com.sinse.tory.db.model.SubCategory;
-import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.ProductDetailDAO;
-import com.sinse.tory.db.repository.TopCategoryDAO;
-import com.sinse.tory.rightpage.util.PageMove;
+import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
+import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.util.Pages;
 import com.sinse.tory.rightpage.util.ProductImageDAO;
@@ -89,16 +81,47 @@ public class ProductShip extends Pages{
 		
 		// 각각 하나씩 자동 생성
 		for(int i=0; i<bt.length;i++) {
-			bt[i] = new JButton();
+			bt[i] = new JButton() {
+				@Override
+				protected void paintComponent(Graphics g) {
+					Graphics2D g2 = (Graphics2D) g.create();
+					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					g2.setColor(getBackground());
+					g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+				    g2.dispose();
+				    super.paintComponent(g);
+				}
+				@Override
+				public void updateUI() {
+					super.updateUI();
+					setOpaque(false);
+				}
+			};
+			bt[i].setContentAreaFilled(false);
+			bt[i].setFocusPainted(false);
+			bt[i].setBorderPainted(false);
 		}
 		for(int i=0; i<la.length;i++) {
 			la[i] = new JLabel();
-			la[i].setFont(new Font(null, 3, 15)); // 라벨은 폰트 설정
-			
 		}
 		
 		for(int i=0; i<box.length;i++) {
-			box[i] = new JComboBox();
+			box[i] = new JComboBox() {
+				protected void paintComponent(Graphics g) {
+					Graphics2D g2 = (Graphics2D) g.create();
+					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					g2.setColor(getBackground());
+					g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+				    g2.dispose();
+				    super.paintComponent(g);
+				}
+				@Override
+				public void updateUI() {
+					super.updateUI();
+					setOpaque(false);
+				}
+			};
+			box[i].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		}
 		
 		//상품이미지 출력
@@ -130,6 +153,17 @@ public class ProductShip extends Pages{
 			}
 		};
 		
+		// 폰트설정
+		Font font = new Font("NanumSquare",Font.BOLD, 15);
+			for(int i=0;i<bt.length;i++) {
+				bt[i].setFont(font);
+				la[i].setFont(font);
+			}
+			for(int i=0;i<box.length;i++) {
+				box[i].setFont(font);
+			}
+			
+		
 		bt[0].setText("상품정보 수정"); 
 		bt[1].setText("상품추가");
 		bt[2].setText("출고");
@@ -138,40 +172,36 @@ public class ProductShip extends Pages{
 		la[0].setText("상위카테고리");
 		la[1].setText("하위카테고리");
 		la[2].setText("상품명");
-		la[3].setText("수량 ");
+		la[3].setText("수량 :");
 		
 		// 패널들의 크기
 		location[0].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,40));
-		location[1].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,260));
-		location[2].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,270));
+		location[1].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,500));
+		location[2].setPreferredSize(new Dimension(PageUtil.InputOutput_Width,50));
 		
 		//상위 카테고리, 하위 카테고리, 상품명인  3개의 콤보박스와 라벨의 크기
-		Dimension d = new Dimension(600,40);
+		Dimension d = new Dimension(600,50);
+		Dimension d3 = new Dimension(600,30);
 		for(int i=0; i<box.length;i++) {
-			la[i].setPreferredSize(d); //라벨의 위치
-			la[i].setMaximumSize(d); //라벨의 위치
+			la[i].setPreferredSize(d3); //라벨의 위치
+			la[i].setMaximumSize(d3); //라벨의 위치
 			box[i].setPreferredSize(d); //콤보박스의 위치
 			box[i].setMaximumSize(d);
 		}
 		
 		//수량 라벨과 텍스트박스 크기 설정
-		la[3].setPreferredSize(new Dimension(800,40));
+		la[3].setPreferredSize(new Dimension(100,40));
 		t_count.setPreferredSize(new Dimension(800,80));
 		t_count.setMaximumSize(new Dimension(800,80));
 		
 		//이미지 패널의 예비용 배경색
 		p_img.setBackground(Color.lightGray);
 		
-		//버튼의 폰트 설정
-		for(int i=0; i<bt.length;i++) {
-			bt[i].setFont(new Font(null, 3, 15));
-		}
-		
 		//버튼들의 크기 설정
 		bt[0].setPreferredSize(new Dimension(150,30));//상품정보 수정
 		bt[1].setPreferredSize(new Dimension(150,30));//상품 추가
 		
-		Dimension d2 = new Dimension(350, 40);
+		Dimension d2 = new Dimension(100, 40);
 		bt[2].setPreferredSize(d2);//출고
 		bt[2].setMaximumSize(d2);
 		bt[3].setPreferredSize(d2);//입고
@@ -225,26 +255,31 @@ public class ProductShip extends Pages{
 		 for(int i=0;i<box.length;i++) {
 			 p_form.add(la[i]);
 			 p_form.add(box[i]);
+			 p_form.add(Box.createRigidArea(new Dimension(0,10)));
 			 
 			 la[i].setAlignmentX(Component.RIGHT_ALIGNMENT);
 			 box[i].setAlignmentX(Component.RIGHT_ALIGNMENT);
 		 }
+		 p_form.add(Box.createRigidArea(new Dimension(0,20)));
 		 		 
 		 location[1].add(p_img);
 		 location[1].add(p_form);
 		 
 		 //location[2]의 수량라벨, 텍스트박스,입고 및 출고 버튼 위치 정의
 		 location[2].setBorder(new EmptyBorder(10,10,10,10));
-		 location[2].setLayout(new BoxLayout(location[2], BoxLayout.Y_AXIS));
+		 location[2].setLayout(new BoxLayout(location[2], BoxLayout.X_AXIS));
+		 location[2].add(la[3]);
 		 location[2].add(t_count);
 		 location[2].add(Box.createRigidArea(new Dimension(0,30)));
 		 Box btSpace = Box.createHorizontalBox();
 		 btSpace.add(bt[2]);
-		 btSpace.add(Box.createHorizontalStrut(10));
+		 btSpace.add(Box.createHorizontalStrut(20));
 		 btSpace.add(bt[3]);
 		 
+		 location[2].add(Box.createRigidArea(new Dimension(100,0)));
 		 location[2].add(btSpace);
-		 location[2].add(Box.createRigidArea(new Dimension(0,150)));
+		 location[2].add(Box.createRigidArea(new Dimension(0,50)));
+		 location[2].add(Box.createHorizontalStrut(20));
 		 
 		 bt[0].addActionListener(new ActionListener() {
 			@Override
@@ -335,9 +370,12 @@ public class ProductShip extends Pages{
 		for(int i =0;i<location.length;i++) {
 			add(location[i]);
 			location[i].setAlignmentX(Component.LEFT_ALIGNMENT);
-			if(i==0) add(Box.createRigidArea(new Dimension(0,30)));
-			if(i==1) add(la[3]);la[3].setAlignmentX(Component.LEFT_ALIGNMENT); 
+			if(i==0) add(Box.createRigidArea(new Dimension(0,10)));
+			if(i==1) {
+				add(Box.createRigidArea(new Dimension(0,20)));
+			}
 		}
+		add(Box.createRigidArea(new Dimension(0,40)));
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(Color.white);
