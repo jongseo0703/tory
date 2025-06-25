@@ -18,7 +18,6 @@ public class MainPage extends JFrame{
 	public MainPage() {
 		
 		// 왼쪽 패널 (InventoryUI)
-		
 		inventoryUI = new InventoryUI();
 		inventoryUI.setPreferredSize(new Dimension(960,1080));
 		add(inventoryUI, BorderLayout.WEST);
