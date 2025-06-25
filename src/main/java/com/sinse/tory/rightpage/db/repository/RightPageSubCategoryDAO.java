@@ -1,4 +1,4 @@
-package com.sinse.tory.rightpage.datamodification;
+package com.sinse.tory.rightpage.db.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
