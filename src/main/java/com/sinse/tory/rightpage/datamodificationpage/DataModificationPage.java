@@ -15,6 +15,8 @@ import javax.swing.border.Border;
 
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
+import com.sinse.tory.db.model.SubCategory;
+import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.rightpage.util.PageMove;
 
 // 우측 페이지에서 마이크 영역을 제외한 영역들의 객체들을 모두 포함하는 객체
@@ -45,5 +47,15 @@ public final class DataModificationPage extends JPanel
 		// 여백
 		add(Box.createRigidArea(new Dimension(0, 32)));
 		add(content);
+	}
+	
+	/**
+	 * 상품 정보 수정 페이지에 매개변수 데이터 삽입
+	 * @param topCategory
+	 * @param subCategory
+	 * @param productName
+	 */
+	public void fillIdentifier(int topCategoryID, int subCategoryID, String name) {
+		content.fillData(topCategoryID, subCategoryID, name);
 	}
 }

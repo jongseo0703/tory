@@ -41,15 +41,17 @@ public final class RightPageProductDetailDAO
 		//String 으로 sql 을 만들면 객체의 낭비가 생기기때문에 StringBuilder 객체 이용.
 		StringBuilder sql = new StringBuilder();
 		
-		sql.append("select 												");
-		sql.append("p.product_id, p.product_name, pd.product_size_name 	");
-		//from 절(조인)
-		sql.append("from Product p, Location l, Brand b, SubCategory s, productdetail pd 	");
-		sql.append("where s.sub_category_id = b.sub_category_id and 						");
-		sql.append("b.brand_id = l.brand_id and 											");
-		sql.append("l.location_id = p.location_id and 										");
-		sql.append("s.sub_category_id = ? and 												");
-		sql.append("pd.product_id = p.product_id;											");
+		sql.append("SELECT pd.product_detail_id, pd.product_size_name, pd.product_quantity, ");
+	    sql.append("p.product_id, p.product_name, p.product_price, p.product_description, ");
+	    sql.append("l.location_id, l.location_name, ");
+	    sql.append("b.brand_id, b.brand_name ");
+	    sql.append("FROM productdetail pd ");
+	    sql.append("JOIN product p ON pd.product_id = p.product_id ");
+	    sql.append("JOIN location l ON p.location_id = l.location_id ");
+	    sql.append("JOIN brand b ON l.brand_id = b.brand_id ");
+	    sql.append("JOIN subcategory s ON b.sub_category_id = s.sub_category_id ");
+	    sql.append("WHERE s.sub_category_id = ?");
+	    
 		try
 		{
 			//만든 쿼리를 실행.
@@ -59,18 +61,36 @@ public final class RightPageProductDetailDAO
 			rs = pstmt.executeQuery();
 			
 			// rs 인스턴스(테이블)에서 한 줄씩 데이터를 꺼내서 product 인스턴스에 넣어서 list 에저장
-			while (rs.next())
-			{
-				ProductDetail productDetail = new ProductDetail();
-				Product product = new Product();
-				
-				product.setProductId(rs.getInt("product_id"));
-				product.setProductName(rs.getString("product_name"));
-				
-				productDetail.setProduct(product);
-				productDetail.setProductSizeName(rs.getString("product_size_name"));
-				
-				list.add(productDetail);
+			while (rs.next()) {
+				 // ProductDetail
+	            ProductDetail pd = new ProductDetail();
+	            pd.setProductDetailId(rs.getInt("product_detail_id"));
+	            pd.setProductSizeName(rs.getString("product_size_name"));
+	            pd.setProductQuantity(rs.getInt("product_quantity"));
+
+	            // Product
+	            Product p = new Product();
+	            p.setProductId(rs.getInt("product_id"));
+	            p.setProductName(rs.getString("product_name"));
+	            p.setProductPrice(rs.getInt("product_price"));
+	            p.setDescription(rs.getString("product_description"));
+
+	            // Location
+	            Location loc = new Location();
+	            loc.setLocationId(rs.getInt("location_id"));
+	            loc.setLocationName(rs.getString("location_name"));
+
+	            // Brand
+	            Brand brand = new Brand();
+	            brand.setBrandId(rs.getInt("brand_id"));
+	            brand.setBrandName(rs.getString("brand_name"));
+	            brand.setSubCategory(subCategoryToGetID);
+
+	            loc.setBrand(brand);
+	            p.setLocation(loc);
+	            pd.setProduct(p);
+
+	            list.add(pd);
 			}
 		}
 		catch(SQLException e)
@@ -157,5 +177,77 @@ public final class RightPageProductDetailDAO
 		{
 	        dbManager.release(pstmt, rs);
 	    }
+	}
+	public static List<ProductDetail> selectProductDetailsByProductName(String productName) {
+	    DBManager dbManager = DBManager.getInstance();
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    List<ProductDetail> list = new ArrayList<>();
+
+	    // SQL 쿼리 작성: 제품 이름을 기준으로 조인
+	    StringBuilder sql = new StringBuilder();
+	    sql.append("SELECT pd.product_detail_id, pd.product_size_name, pd.product_quantity, ");
+	    sql.append("p.product_id, p.product_name, p.product_price, p.product_description, ");
+	    sql.append("l.location_id, l.location_name, ");
+	    sql.append("b.brand_id, b.brand_name, ");
+	    sql.append("s.sub_category_id, s.sub_category_name ");
+	    sql.append("FROM productdetail pd ");
+	    sql.append("JOIN product p ON pd.product_id = p.product_id ");
+	    sql.append("JOIN location l ON p.location_id = l.location_id ");
+	    sql.append("JOIN brand b ON l.brand_id = b.brand_id ");
+	    sql.append("JOIN subcategory s ON b.sub_category_id = s.sub_category_id ");
+	    sql.append("WHERE p.product_name = ?");
+
+	    try {
+	        con = dbManager.getConnection();
+	        pstmt = con.prepareStatement(sql.toString());
+	        pstmt.setString(1, productName);
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            // ProductDetail 객체 생성
+	            ProductDetail pd = new ProductDetail();
+	            pd.setProductDetailId(rs.getInt("product_detail_id"));
+	            pd.setProductSizeName(rs.getString("product_size_name"));
+	            pd.setProductQuantity(rs.getInt("product_quantity"));
+
+	            // Product 객체 생성 및 설정
+	            Product p = new Product();
+	            p.setProductId(rs.getInt("product_id"));
+	            p.setProductName(rs.getString("product_name"));
+	            p.setProductPrice(rs.getInt("product_price"));
+	            p.setDescription(rs.getString("product_description"));
+
+	            // Location 객체 생성 및 설정
+	            Location l = new Location();
+	            l.setLocationId(rs.getInt("location_id"));
+	            l.setLocationName(rs.getString("location_name"));
+
+	            // Brand 객체 생성 및 설정
+	            Brand b = new Brand();
+	            b.setBrandId(rs.getInt("brand_id"));
+	            b.setBrandName(rs.getString("brand_name"));
+
+	            // SubCategory 객체 생성 및 설정
+	            SubCategory s = new SubCategory();
+	            s.setSubCategoryId(rs.getInt("sub_category_id"));
+	            s.setSubCategoryName(rs.getString("sub_category_name"));
+
+	            // 계층 관계 연결: Brand → SubCategory, Location → Brand, Product → Location, ProductDetail → Product
+	            b.setSubCategory(s);
+	            l.setBrand(b);
+	            p.setLocation(l);
+	            pd.setProduct(p);
+
+	            list.add(pd);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        dbManager.release(pstmt, rs);
+	    }
+	    
+	    return list;
 	}
 }

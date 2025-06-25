@@ -33,8 +33,6 @@ final class IdentificationPanel extends JPanel
 	private IdentifierUpdateWithNameField identifierUpdateWithNameField;
 	// #endregion
 	
-	
-	
 	IdentificationPanel(ProductDetail productDetail)
 	{
 		topCategoryComboBox = new JComboBox<TopCategory>();
@@ -56,18 +54,45 @@ final class IdentificationPanel extends JPanel
 		
 		if (productDetail != null)
 		{
-			insertProductIdentifier(productDetail.getProduct());
+			//insertProductIdentifier(productDetail.getProduct());
 		}
 	}
 	
-	
-	
-	// 매개변수 데이터들로 UI들을 초기화하는 함수.
-	void insertProductIdentifier(Product product)
+	/**
+	 * 매개변수 데이터들로 UI들을 초기화하는 함수.
+	 * */ 
+	void insertProductIdentifier(int topCategoryID, int subCategoryID, String name)
 	{
-		topCategoryComboBox.setSelectedItem(product.getLocation().getBrand().getSubCategory().getTopCategory());
-		subCategoryComboBox.setSelectedItem(product.getLocation().getBrand().getSubCategory());
-		nameField.setText(product.getProductName());
+		selectTopCategoryById(topCategoryID);
+		selectSubCategoryById(subCategoryID);
+		nameField.setText(name);
+	}
+	public static boolean comboBoxContains(JComboBox<?> comboBox, Object target) {
+	    for (int i = 0; i < comboBox.getItemCount(); i++) {
+	        Object item = comboBox.getItemAt(i);
+	        if (item.equals(target)) { // equals 오버라이딩 되어 있어야 정확함
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	private void selectTopCategoryById(int targetId) {
+	    for (int i = 0; i < topCategoryComboBox.getItemCount(); i++) {
+	        TopCategory item = topCategoryComboBox.getItemAt(i);
+	        if (item.getTopCategoryId() == targetId) {
+	        	topCategoryComboBox.setSelectedIndex(i);
+	            return;
+	        }
+	    }
+	}
+	private void selectSubCategoryById(int targetId) {
+	    for (int i = 0; i < subCategoryComboBox.getItemCount(); i++) {
+	        SubCategory item = subCategoryComboBox.getItemAt(i);
+	        if (item.getSubCategoryId() == targetId) {
+	        	subCategoryComboBox.setSelectedIndex(i);
+	            return;
+	        }
+	    }
 	}
 	boolean isSelectAll()
 	{
@@ -93,16 +118,16 @@ final class IdentificationPanel extends JPanel
 	{
 		return nameField.getText();
 	}
-	
-	
-	
-	
-	// 현재 선택 상태 확인
-	private void logSelectionState()
-	{
+	/**
+	 * 현재 선택 상태 확인
+	 */
+	private void logSelectionState() {
 		System.out.println("===============================================");
 		System.out.println((TopCategory)topCategoryComboBox.getSelectedItem());
 		System.out.println((SubCategory)subCategoryComboBox.getSelectedItem());
 		System.out.println("Text : " + nameField.getText());
+	}
+	void reset() {
+		identifierUpdateWithNameField.reset();
 	}
 }

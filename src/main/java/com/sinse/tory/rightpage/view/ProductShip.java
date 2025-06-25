@@ -15,6 +15,7 @@ import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -28,10 +29,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
+import com.sinse.tory.rightpage.db.repository.RightPageProductDetailDAO;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.ProductImage;
+import com.sinse.tory.db.model.SubCategory;
+import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.ProductDetailDAO;
 import com.sinse.tory.db.repository.ProductImageDAO;
 import com.sinse.tory.db.repository.TopCategoryDAO;
@@ -54,7 +59,7 @@ public class ProductShip extends Pages{
 	ProductDetailDAO productDetailDAO;
 	
 	int itemId =0;
-	public ProductShip(Testmain testmain) {
+	public ProductShip(Testmain testmain, DataModificationPage dataModificationPage) {
 		super(testmain);
 		t_count = new JTextField();
 		p_form = new JPanel();
@@ -184,7 +189,6 @@ public class ProductShip extends Pages{
 				itemId = identifierUpdateWithNameComboBox.getItemID();
 				productDetail = productDetailDAO.selectDetailInfo(itemId);
 				t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
-				
 			}
 
 		});
@@ -234,6 +238,20 @@ public class ProductShip extends Pages{
 		 location[2].add(btSpace);
 		 location[2].add(Box.createRigidArea(new Dimension(0,150)));
 		 
+		 bt[0].addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (identifierUpdateWithNameComboBox.getName() == null) {
+					ShowMessage.showAlert(null, "상품 정보 수정", "상품을 선택 해주세요.");
+					return;
+				}
+				
+				dataModificationPage.fillIdentifier(identifierUpdateWithNameComboBox.getSelectedTopCategoryID(),
+						identifierUpdateWithNameComboBox.getSelectedSubCategoryID(),
+						identifierUpdateWithNameComboBox.getItemName());
+				testmain.pageMove.showPage(1,0);
+			}
+		});
 		 // 이벤트
 		 bt[1].addActionListener(new ActionListener() {
 			@Override

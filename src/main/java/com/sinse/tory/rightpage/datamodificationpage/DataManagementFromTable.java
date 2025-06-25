@@ -41,6 +41,8 @@ final class DataManagementFromTable
 			}
 			
 			RightPageProductDetailDAO.insert(productDetail);
+			identificationPanel.reset();
+			detailDataTable.reset();
 			pageMove.showPage(0, 1);
 		}
 		else
