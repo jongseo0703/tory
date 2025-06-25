@@ -1,4 +1,4 @@
-package com.sinse.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodification.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -14,9 +14,10 @@ import javax.swing.JPanel;
 import com.sinse.tory.rightpage.util.PageMove;
 import com.sinse.tory.rightpage.view.ShowMessage;
 
-// 뒤로 가기 버튼, 삭제 버튼 등이 있는 구역
-public final class Header extends JPanel
-{
+/**
+ * 뒤로 가기 버튼, 삭제 버튼 등이 있는 구역
+ */
+public final class Header extends JPanel {
 	private JButton backButton;
 	// 삭제, 저장 버튼이 들어갈 패널
 	private JPanel rightPanel;
@@ -32,8 +33,7 @@ public final class Header extends JPanel
 	
 	
 	
-	public Header(PageMove pageMove, DataManagementFromTable dataManagementFromTable)
-	{
+	public Header(PageMove pageMove, DataManagementFromTable dataManagementFromTable) {
 		backButton = new JButton("<");
 		rightPanel = new JPanel();
 		deleteButton = new JButton("삭제");
@@ -50,11 +50,9 @@ public final class Header extends JPanel
 		backButton.setBorder(DataModificationPage.EMPTY_BORDER);
 		backButton.setPreferredSize(new Dimension(HEADER_HEIGHT, HEADER_HEIGHT));
 		backButton.setMaximumSize(new Dimension(HEADER_HEIGHT, HEADER_HEIGHT));
-		backButton.addActionListener(new ActionListener()
-		{
+		backButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				pageMove.showPage(0, 1);
 			}
 		});
@@ -69,19 +67,15 @@ public final class Header extends JPanel
 		updateButtonSize(deleteButton);
 		updateButtonSize(saveButton);
 		
-		deleteButton.addActionListener(new ActionListener()
-		{
+		deleteButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				ShowMessage.showConfirm(null, "title", "content");
 			}
 		});
-		saveButton.addActionListener(new ActionListener()
-		{
+		saveButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				dataManagementFromTable.add(pageMove);
 			}
 		});
@@ -89,18 +83,10 @@ public final class Header extends JPanel
 	
 	
 	
-	private void updateButtonSize(JButton button)
-	{
+	private void updateButtonSize(JButton button) {
 		button.setBorder(BorderFactory.createEmptyBorder(0, BUTTON_WIDTH_MARGIN, 0, BUTTON_WIDTH_MARGIN));
 		int buttonPreferredWidth = button.getPreferredSize().width;
 		button.setPreferredSize(new Dimension(buttonPreferredWidth, HEADER_HEIGHT));
 		button.setMaximumSize(new Dimension(buttonPreferredWidth, HEADER_HEIGHT));
-	}
-	
-	
-	
-	private void updateToSearchPage()
-	{
-		
 	}
 }

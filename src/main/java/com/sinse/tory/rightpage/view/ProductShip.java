@@ -33,7 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
+import com.sinse.tory.rightpage.datamodification.view.DataModificationPage;
 import com.sinse.tory.rightpage.db.repository.RightPageProductDetailDAO;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.db.model.Product;
@@ -254,22 +254,19 @@ public class ProductShip extends Pages{
 					return;
 				}
 				
-				System.out.println(productDetail);
 				dataModificationPage.fillIdentifier(identifierUpdateWithNameComboBox.getSelectedTopCategoryID(),
 						identifierUpdateWithNameComboBox.getSelectedSubCategoryID(),
 						identifierUpdateWithNameComboBox.getItemName());
-				testmain.pageMove.showPage(1,0);
+				ProductDetail productDetail = productDetailDAO.selectDetailInfo(identifierUpdateWithNameComboBox.getName().getProductDetailId());
+				testmain.pageMove.showDataModificationPage(productDetail);
 			}
 		});
-		 // 이벤트
-		 bt[0].addActionListener((e)->{
-			 //상품수정으로 가는 버튼
-		 });
 		 bt[1].addActionListener(new ActionListener() {
 			 // 상품추가로 가는 버튼
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				testmain.pageMove.showPage(1,0);
+				ProductDetail productDetail = new ProductDetail();
+				testmain.pageMove.showDataModificationPage(productDetail);
 			}
 		});
 		 
