@@ -18,8 +18,10 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.sinse.tory.db.model.InventoryLog;
 //선언한 라이브러리 패키지 임포트
 import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.repository.ProductDetailDAO;
 
 //메인페이지
 public class MainPage extends JFrame {
@@ -55,6 +57,7 @@ public class MainPage extends JFrame {
 		mainPageDataLoader = new MainPageDataLoader();
 		categoryManager = new CategoryManager();
 		
+		List<Product> products = mainPageDataLoader.loadProducts();
 		categoryManager.init(mainPageDataLoader.loadTopCategories(), mainPageDataLoader.loadProducts());
 		
 		categoryOrder = categoryManager.getCategoryOrder();
@@ -62,8 +65,14 @@ public class MainPage extends JFrame {
 		productCountPerCategory = categoryManager.getProductCountPerCategory();
 		categoryProductMap = categoryManager.categorizeProducts(mainPageDataLoader.loadProducts());
 		
+		ProductDetailDAO productDetailDAO = new ProductDetailDAO();
+		List<InventoryLog> logs = productDetailDAO.selectAllInventoryLogsWithProductInfo();
+		
 		//레이아웃 생성 관련
 		layoutBuilder = new MainPageLayoutBuilder();
+		layoutBuilder.setCategoryManager(categoryManager);
+		layoutBuilder.setProducts(products);
+		layoutBuilder.setInventoryLogs(logs);
 		p_left = layoutBuilder.buildLeft(categoryOrder);
 		p_right = layoutBuilder.buildRight();
 		

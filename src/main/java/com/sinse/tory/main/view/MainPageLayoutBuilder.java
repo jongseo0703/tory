@@ -6,6 +6,7 @@ package com.sinse.tory.main.view;
 
 //컬렉션 관련 패키지 임포트
 import java.util.List;
+import java.util.Map;
 
 //awt 관련 패키지 임포트
 import java.awt.BorderLayout;
@@ -23,6 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+//선언한 라이브러리 패키지 임포트
+import com.sinse.tory.db.model.Product;
+import com.sinse.tory.db.model.InventoryLog;
 
 public class MainPageLayoutBuilder {
 	
@@ -47,6 +52,10 @@ public class MainPageLayoutBuilder {
 	//드롭다운 메뉴 배열
 	String[] sortOptions = {"보기", "재고량순", "출고순", "회전율순", "입고일순"};
 	JComboBox cb_sort; //정렬 드롭다운 박스
+	
+	List<Product> products;
+	List<InventoryLog> inventoryLogs;
+	CategoryManager categoryManager;
 	
 	InventoryBox[] boxes; //박스들의 배열
 	
@@ -121,6 +130,61 @@ public class MainPageLayoutBuilder {
 		cb_sort.setBackground(Color.WHITE);
 		cb_sort.setBorder(new EmptyBorder(5, 10, 5, 10));
 		
+		cb_sort.addActionListener(e -> {
+			String selected = (String) cb_sort.getSelectedItem();
+			
+			if("재고량순".equals(selected)) {
+				SortStrategy sortStrategy = new SortByQuantity();
+				
+				List<String> sortedCategoryOrder = sortStrategy.sort(categoryManager.getCategoryOrder(), products);
+				
+				Map<String, List<Product>> categorizedProducts = categoryManager.categorizeProducts(products);
+				
+				p_box.removeAll();
+				
+				InventoryBoxFactory boxFactory = new InventoryBoxFactory(ROWS, sortedCategoryOrder.size(), BOX_SIZE);
+				InventoryBox[] newBoxes = boxFactory.createBoxes(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
+				
+				BoxFillAnimator animator = new BoxFillAnimator(newBoxes, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
+				animator.start();
+				
+				p_box.revalidate();
+				p_box.repaint();
+			}
+			else if("출고순".equals(selected)) {
+				SortStrategy sortStrategy = new SortByRecentShipment(products, inventoryLogs, InventoryLog.ChangeType.OUT, false);
+				List<String> sortedCategoryOrder = sortStrategy.sort(categoryOrder, products);
+				Map<String, List<Product>> categorizedProducts = categoryManager.categorizeProducts(products);
+				
+				p_box.removeAll();
+				
+				InventoryBoxFactory boxFactory = new InventoryBoxFactory(ROWS, sortedCategoryOrder.size(), BOX_SIZE);
+				InventoryBox[] newBoxes = boxFactory.createBoxes(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
+				
+				BoxFillAnimator animator = new BoxFillAnimator(newBoxes, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
+				animator.start();
+				
+				p_box.revalidate();
+				p_box.repaint();
+			}
+			else if("입고일순".equals(selected)) {
+				SortStrategy sortStrategy = new SortByRecentShipment(products, inventoryLogs, InventoryLog.ChangeType.IN, true);
+				List<String> sortedCategoryOrder = sortStrategy.sort(categoryOrder, products);
+				Map<String, List<Product>> categorizedProducts = categoryManager.categorizeProducts(products);
+				
+				p_box.removeAll();
+				
+				InventoryBoxFactory boxFactory = new InventoryBoxFactory(ROWS, sortedCategoryOrder.size(), BOX_SIZE);
+				InventoryBox[] newBoxes = boxFactory.createBoxes(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
+				
+				BoxFillAnimator animator = new BoxFillAnimator(newBoxes, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
+				animator.start();
+				
+				p_box.revalidate();
+				p_box.repaint();
+			}
+		});
+		
 		//부착
 		p_left_logo.add(la_logo);
 		p_left_clock.add(la_clock, BorderLayout.CENTER);
@@ -151,6 +215,18 @@ public class MainPageLayoutBuilder {
 		p_right.setPreferredSize(new Dimension(820, 1024));
 		
 		return p_right;
+	}
+	
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+	
+	public void setInventoryLogs(List<InventoryLog> inventoryLogs) {
+		this.inventoryLogs = inventoryLogs;
+	}
+	
+	public void setCategoryManager(CategoryManager categoryManager) {
+		this.categoryManager = categoryManager;
 	}
 	
 	public JPanel getBoxPanel() {
