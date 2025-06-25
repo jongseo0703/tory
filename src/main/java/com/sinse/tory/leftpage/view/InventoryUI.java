@@ -97,7 +97,6 @@ public class InventoryUI extends JPanel {
 		setBackground(Color.WHITE);
 
 		/* ---------- 로고 + 시계 (p_clockBar) ---------- */
-
 		// 시계 + 로고를 담을 상단 패널 (고정 높이 60px)
 		p_clockBar = new JPanel(new BorderLayout());
 		p_clockBar.setPreferredSize(new Dimension(960, 60));
@@ -130,6 +129,9 @@ public class InventoryUI extends JPanel {
 		p_titleBar = new JPanel(new BorderLayout());
 		p_titleBar.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50)); // 상,하,좌,우 각각 여백주기
 
+		
+		//재고현황 글씨를 감싸는 헤더영역 생성
+		JPanel p_title = new JPanel(new BorderLayout());
 		la_title = new JLabel("재고 현황", JLabel.CENTER);
 		la_title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 36));
 
@@ -139,12 +141,20 @@ public class InventoryUI extends JPanel {
 		cb_filter.addItem("재고량 적은 순");
 		cb_filter.addItem("최근 입고순");
 		cb_filter.addItem("입고 예정순");
-
-		// 콤보박스 크기 고정
-		cb_filter.setPreferredSize(new Dimension(150, 40));
-
-		p_titleBar.add(la_title, BorderLayout.CENTER);
-		p_titleBar.add(cb_filter, BorderLayout.EAST);
+		
+		// title 중앙으로 밀어줄 빈 패널
+		JPanel leftSpacer = new JPanel();
+		leftSpacer.setPreferredSize(new Dimension(180, 30));
+		
+		// 콤보박스를 감쌀 패널 생성 (FlowLayout 사용 시 크기 반영에 유리)
+		JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 10)); // 세로 padding 조정
+		cb_filter.setPreferredSize(new Dimension(120, 30)); // 높이를 30으로
+		
+		filterPanel.add(cb_filter);
+		p_title.add(la_title);
+		p_titleBar.add(leftSpacer, BorderLayout.WEST);
+		p_titleBar.add(p_title, BorderLayout.CENTER);
+		p_titleBar.add(filterPanel, BorderLayout.EAST);
 
 		// [DB 연동]
 		// TopCategory DAO 객체 생성 및 전체 조회
@@ -171,12 +181,14 @@ public class InventoryUI extends JPanel {
 		// 1. 카테고리별 상품 리스트 초기화
 		Map<String, List<Product>> categoryProductMap = new LinkedHashMap<>();
 		for (String category : categoryOrder) {
+			//System.out.println("categoryOrder 항목: " + category);
 			categoryProductMap.put(category, new ArrayList<>());
 		}
 		// 2. 상품을 카테고리별로 분류
 		for (Product p : products) {
 			String topCategoryName = p.getLocation().getBrand().getSubCategory().getTopCategory().getTopCategoryName()
 					.trim();
+			//System.out.println("Product 상위카테고리: " + topCategoryName);
 			if (categoryProductMap.containsKey(topCategoryName)) {
 				categoryProductMap.get(topCategoryName).add(p);
 			}
