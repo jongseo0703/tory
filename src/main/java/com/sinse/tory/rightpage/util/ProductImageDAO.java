@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import com.sinse.tory.db.common.util.DBManager;
 import com.sinse.tory.db.model.Product;
