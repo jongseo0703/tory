@@ -34,7 +34,7 @@ import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.ProductImage;
 import com.sinse.tory.db.repository.ProductDetailDAO;
-import com.sinse.tory.rightpage.datamodificationpage.DataModificationPage;
+import com.sinse.tory.rightpage.datamodification.view.DataModificationPage;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.util.Pages;
