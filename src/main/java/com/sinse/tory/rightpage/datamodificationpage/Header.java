@@ -11,6 +11,9 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.sinse.tory.rightpage.util.PageMove;
+import com.sinse.tory.rightpage.view.ShowMessage;
+
 // 뒤로 가기 버튼, 삭제 버튼 등이 있는 구역
 public final class Header extends JPanel
 {
@@ -19,6 +22,7 @@ public final class Header extends JPanel
 	private JPanel rightPanel;
 	private JButton deleteButton;
 	private JButton saveButton;
+	private DataManagementFromTable dataManagementFromTable;
 	
 	// 헤더 패널의 높이
 	private static final int HEADER_HEIGHT = 29;
@@ -28,7 +32,7 @@ public final class Header extends JPanel
 	
 	
 	
-	public Header()
+	public Header(PageMove pageMove, DataManagementFromTable dataManagementFromTable)
 	{
 		backButton = new JButton("<");
 		rightPanel = new JPanel();
@@ -51,7 +55,7 @@ public final class Header extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				
+				pageMove.showPage(0, 1);
 			}
 		});
 		
@@ -64,6 +68,23 @@ public final class Header extends JPanel
 		
 		updateButtonSize(deleteButton);
 		updateButtonSize(saveButton);
+		
+		deleteButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				ShowMessage.showConfirm(null, "title", "content");
+			}
+		});
+		saveButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				dataManagementFromTable.add(pageMove);
+			}
+		});
 	}
 	
 	

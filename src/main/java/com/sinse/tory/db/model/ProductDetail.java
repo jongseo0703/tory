@@ -90,10 +90,7 @@ public class ProductDetail {
 	//디버깅용 toString() 메서드 오버라이딩
 	@Override
 	public String toString() {
-		return "ProductDetail{id=" + productDetailId +
-				", sizeName='" + productSizeName + "'" +
-				", productQuantity='" + productQuantity + "'" +
-				", product=" + product.getProductName() + "}";
+		return getProduct().getProductName() + " " + getProductSizeName();
 	}
 	
 }
