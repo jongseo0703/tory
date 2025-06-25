@@ -1,4 +1,4 @@
-package com.sinse.tory.main.view;
+package com.sinse.tory.leftpage.view;
 
 /*
  * 임포트 순서 static 임포트 패키지 -> java 패키지 -> javax 패키지 -> 외부라이브러리
@@ -15,8 +15,6 @@ import java.awt.event.ActionListener;
 
 //스윙 관련 패키지 임포트
 import javax.swing.Timer;
-
-import com.sinse.tory.leftpage.view.InventoryCell;
 
 //InventoryCell을 채우는 애니메이션을 담당하는 클래스
 public class CellFillAnimator {

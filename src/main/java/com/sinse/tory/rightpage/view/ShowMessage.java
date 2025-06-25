@@ -12,14 +12,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class ShowMessage{
+public class ShowMessage {
 	
-	public static boolean showConfirm(Testmain testmain, String title, String message) {
+	public static boolean showConfirm(JComponent parent, String title, String message) {
 		JPanel panel = new JPanel();// 메시지를 담을 패널
 		JLabel msg = new JLabel();//메시지 내용
 		JButton bt_ok = new JButton("확인");
 		JButton bt_cancel = new JButton("취소");
-		
 		
 		//버튼 스타일
 		bt_ok.setBackground(Color.decode("#75A5FD"));
@@ -42,30 +41,29 @@ public class ShowMessage{
 				,options
 				,options[0]//"확인"에 포커스를 둠
 				);
-		JDialog dialog = pane.createDialog(testmain,title);
+		JDialog dialog = pane.createDialog(parent,title);
 		dialog.getRootPane().setBorder(
 				BorderFactory.createLineBorder(Color.white));
 		dialog.setAlwaysOnTop(true);
 		
-		
-		bt_cancel.addActionListener(e->{
-			pane.setValue(bt_cancel);   // 사용자 선택값 세팅
-		    dialog.dispose();           // 창 닫기
+		bt_cancel.addActionListener(
+			e -> {
+				pane.setValue(bt_cancel);   // 사용자 선택값 세팅
+				dialog.dispose();           // 창 닫기
 		});
-		bt_ok.addActionListener(e->{
-			pane.setValue(bt_ok);   // 사용자 선택값 세팅
-			dialog.dispose();           // 창 닫기
+		bt_ok.addActionListener(
+			e -> {
+				pane.setValue(bt_ok);   // 사용자 선택값 세팅
+				dialog.dispose();           // 창 닫기
 		});
 		
 		dialog.setVisible(true);	
 		return pane.getValue() == bt_ok;
 	}
-	public static void showAlert(JComponent parentComponent, String title, String message)
-	{
+	public static void showAlert(JComponent parentComponent, String title, String message) {
 		JPanel panel = new JPanel();// 메시지를 담을 패널
 		JLabel msg = new JLabel();//메시지 내용
 		JButton bt_ok = new JButton("확인");
-		
 		
 		//버튼 스타일
 		bt_ok.setBackground(Color.decode("#75A5FD"));
@@ -92,10 +90,10 @@ public class ShowMessage{
 				BorderFactory.createLineBorder(Color.white));
 		dialog.setAlwaysOnTop(true);
 		
-		
-		bt_ok.addActionListener(e->{
-			pane.setValue(bt_ok);   // 사용자 선택값 세팅
-			dialog.dispose();           // 창 닫기
+		bt_ok.addActionListener(
+			e -> {
+				pane.setValue(bt_ok);   // 사용자 선택값 세팅
+				dialog.dispose();           // 창 닫기
 		});
 		
 		dialog.setVisible(true);	

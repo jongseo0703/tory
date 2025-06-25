@@ -1,4 +1,4 @@
-package com.sinse.tory.main.view;
+package com.sinse.tory.leftpage.view;
 
 /*
  * 임포트 순서 static 임포트 패키지 -> java 패키지 -> javax 패키지 -> 외부라이브러리

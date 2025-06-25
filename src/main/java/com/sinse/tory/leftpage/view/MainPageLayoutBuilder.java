@@ -1,4 +1,4 @@
-package com.sinse.tory.main.view;
+package com.sinse.tory.leftpage.view;
 
 /*
  * 임포트 순서 static 임포트 패키지 -> java 패키지 -> javax 패키지 -> 외부라이브러리
@@ -28,7 +28,6 @@ import javax.swing.border.EmptyBorder;
 //선언한 라이브러리 패키지 임포트
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.InventoryLog;
-import com.sinse.tory.leftpage.view.InventoryCell;
 
 public class MainPageLayoutBuilder {
 	

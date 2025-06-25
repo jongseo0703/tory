@@ -19,7 +19,7 @@ public class ProductImageDAO {
 		con = dbManager.getConnection();
 		StringBuffer sql = new StringBuffer();
 		ProductImage productImage = new ProductImage();
-		sql.append("select * from productimage where product_id =?");
+		sql.append("select * from ProductImage where product_id =?");
 		try {
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.setInt(1, id);
@@ -31,12 +31,42 @@ public class ProductImageDAO {
 				productImage.setProduct(product);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			dbManager.release(pstmt, rs);
 		}
 		
 		return productImage;
+	}
+	
+	/**
+	 * ProductImage 저장
+	 * @param productImage 저장할 ProductImage 객체
+	 */
+	public void insert(ProductImage productImage) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		con = dbManager.getConnection();
+		String sql = "INSERT INTO ProductImage (image_url, product_id) VALUES (?, ?)";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, productImage.getImageURL());
+			pstmt.setInt(2, productImage.getProduct().getProductId());
+			
+			int result = pstmt.executeUpdate();
+			if (result > 0) {
+				System.out.println("✅ ProductImage 저장 성공");
+			} else {
+				System.out.println("❌ ProductImage 저장 실패");
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("❌ ProductImage 저장 중 오류: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			dbManager.release(pstmt, null);
+		}
 	}
 }

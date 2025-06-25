@@ -42,11 +42,11 @@ public final class RightPageProductDetailDAO
 	    sql.append("p.product_id, p.product_name, p.product_price, p.product_description, ");
 	    sql.append("l.location_id, l.location_name, ");
 	    sql.append("b.brand_id, b.brand_name ");
-	    sql.append("FROM productdetail pd ");
-	    sql.append("JOIN product p ON pd.product_id = p.product_id ");
-	    sql.append("JOIN location l ON p.location_id = l.location_id ");
-	    sql.append("JOIN brand b ON l.brand_id = b.brand_id ");
-	    sql.append("JOIN subcategory s ON b.sub_category_id = s.sub_category_id ");
+	    sql.append("FROM ProductDetail pd ");
+	    sql.append("JOIN Product p ON pd.product_id = p.product_id ");
+	    sql.append("JOIN Location l ON p.location_id = l.location_id ");
+	    sql.append("JOIN Brand b ON l.brand_id = b.brand_id ");
+	    sql.append("JOIN SubCategory s ON b.sub_category_id = s.sub_category_id ");
 	    sql.append("WHERE s.sub_category_id = ?");
 	    
 		try {
@@ -117,7 +117,7 @@ public final class RightPageProductDetailDAO
 	        }
 
 	        // 1. insert into product
-	        String productSql = "INSERT INTO product (product_name, product_price, product_description, location_id) VALUES (?, ?, ?, ?)";
+	        String productSql = "INSERT INTO Product (product_name, product_price, product_description, location_id) VALUES (?, ?, ?, ?)";
 	        pstmt = con.prepareStatement(productSql, Statement.RETURN_GENERATED_KEYS);
 	        pstmt.setString(1, product.getProductName());
 	        pstmt.setInt(2, product.getProductPrice());
@@ -137,7 +137,7 @@ public final class RightPageProductDetailDAO
 	        pstmt.close();
 
 	        // 2. insert into productdetail
-	        String detailSql = "INSERT INTO productdetail (product_size_name, product_quantity, product_id) VALUES (?, ?, ?)";
+	        String detailSql = "INSERT INTO ProductDetail (product_size_name, product_quantity, product_id) VALUES (?, ?, ?)";
 	        pstmt = con.prepareStatement(detailSql);
 	        pstmt.setString(1, productDetail.getProductSizeName());
 	        pstmt.setInt(2, productDetail.getProductQuantity());
@@ -145,6 +145,9 @@ public final class RightPageProductDetailDAO
 	        pstmt.executeUpdate();
 
 	        con.commit(); // 트랜잭션 성공
+	        System.out.println("✅ Product와 ProductDetail 저장 성공!");
+	        System.out.println("   - Product ID: " + product.getProductId());
+	        System.out.println("   - Product Name: " + product.getProductName());
 
 	    }
 		catch (Exception e) {
@@ -176,11 +179,11 @@ public final class RightPageProductDetailDAO
 	    sql.append("l.location_id, l.location_name, ");
 	    sql.append("b.brand_id, b.brand_name, ");
 	    sql.append("s.sub_category_id, s.sub_category_name ");
-	    sql.append("FROM productdetail pd ");
-	    sql.append("JOIN product p ON pd.product_id = p.product_id ");
-	    sql.append("JOIN location l ON p.location_id = l.location_id ");
-	    sql.append("JOIN brand b ON l.brand_id = b.brand_id ");
-	    sql.append("JOIN subcategory s ON b.sub_category_id = s.sub_category_id ");
+	    sql.append("FROM ProductDetail pd ");
+	    sql.append("JOIN Product p ON pd.product_id = p.product_id ");
+	    sql.append("JOIN Location l ON p.location_id = l.location_id ");
+	    sql.append("JOIN Brand b ON l.brand_id = b.brand_id ");
+	    sql.append("JOIN SubCategory s ON b.sub_category_id = s.sub_category_id ");
 	    sql.append("WHERE p.product_name = ?");
 
 	    try {
@@ -249,12 +252,12 @@ public final class RightPageProductDetailDAO
 	    sql.append("b.brand_id, b.brand_name, ");
 	    sql.append("s.sub_category_id, s.sub_category_name, ");
 	    sql.append("t.top_category_id, t.top_category_name ");
-	    sql.append("FROM productdetail pd ");
-	    sql.append("JOIN product p ON pd.product_id = p.product_id ");
-	    sql.append("JOIN location l ON p.location_id = l.location_id ");
-	    sql.append("JOIN brand b ON l.brand_id = b.brand_id ");
-	    sql.append("JOIN subcategory s ON b.sub_category_id = s.sub_category_id ");
-	    sql.append("JOIN topcategory t ON s.top_category_id = t.top_category_id ");
+	    sql.append("FROM ProductDetail pd ");
+	    sql.append("JOIN Product p ON pd.product_id = p.product_id ");
+	    sql.append("JOIN Location l ON p.location_id = l.location_id ");
+	    sql.append("JOIN Brand b ON l.brand_id = b.brand_id ");
+	    sql.append("JOIN SubCategory s ON b.sub_category_id = s.sub_category_id ");
+	    sql.append("JOIN TopCategory t ON s.top_category_id = t.top_category_id ");
 	    sql.append("WHERE p.product_name = ? AND pd.product_size_name = ?;");
 
 	    try {

@@ -14,7 +14,7 @@ public class UpdateCount {
 		PreparedStatement pstmt = null;
 		con = dbManager.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("update productdetail  set product_quantity = ? where product_id = ?");
+		sql.append("update ProductDetail set product_quantity = ? where product_detail_id = ?");
 		try {
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.setInt(1, count);
@@ -23,13 +23,10 @@ public class UpdateCount {
 			con.setAutoCommit(false); //AutoCommit를 꺼두어야 자동으로 저장됨 
 			int retult = pstmt.executeUpdate();
 			if(retult>0) {
-				System.out.println("업데니트성공");
 				con.commit(); //DB에 반영하기 위해서는 필요
 			}
 			
-			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			dbManager.release(pstmt);
@@ -42,7 +39,7 @@ public class UpdateCount {
 		PreparedStatement pstmt = null;
 		con = dbManager.getConnection();
 		StringBuffer sql = new StringBuffer();
-		sql.append("insert into inventorylog(change_type,quantity,product_detail_id) values(?,?,?)");
+		sql.append("insert into InventoryLog(change_type,quantity,product_detail_id) values(?,?,?)");
 		try {
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.setString(1, inOut);
@@ -55,9 +52,8 @@ public class UpdateCount {
 				con.commit(); //DB에 반영하기 위해서는 필요
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
+		} finally {
 			dbManager.release(pstmt);
 		}
 		

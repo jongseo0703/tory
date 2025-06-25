@@ -19,6 +19,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import com.sinse.tory.common.view.Clock;
 import com.sinse.tory.db.model.Product;
@@ -28,15 +30,9 @@ import com.sinse.tory.db.model.TopCategory;
 import com.sinse.tory.db.repository.ProductDAO;
 import com.sinse.tory.db.repository.SubCategoryDAO;
 import com.sinse.tory.db.repository.TopCategoryDAO;
-
-// main/view 기능 통합을 위한 import 추가
-import com.sinse.tory.main.view.MainPageDataLoader;
-import com.sinse.tory.main.view.CategoryManager;
-import com.sinse.tory.main.view.SortStrategy;
-import com.sinse.tory.main.view.SortByQuantity;
-import com.sinse.tory.main.view.SortByRecentShipment;
 import com.sinse.tory.db.model.InventoryLog;
 import com.sinse.tory.db.repository.ProductDetailDAO;
+import com.sinse.tory.rightpage.view.ProductShip;
 
 /**
  * 창고 재고 현황을 시각적으로 표시하는 왼쪽 메인 UI 패널
@@ -98,6 +94,9 @@ public class InventoryUI extends JPanel {
 	
 	// 정렬을 위한 재고 로그 데이터
 	List<InventoryLog> inventoryLogs;
+	
+	// 오른쪽 페이지 연동을 위한 ProductShip 참조
+	private ProductShip productShip;
 	
 	/**
 	 * InventoryUI 생성자
@@ -268,11 +267,16 @@ public class InventoryUI extends JPanel {
 			// 상위카테고리별로 색상이 다른 셀 생성
 			InventoryCell cell = new InventoryCell(topCategoryColor); 
 				
-			// 하위카테고리별 누적 수량 (입력된 순서로 누적)
+			// 하위카테고리별 누적 수량 및 상품 목록 (입력된 순서로 누적)
 			Map<String, Integer> subCategoryCountMap = new LinkedHashMap<>();
+			Map<String, List<Product>> subCategoryProductMap = new LinkedHashMap<>();
 			
 			for(Product p : productList) {
 				String subCategoryName = p.getLocation().getBrand().getSubCategory().getSubCategoryName().trim();
+				
+				// 하위카테고리별 상품 목록 관리
+				subCategoryProductMap.computeIfAbsent(subCategoryName, k -> new ArrayList<>()).add(p);
+				
 				for(ProductDetail detail : p.getProductDetails()) {
 					int quantity = detail.getProductQuantity();
 					// 기존값이 있으면 그걸 쓰고, 없으면 0 + 상품의 수량
@@ -280,16 +284,23 @@ public class InventoryUI extends JPanel {
 				}
 			}
 			
-			// 하위 카테고리별 수량 기반으로 블록 추가
+			// 하위 카테고리별 수량 및 상품 목록 기반으로 블록 추가
 			for(Map.Entry<String, Integer> entry : subCategoryCountMap.entrySet()) {
 				String subCategoryName = entry.getKey();
 				int quantity = entry.getValue();
 				
 				// 하위카테고리별 색상 가져오기 (없으면 기본 색)
 				Color subColor = subColorMap.getOrDefault(subCategoryName, Color.LIGHT_GRAY);
+				
+				// 해당 하위카테고리의 상품 목록 가져오기
+				List<Product> subCategoryProducts = subCategoryProductMap.getOrDefault(subCategoryName, new ArrayList<>());
 
-				cell.addBlock(subCategoryName, quantity, subColor);
+				// 상품 목록과 함께 블록 추가
+				cell.addBlock(subCategoryName, quantity, subColor, subCategoryProducts);
 			}
+			
+			// 부모 UI 참조 설정 (클릭 이벤트 전달용)
+			cell.setParentUI(this);
 
 			// 재고량 업데이트
 			cell.renderBlocks(subColorMap);
@@ -365,7 +376,7 @@ public class InventoryUI extends JPanel {
 		p_left.setLayout(new BoxLayout(p_left, BoxLayout.Y_AXIS)); // 수직정렬
 		p_left.add(p_clockBar);
 		p_left.add(p_titleBar);
-		p_left.add(p_gridWrapper);
+		p_left.add(p_gridWrapper, BorderLayout.CENTER);
 		add(p_left, BorderLayout.CENTER);
 	}
 
@@ -376,5 +387,122 @@ public class InventoryUI extends JPanel {
 	 */
 	public JLabel getLa_timeLabel() {
 		return la_timeLabel;
+	}
+
+	/**
+	 * 오른쪽 페이지 ProductShip 참조 설정
+	 * @param productShip ProductShip 인스턴스
+	 */
+	public void setProductShipReference(ProductShip productShip) {
+		this.productShip = productShip;
+	}
+	
+	/**
+	 * 선택된 상품 정보를 오른쪽 페이지로 전달
+	 * @param selectedProduct 선택된 상품
+	 */
+	public void sendProductToRightPage(Product selectedProduct) {
+		if (productShip != null) {
+			productShip.fillProductInfo(selectedProduct);
+			System.out.println("✅ 상품 정보 전달: " + selectedProduct.getProductName());
+		}
+	}
+	
+	/**
+	 * 출고/입고 완료 후 실시간 데이터 새로고침 (애니메이션 포함)
+	 */
+	public void refreshInventoryData() {
+		// 백그라운드에서 데이터 새로고침
+		SwingUtilities.invokeLater(() -> {
+			try {
+				// DAO가 null인 경우 새로 생성
+				if (topCategoryDAO == null) {
+					topCategoryDAO = new TopCategoryDAO();
+				}
+				if (mainPageDataLoader == null) {
+					mainPageDataLoader = new MainPageDataLoader();
+				}
+				if (categoryManager == null) {
+					categoryManager = new CategoryManager();
+				}
+				
+				// 모든 데이터 완전히 다시 로드
+				topCategories = topCategoryDAO.selectAll();
+				products = mainPageDataLoader.loadProducts();
+				categoryManager.init(topCategories, products);
+				categoryProductMap = categoryManager.categorizeProducts(products);
+				
+				// 카테고리 순서와 색상 다시 설정
+				categoryOrder = categoryManager.getCategoryOrder();
+				categoryColors = categoryManager.getCategoryColors();
+				
+				// 재고 로그 데이터도 새로고침
+				try {
+					ProductDetailDAO productDetailDAO = new ProductDetailDAO();
+					inventoryLogs = productDetailDAO.selectAllInventoryLogsWithProductInfo();
+				} catch (Exception logEx) {
+					System.err.println("⚠️ 재고 로그 로딩 실패: " + logEx.getMessage());
+					inventoryLogs = new ArrayList<>(); // 빈 리스트로 초기화
+				}
+				
+				// 격자 새로고침 (애니메이션 포함)
+				refreshGridWithAnimation();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+	
+	/**
+	 * 애니메이션과 함께 격자 새로고침
+	 */
+	private void refreshGridWithAnimation() {
+		// 기존 격자 페이드아웃 애니메이션
+		Timer fadeOutTimer = new Timer(50, null);
+		final float[] alpha = {1.0f};
+		
+		fadeOutTimer.addActionListener(e -> {
+			alpha[0] -= 0.1f;
+			if (alpha[0] <= 0.0f) {
+				alpha[0] = 0.0f;
+				fadeOutTimer.stop();
+				
+				// 격자 다시 생성
+				p_grid.removeAll();
+				createGridCells();
+				
+				// 페이드인 애니메이션
+				startFadeInAnimation();
+			}
+			
+			// 투명도 적용 (간단한 효과)
+			p_grid.setOpaque(alpha[0] > 0.5f);
+			p_grid.repaint();
+		});
+		
+		fadeOutTimer.start();
+	}
+	
+	/**
+	 * 페이드인 애니메이션
+	 */
+	private void startFadeInAnimation() {
+		Timer fadeInTimer = new Timer(50, null);
+		final float[] alpha = {0.0f};
+		
+		fadeInTimer.addActionListener(e -> {
+			alpha[0] += 0.1f;
+			if (alpha[0] >= 1.0f) {
+				alpha[0] = 1.0f;
+				fadeInTimer.stop();
+			}
+			
+			// 투명도 적용
+			p_grid.setOpaque(alpha[0] > 0.5f);
+			p_grid.repaint();
+		});
+		
+		fadeInTimer.start();
 	}
 }

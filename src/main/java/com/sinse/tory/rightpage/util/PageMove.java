@@ -5,7 +5,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import com.sinse.tory.db.model.ProductDetail;
-import com.sinse.tory.rightpage.datamodification.view.DataModificationPage;
 
 /**
  * PageMove
@@ -29,14 +28,13 @@ public class PageMove {
 
 	/**
 	 * showDataModificationPage(ProductDetail)
-	 * - 수정 페이지(DataModificationPage)를 보여주고,
-	 * 해당 페이지에 ProductDetail 데이터를 전달하여 초기화
+	 * - ProductAddPage를 보여주고 초기화
 	 * 
-	 * @param productDetail 수정할 상품 상세 정보
+	 * @param productDetail 상품 상세 정보 (현재는 사용하지 않음)
 	 */
 	public void showDataModificationPage(ProductDetail productDetail) {
 		list.get(0).setVisible(false);
 		list.get(1).setVisible(true);
-		((DataModificationPage) list.get(1)).onShow(productDetail); 
+		// ProductAddPage는 항상 새 상품 등록이므로 별도 초기화 불필요
 	}
 }
