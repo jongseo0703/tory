@@ -28,12 +28,13 @@ import javax.swing.border.EmptyBorder;
 //선언한 라이브러리 패키지 임포트
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.InventoryLog;
+import com.sinse.tory.leftpage.view.InventoryCell;
 
 public class MainPageLayoutBuilder {
 	
 	//상수
 	private static final int ROWS = 10; //행
-	private static final int BOX_SIZE = 65; //박스의 크기 (약간 줄여서 여백 확보)
+	private static final int CELL_SIZE = 65; //셀의 크기 (약간 줄여서 여백 확보)
 	private static final int GAP = 0; //박스 간의 간격
 	
 	JPanel p_left; //왼쪽 영역
@@ -57,7 +58,7 @@ public class MainPageLayoutBuilder {
 	List<InventoryLog> inventoryLogs;
 	CategoryManager categoryManager;
 	
-	InventoryBox[] boxes; //박스들의 배열
+	// InventoryBox[] 배열은 더 이상 사용하지 않음 - InventoryCell 리스트 방식으로 변경됨
 	
 	ClockUpdater clockUpdater; //현재 날짜 가져오는 객체
 	
@@ -102,18 +103,18 @@ public class MainPageLayoutBuilder {
 		p_left_logo.setBackground(Color.WHITE);
 		p_left_clock.setBackground(Color.WHITE);
 		la_clock.setFont(new Font("Arial", Font.BOLD, 22));
-		//박스 패널 크기를 정확히 계산하여 정사각형 유지
-		int totalBoxWidth = cols * BOX_SIZE + (cols - 1) * GAP;
-		int totalBoxHeight = ROWS * BOX_SIZE + (ROWS - 1) * GAP;
+		//셀 패널 크기를 정확히 계산
+		int totalCellWidth = cols * CELL_SIZE + (cols - 1) * GAP;
+		int totalCellHeight = ROWS * CELL_SIZE + (ROWS - 1) * GAP;
 		p_box.setLayout(new	GridLayout(ROWS + 1, cols, GAP, GAP));
 		p_box.setBackground(Color.WHITE);
-		p_box.setPreferredSize(new Dimension(totalBoxWidth, totalBoxHeight));
+		p_box.setPreferredSize(new Dimension(totalCellWidth, totalCellHeight));
 		p_box.setOpaque(false); //배경 투명
 		//래퍼 패널 스타일 설정
 		p_box_wrapper.setBackground(Color.WHITE);
 		p_box_wrapper.setBorder(new EmptyBorder(200, 50, 120, 50)); //여백 조절(top, left, bottom, right)
 		p_inventory_header.setBackground(Color.WHITE);
-		p_inventory_header.setPreferredSize(new Dimension(totalBoxWidth, 50));
+		p_inventory_header.setPreferredSize(new Dimension(totalCellWidth, 50));
 		la_inventory_title.setFont(new Font("Gulim", Font.BOLD, 30));
 		la_inventory_title.setForeground(Color.decode("#393939"));
 		la_inventory_title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -142,10 +143,10 @@ public class MainPageLayoutBuilder {
 				
 				p_box.removeAll();
 				
-				InventoryBoxFactory boxFactory = new InventoryBoxFactory(ROWS, sortedCategoryOrder.size(), BOX_SIZE);
-				InventoryBox[] newBoxes = boxFactory.createBoxes(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
+				InventoryCellFactory cellFactory = new InventoryCellFactory(ROWS, sortedCategoryOrder.size(), CELL_SIZE);
+				List<InventoryCell> newCells = cellFactory.createCells(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
 				
-				BoxFillAnimator animator = new BoxFillAnimator(newBoxes, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
+				CellFillAnimator animator = new CellFillAnimator(newCells, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
 				animator.start();
 				
 				p_box.revalidate();
@@ -158,10 +159,10 @@ public class MainPageLayoutBuilder {
 				
 				p_box.removeAll();
 				
-				InventoryBoxFactory boxFactory = new InventoryBoxFactory(ROWS, sortedCategoryOrder.size(), BOX_SIZE);
-				InventoryBox[] newBoxes = boxFactory.createBoxes(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
+				InventoryCellFactory cellFactory = new InventoryCellFactory(ROWS, sortedCategoryOrder.size(), CELL_SIZE);
+				List<InventoryCell> newCells = cellFactory.createCells(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
 				
-				BoxFillAnimator animator = new BoxFillAnimator(newBoxes, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
+				CellFillAnimator animator = new CellFillAnimator(newCells, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
 				animator.start();
 				
 				p_box.revalidate();
@@ -174,10 +175,10 @@ public class MainPageLayoutBuilder {
 				
 				p_box.removeAll();
 				
-				InventoryBoxFactory boxFactory = new InventoryBoxFactory(ROWS, sortedCategoryOrder.size(), BOX_SIZE);
-				InventoryBox[] newBoxes = boxFactory.createBoxes(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
+				InventoryCellFactory cellFactory = new InventoryCellFactory(ROWS, sortedCategoryOrder.size(), CELL_SIZE);
+				List<InventoryCell> newCells = cellFactory.createCells(sortedCategoryOrder, categorizedProducts, categoryManager.getCategoryColors(), p_box);
 				
-				BoxFillAnimator animator = new BoxFillAnimator(newBoxes, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
+				CellFillAnimator animator = new CellFillAnimator(newCells, sortedCategoryOrder, categoryManager.getCategoryColors(), categoryManager.getProductCountPerCategory(), ROWS, sortedCategoryOrder.size());
 				animator.start();
 				
 				p_box.revalidate();

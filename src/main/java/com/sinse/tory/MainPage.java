@@ -17,18 +17,16 @@ public class MainPage extends JFrame{
 	
 	public MainPage() {
 		
-		// 왼쪽 패널 (InventoryUI)
+		// 통합된 InventoryUI 사용 (main/view 기능 포함)
 		inventoryUI = new InventoryUI();
 		inventoryUI.setPreferredSize(new Dimension(960,1080));
-		add(inventoryUI, BorderLayout.WEST);
 		
 		// 임시로 오른쪽 패널 삽입
 		rightPanel = new JPanel();
 		rightPanel.setBackground(Color.YELLOW);
 	
-		setTitle("음성기반 창고관리 Tory");
+		setTitle("음성기반 창고관리 Tory - 통합 버전");
 		setSize(1920,1080);
-		setBackground(Color.PINK);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		setLayout(new GridLayout(1,2));
@@ -36,7 +34,6 @@ public class MainPage extends JFrame{
 		add(rightPanel);
 	
 		setVisible(true);
-		
 	}
     public static void main( String[] args ){
     	new MainPage();
