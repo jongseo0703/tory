@@ -107,7 +107,6 @@ public class ProductShip extends Pages{
 				try {
 					BufferedImage buffer = ImageIO.read(url);
 					image = buffer.getScaledInstance(PageUtil.InputOutput_Width/2,260, Image.SCALE_SMOOTH);	
-					System.out.println(url);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -246,15 +245,21 @@ public class ProductShip extends Pages{
 		 
 			 bt[2].addActionListener(e->{
 				 boolean resutle = ShowMessage.showConfirm(testmain,"출고하기","출고하기겠습니까?");
+				 int count =0;
 				 // 확인 눌렀을때
 				 if(resutle) {
 					 String inOut = "OUT";
-					 int count = productDetail.getProductQuantity()- Integer.parseInt(t_count.getText());
+					 if(productDetail.getProductQuantity()>=Integer.parseInt(t_count.getText())) {
+						 count = productDetail.getProductQuantity()- Integer.parseInt(t_count.getText());						 
+						 updateCount.update(count, itemId);
+						 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
+						 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
+					 }else {
+						
+					}
 					 System.out.println(count);
 					 System.out.println(itemId);
 					 System.out.println(Integer.parseInt(t_count.getText()));
-					updateCount.update(count, itemId);
-					updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
 				 }
 			 });
 			 bt[3].addActionListener(e->{
@@ -268,6 +273,7 @@ public class ProductShip extends Pages{
 					 System.out.println(itemId);
 					 updateCount.update(count, itemId);
 					 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
+					 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
 				 }
 			 });
 		 
