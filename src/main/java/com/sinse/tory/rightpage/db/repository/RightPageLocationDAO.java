@@ -10,7 +10,6 @@ import java.util.List;
 import com.sinse.tory.db.common.util.DBManager;
 import com.sinse.tory.db.model.Brand;
 import com.sinse.tory.db.model.Location;
-import com.sinse.tory.db.repository.BrandDAO;
 
 public final class RightPageLocationDAO {
 	
@@ -20,7 +19,6 @@ public final class RightPageLocationDAO {
 		PreparedStatement pstmt = null; //sql 문을 실행하기 위한 PreparedStatement 객체 초기화
 		ResultSet rs = null; //select 문을 위한 표반환 객체인 ResultSet 객체 초기화
 		List<Location> locations = new ArrayList<Location>();
-		BrandDAO brandDAO = new BrandDAO();
 				
 		//String 으로 sql 을 만들면 객체의 낭비가 생기기때문에 StringBuilder 객체 이용.
 		StringBuilder sql = new StringBuilder();

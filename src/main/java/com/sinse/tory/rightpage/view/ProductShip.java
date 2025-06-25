@@ -56,6 +56,7 @@ import com.sinse.tory.leftpage.view.InventoryUI;
  * */
 public class ProductShip extends Pages{
 	JButton[]bt = new JButton[4];//버튼 4개 생성
+	@SuppressWarnings("rawtypes")
 	JComboBox[] box = new JComboBox[3];//콤보박스 3개
 	JLabel[]la = new JLabel[4];//라벨 4개
 	JTextField t_count;
@@ -82,7 +83,6 @@ public class ProductShip extends Pages{
 		productImage = new ProductImage();
 		imageDAO = new ProductImageDAO();
 		
-		int width = getPreferredSize().getSize().width;//현 패널의 가로넓비
 		/*
 		 * 패널[0]= 상품정보 수정과 추가 버튼
 		 * 패널[1]= 이미지 패널과 폼 패널의 들어갈곳
@@ -120,7 +120,8 @@ public class ProductShip extends Pages{
 		}
 		
 		for(int i=0; i<box.length;i++) {
-			box[i] = new JComboBox() {
+			box[i] = 
+			new JComboBox() {
 				protected void paintComponent(Graphics g) {
 					Graphics2D g2 = (Graphics2D) g.create();
 					g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -203,7 +204,6 @@ public class ProductShip extends Pages{
 		p_img.setPreferredSize(new Dimension(300, 280));
 		
 		// 폰트설정
-		Font titleFont = new Font("맑은 고딕", Font.BOLD, 16);
 		Font labelFont = new Font("맑은 고딕", Font.PLAIN, 14);
 		Font buttonFont = new Font("맑은 고딕", Font.BOLD, 13);
 		
@@ -555,10 +555,7 @@ public class ProductShip extends Pages{
 			String topCategoryName = selectedProduct.getLocation().getBrand().getSubCategory().getTopCategory().getTopCategoryName();
 			String subCategoryName = selectedProduct.getLocation().getBrand().getSubCategory().getSubCategoryName();
 			String productName = selectedProduct.getProductName();
-			
-			// IdentifierUpdateWithNameComboBox를 통해 콤보박스 설정
-			IdentifierUpdateWithNameComboBox identifierUpdate = new IdentifierUpdateWithNameComboBox(box[0], box[1], box[2]);
-			
+
 			// 상위 카테고리 설정
 			for (int i = 0; i < box[0].getItemCount(); i++) {
 				if (box[0].getItemAt(i).toString().equals(topCategoryName)) {

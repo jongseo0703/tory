@@ -204,7 +204,6 @@ public class MicrophoneForm extends Pages{
 			// ProductAddPage에 음성 명령 전달 (현재 페이지가 ProductAddPage인 경우)
 			if (testmain != null) {
 				try {
-					Object pageMove = testmain.getClass().getField("pageMove").get(testmain);
 					Object productAddPage = testmain.getClass().getField("productAddPage").get(testmain);
 					
 					// ProductAddPage의 fillFromVoiceCommand 메서드 호출

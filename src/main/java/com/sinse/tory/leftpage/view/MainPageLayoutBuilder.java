@@ -51,7 +51,7 @@ public class MainPageLayoutBuilder {
 	
 	//드롭다운 메뉴 배열
 	String[] sortOptions = {"보기", "재고량순", "출고순", "회전율순", "입고일순"};
-	JComboBox cb_sort; //정렬 드롭다운 박스
+	JComboBox<String> cb_sort; //정렬 드롭다운 박스
 	
 	List<Product> products;
 	List<InventoryLog> inventoryLogs;

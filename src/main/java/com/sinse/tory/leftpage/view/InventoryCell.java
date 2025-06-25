@@ -30,7 +30,6 @@ import com.sinse.tory.db.model.Product;
  */
 public class InventoryCell extends JPanel {
 
-	private final Color categoryColor; // 해당 셀의 상위 카테고리 대표 색상
 	private final int maxStock = 60; // 최대 블록 개수 (셀 안에 들어갈 최대 수량 기준)
 	private JPanel[] slots = new JPanel[maxStock]; // 위치 고정용 패널 배열
 	private List<SubCategoryBlock> blocks = new ArrayList<>(); // 셀에 포함될 하위카테고리 블록 목록
@@ -50,7 +49,6 @@ public class InventoryCell extends JPanel {
 	 * - 내부 레이아웃은 BoxLayout(Y_AXIS)로 설정하여 수직 블록 쌓기
 	 */
 	public InventoryCell(Color categoryColor) {
-		this.categoryColor = categoryColor;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false); // 배경 투명 처리 (직접 그릴 것)
 
@@ -113,7 +111,6 @@ public class InventoryCell extends JPanel {
 			try {
 				for (SubCategoryBlock block : blocks) {
 					int limit = Math.min(block.quantity, maxStock - currentStock);
-					Color color = subCategoryColorMap.getOrDefault(block.subCategoryName, Color.LIGHT_GRAY);
 
 					for (int i = 0; i < limit; i++) {
 						final int index = maxStock - 1 - currentStock; // 아래에서 위로
@@ -161,8 +158,7 @@ public class InventoryCell extends JPanel {
 	 */
 	private JPanel createBlockPanel(SubCategoryBlock block) {
 		String subCategoryName = block.subCategoryName;
-		Color color = block.color;
-
+		
 		JPanel panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {

@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 //컬렉션 관련 패키지 임포트
 import java.util.ArrayList;
@@ -75,9 +74,7 @@ public class ProductDAO {
 			rs = pstmt.executeQuery();
 			
 			//rs 인스턴스(테이블)에서 한 줄씩 데이터를 꺼내서 product 인스턴스에 넣어서 list 에저장
-			int rowCount = 0;
 			while(rs.next()) {
-				rowCount++;
 				int productId = rs.getInt("product_id"); //이미 만들어진 Product 인지 확인하기 위한 productId
 				Product product = productMap.get(productId); //해당 productId의 레코드 한 건을 담기위한 객체
 				

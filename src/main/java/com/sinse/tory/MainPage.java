@@ -1,8 +1,6 @@
 package com.sinse.tory;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
@@ -13,7 +11,6 @@ import javax.swing.JPanel;
 
 import com.sinse.tory.leftpage.view.InventoryUI;
 import com.sinse.tory.rightpage.util.PageMove;
-import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.view.MicrophoneForm;
 import com.sinse.tory.rightpage.view.ProductShip;
 import com.sinse.tory.rightpage.view.ProductAddPage;

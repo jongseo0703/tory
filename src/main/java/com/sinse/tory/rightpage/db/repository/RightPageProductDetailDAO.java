@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.sinse.tory.db.common.util.DBManager;
 import com.sinse.tory.db.model.Brand;
@@ -103,7 +101,6 @@ public final class RightPageProductDetailDAO
 		Connection con = null; //커넥션 객체 초기화
 		PreparedStatement pstmt = null;
 		con = dbManager.getConnection();
-		StringBuilder sql = new StringBuilder();
 		ResultSet rs = null;
 		
 		try {

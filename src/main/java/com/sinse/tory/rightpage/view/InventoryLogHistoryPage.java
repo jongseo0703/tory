@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.*;
@@ -40,12 +39,9 @@ public class InventoryLogHistoryPage extends Pages {
     private JTextField endDateFilter;
     
     private InventoryLogDAO inventoryLogDAO;
-    private ProductDetail selectedProductDetail;
-    private String selectedProductName;
     
     // 색상 상수
     private static final Color PRIMARY_COLOR = new Color(52, 144, 220);
-    private static final Color SUCCESS_COLOR = new Color(40, 167, 69);
     private static final Color WARNING_COLOR = new Color(255, 149, 0);
     private static final Color LIGHT_GRAY = new Color(248, 249, 250);
     private static final Color BORDER_COLOR = new Color(230, 230, 230);

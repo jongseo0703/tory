@@ -22,7 +22,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import com.sinse.tory.db.model.*;
@@ -69,9 +68,6 @@ public class ProductAddPage extends Pages {
     // 데이터 접근 객체들
     private TopCategoryDAO topCategoryDAO;
     private SubCategoryDAO subCategoryDAO;
-    private RightPageBrandDAO brandDAO;
-    private RightPageLocationDAO locationDAO;
-    private RightPageProductDetailDAO productDetailDAO;
     
     // 왼쪽 InventoryUI와의 실시간 연동을 위한 참조
     private InventoryUI inventoryUI;
@@ -89,9 +85,6 @@ public class ProductAddPage extends Pages {
         // DAO 초기화
         topCategoryDAO = new TopCategoryDAO();
         subCategoryDAO = new SubCategoryDAO();
-        brandDAO = new RightPageBrandDAO();
-        locationDAO = new RightPageLocationDAO();
-        productDetailDAO = new RightPageProductDetailDAO();
         
         initializeComponents();
         setupLayout();
@@ -412,7 +405,7 @@ public class ProductAddPage extends Pages {
         dummy.setBrandName("선택하세요");
         brandCombo.addItem(dummy);
         
-        List<Brand> brands = brandDAO.selectAllName();
+        List<Brand> brands = RightPageBrandDAO.selectAllName();
         for (Brand brand : brands) {
             brandCombo.addItem(brand);
         }
@@ -427,7 +420,7 @@ public class ProductAddPage extends Pages {
         dummy.setLocationName("선택하세요");
         locationCombo.addItem(dummy);
         
-        List<Location> locations = locationDAO.selectAllName();
+        List<Location> locations = RightPageLocationDAO.selectAllName();
         for (Location location : locations) {
             locationCombo.addItem(location);
         }
@@ -516,7 +509,7 @@ public class ProductAddPage extends Pages {
             ProductDetail productDetail = createProductDetailFromForm();
             
             // DB에 저장
-            productDetailDAO.insert(productDetail);
+            RightPageProductDetailDAO.insert(productDetail);
             
             // 이미지 저장 처리
             if (selectedImagePath != null && !selectedImagePath.isEmpty()) {
@@ -680,7 +673,7 @@ public class ProductAddPage extends Pages {
         
         try {
             // 1. 선택된 SubCategory에 맞는 Brand 찾기
-            List<Brand> brandsForSubCategory = brandDAO.selectBySubCategory(selectedSubCategory);
+            List<Brand> brandsForSubCategory = RightPageBrandDAO.selectBySubCategory(selectedSubCategory);
             if (!brandsForSubCategory.isEmpty()) {
                 // 사용자가 선택한 브랜드가 이 SubCategory에 속하는지 확인
                 for (Brand brand : brandsForSubCategory) {
@@ -697,7 +690,7 @@ public class ProductAddPage extends Pages {
             
             // 2. 올바른 Brand에 맞는 Location 찾기
             if (correctBrand != null) {
-                List<Location> locationsForBrand = locationDAO.selectByBrand(correctBrand);
+                List<Location> locationsForBrand = RightPageLocationDAO.selectByBrand(correctBrand);
                 if (!locationsForBrand.isEmpty()) {
                     // 사용자가 선택한 위치가 이 Brand에 속하는지 확인
                     for (Location location : locationsForBrand) {

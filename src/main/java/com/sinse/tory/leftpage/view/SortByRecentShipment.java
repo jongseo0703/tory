@@ -15,7 +15,6 @@ import java.time.ZoneId;
 
 //선언한 라이브러리 패키지 임포트
 import com.sinse.tory.db.model.Product;
-import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.InventoryLog;
 
 public class SortByRecentShipment implements SortStrategy {
