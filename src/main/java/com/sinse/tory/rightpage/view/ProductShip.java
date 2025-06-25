@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -249,17 +250,19 @@ public class ProductShip extends Pages{
 				 // 확인 눌렀을때
 				 if(resutle) {
 					 String inOut = "OUT";
-					 if(productDetail.getProductQuantity()>=Integer.parseInt(t_count.getText())) {
+					 if(productDetail.getProductQuantity() != 0
+							 &&productDetail.getProductQuantity()>=Integer.parseInt(t_count.getText())
+							 &&Integer.parseInt(t_count.getText())!=0 ) {
 						 count = productDetail.getProductQuantity()- Integer.parseInt(t_count.getText());						 
 						 updateCount.update(count, itemId);
 						 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
 						 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
-					 }else {
-						
+					}else if (Integer.parseInt(t_count.getText())==0) {
+						JOptionPane.showMessageDialog(this, "출고 수량을 다시 입력해 주세요");
 					}
-					 System.out.println(count);
-					 System.out.println(itemId);
-					 System.out.println(Integer.parseInt(t_count.getText()));
+					 else {
+						JOptionPane.showMessageDialog(this, "재고부족");
+					}
 				 }
 			 });
 			 bt[3].addActionListener(e->{
@@ -269,8 +272,6 @@ public class ProductShip extends Pages{
 				 if(resutle) {
 					 String inOut = "IN";
 					 int count = productDetail.getProductQuantity()+ Integer.parseInt(t_count.getText());
-					 System.out.println(count);
-					 System.out.println(itemId);
 					 updateCount.update(count, itemId);
 					 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
 					 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
