@@ -26,6 +26,7 @@ public final class DataModificationPage extends JPanel
 {
 	private Header header;
 	private Content content;
+	private ProductDetail productDetail;
 	
 	// TODO : 나중에 공용으로 사용할 상수에 추가해야 함.
 	private static final int HORIZONTAL_MARGIN = 16;
@@ -37,8 +38,9 @@ public final class DataModificationPage extends JPanel
 	
 	public DataModificationPage(PageMove pageMove, ProductDetail productDetail)
 	{
-		content = new Content(productDetail);
+		content = new Content();
 		header = new Header(pageMove, content.createDataManagementFromTable());
+		
 		
 		// 안쪽 마진
 		//setBorder(BorderFactory.createEmptyBorder(VERTICAL_MARGIN, HORIZONTAL_MARGIN, VERTICAL_MARGIN, HORIZONTAL_MARGIN));

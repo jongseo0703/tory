@@ -246,6 +246,7 @@ public class ProductShip extends Pages{
 					return;
 				}
 				
+				System.out.println(productDetail);
 				dataModificationPage.fillIdentifier(identifierUpdateWithNameComboBox.getSelectedTopCategoryID(),
 						identifierUpdateWithNameComboBox.getSelectedSubCategoryID(),
 						identifierUpdateWithNameComboBox.getItemName());

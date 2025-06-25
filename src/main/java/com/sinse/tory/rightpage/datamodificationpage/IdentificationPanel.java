@@ -33,7 +33,7 @@ final class IdentificationPanel extends JPanel
 	private IdentifierUpdateWithNameField identifierUpdateWithNameField;
 	// #endregion
 	
-	IdentificationPanel(ProductDetail productDetail)
+	IdentificationPanel()
 	{
 		topCategoryComboBox = new JComboBox<TopCategory>();
 		subCategoryComboBox = new JComboBox<SubCategory>();
@@ -51,11 +51,6 @@ final class IdentificationPanel extends JPanel
 		add(subCategory);
 		add(Box.createRigidArea(new Dimension(0, 12)));
 		add(name);
-		
-		if (productDetail != null)
-		{
-			//insertProductIdentifier(productDetail.getProduct());
-		}
 	}
 	
 	/**

@@ -35,12 +35,12 @@ public final class Content extends JPanel
 	
 	
 	
-	public Content(ProductDetail productDetail)
+	public Content()
 	{
 		simpleDataPanel = new JPanel();
 		imageUploadPanel = new ImageUploadPanel();
-		identificationPanel = new IdentificationPanel(productDetail);
-		detailDataTable = new DetailDataTable(productDetail);
+		identificationPanel = new IdentificationPanel();
+		detailDataTable = new DetailDataTable();
 		
 		// 내부 동서남북 마진
 		setBorder(BorderFactory.createEmptyBorder(0, HORIZONTAL_MARGIN, 0, HORIZONTAL_MARGIN));

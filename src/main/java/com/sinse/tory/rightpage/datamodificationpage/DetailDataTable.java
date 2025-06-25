@@ -36,7 +36,7 @@ final class DetailDataTable extends JPanel
 	
 	
 	
-	DetailDataTable(ProductDetail productDetail)
+	DetailDataTable()
 	{
 		locationComboBox = new JComboBox<Location>();
 		brandComboBox = new JComboBox<Brand>();
@@ -70,14 +70,7 @@ final class DetailDataTable extends JPanel
 			}
 		);
 		
-		if (productDetail != null)
-		{
-			insertDetailData(productDetail);
-		}
-		else
-		{
-			initializeTable();
-		}
+		initializeTable();
 	}
 
 	
