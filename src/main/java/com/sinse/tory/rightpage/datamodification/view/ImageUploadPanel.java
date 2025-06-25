@@ -1,8 +1,7 @@
-package com.sinse.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodification.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -13,9 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-// 이미지 업로드 패널
-final class ImageUploadPanel extends JPanel
-{
+/**
+ * 이미지 업로드 패널
+ */
+final class ImageUploadPanel extends JPanel {
 	private JButton uploadButton;
 	private JLabel orLabel;
 	private JTextField urlInputField;
@@ -25,10 +25,7 @@ final class ImageUploadPanel extends JPanel
 	private static final int INPUT_FIELD_WIDTH_MARGIN = 16;
 	private static final int INPUT_FIELD_HEIGHT_MARGIN = 8;
 	
-	
-	
-	ImageUploadPanel()
-	{
+	ImageUploadPanel() {
 		uploadButton = new JButton("이미지 [png, jpg, ...]");
 		orLabel = new JLabel("혹은");
 		urlInputField = new JTextField();

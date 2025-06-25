@@ -15,10 +15,8 @@ import com.sinse.tory.db.model.Brand;
 import com.sinse.tory.db.model.Location;
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
-import com.sinse.tory.db.model.ProductImage;
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
-import com.sinse.tory.db.repository.ProductDAO;
 
 public final class RightPageProductDetailDAO
 {
@@ -27,8 +25,7 @@ public final class RightPageProductDetailDAO
 	 * @param subCategoryToGetID
 	 * @return id, name만 가지고 있는 product
 	 */
-	public static List<ProductDetail> selectProductDetail(SubCategory subCategoryToGetID)
-	{
+	public static List<ProductDetail> selectProductDetail(SubCategory subCategoryToGetID) {
 		DBManager dbManager = DBManager.getInstance();
 		Connection con = null; //커넥션 객체 초기화
 		PreparedStatement pstmt = null; //sql 문을 실행하기 위한 PreparedStatement 객체 초기화
@@ -52,8 +49,7 @@ public final class RightPageProductDetailDAO
 	    sql.append("JOIN subcategory s ON b.sub_category_id = s.sub_category_id ");
 	    sql.append("WHERE s.sub_category_id = ?");
 	    
-		try
-		{
+		try {
 			//만든 쿼리를 실행.
 			pstmt = con.prepareStatement(sql.toString());
 			//첫번째 바인딩 변수 = select 메서드의 매개변수인 product_id(즉, 사용자가 선택한 상자)
@@ -93,19 +89,16 @@ public final class RightPageProductDetailDAO
 	            list.add(pd);
 			}
 		}
-		catch(SQLException e)
-		{
+		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		finally
-		{
+		finally {
 			dbManager.release(pstmt, rs);
 		}
 		
 		return list;
 	}
-	public static void insert(ProductDetail productDetail)
-	{
+	public static void insert(ProductDetail productDetail) {
 		DBManager dbManager = DBManager.getInstance();
 		Connection con = null; //커넥션 객체 초기화
 		PreparedStatement pstmt = null;
@@ -113,15 +106,13 @@ public final class RightPageProductDetailDAO
 		StringBuilder sql = new StringBuilder();
 		ResultSet rs = null;
 		
-		try
-		{
+		try {
 	        con.setAutoCommit(false); // 트랜잭션 시작
 
 	        Product product = productDetail.getProduct();
 	        Location location = product.getLocation();
 
-	        if (location == null || location.getLocationId() == 0)
-	        {
+	        if (location == null || location.getLocationId() == 0) {
 	            throw new IllegalArgumentException("Product에 유효한 Location이 필요합니다.");
 	        }
 
@@ -135,13 +126,11 @@ public final class RightPageProductDetailDAO
 	        pstmt.executeUpdate();
 
 	        rs = pstmt.getGeneratedKeys();
-	        if (rs.next())
-	        {
+	        if (rs.next()) {
 	            int productId = rs.getInt(1);
 	            product.setProductId(productId); // 자바 객체에도 반영
 	        }
-	        else
-	        {
+	        else {
 	            throw new SQLException("Product insert 실패: 생성된 key 없음");
 	        }
 
@@ -158,23 +147,18 @@ public final class RightPageProductDetailDAO
 	        con.commit(); // 트랜잭션 성공
 
 	    }
-		catch (Exception e)
-		{
+		catch (Exception e) {
 	        e.printStackTrace();
-	        try
-	        {
-	            if (con != null)
-	            {
+	        try {
+	            if (con != null) {
 	            	con.rollback();
 	            }
 	        }
-	        catch (SQLException rollbackEx)
-	        {
+	        catch (SQLException rollbackEx) {
 	            rollbackEx.printStackTrace();
 	        }
 	    }
-		finally
-		{
+		finally {
 	        dbManager.release(pstmt, rs);
 	    }
 	}
@@ -249,5 +233,78 @@ public final class RightPageProductDetailDAO
 	    }
 	    
 	    return list;
+	}
+	public static ProductDetail select(Product product, String sizeName) {
+		DBManager dbManager = DBManager.getInstance();
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    ProductDetail pd = null;
+
+	    StringBuilder sql = new StringBuilder();
+	    sql.append("SELECT ");
+	    sql.append("pd.product_detail_id, pd.product_size_name, pd.product_quantity, ");
+	    sql.append("p.product_id, p.product_name, p.product_price, p.product_description, ");
+	    sql.append("l.location_id, l.location_name, ");
+	    sql.append("b.brand_id, b.brand_name, ");
+	    sql.append("s.sub_category_id, s.sub_category_name, ");
+	    sql.append("t.top_category_id, t.top_category_name ");
+	    sql.append("FROM productdetail pd ");
+	    sql.append("JOIN product p ON pd.product_id = p.product_id ");
+	    sql.append("JOIN location l ON p.location_id = l.location_id ");
+	    sql.append("JOIN brand b ON l.brand_id = b.brand_id ");
+	    sql.append("JOIN subcategory s ON b.sub_category_id = s.sub_category_id ");
+	    sql.append("JOIN topcategory t ON s.top_category_id = t.top_category_id ");
+	    sql.append("WHERE p.product_name = ? AND pd.product_size_name = ?;");
+
+	    try {
+	        con = dbManager.getConnection();
+	        pstmt = con.prepareStatement(sql.toString());
+	        pstmt.setString(1, product.getProductName());
+	        pstmt.setString(2, sizeName);
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            pd = new ProductDetail();
+	            pd.setProductDetailId(rs.getInt("product_detail_id"));
+	            pd.setProductSizeName(rs.getString("product_size_name"));
+	            pd.setProductQuantity(rs.getInt("product_quantity"));
+
+	            Product p = new Product();
+	            p.setProductId(rs.getInt("product_id"));
+	            p.setProductName(rs.getString("product_name"));
+	            p.setProductPrice(rs.getInt("product_price"));
+	            p.setDescription(rs.getString("product_description"));
+
+	            Location l = new Location();
+	            l.setLocationId(rs.getInt("location_id"));
+	            l.setLocationName(rs.getString("location_name"));
+
+	            Brand b = new Brand();
+	            b.setBrandId(rs.getInt("brand_id"));
+	            b.setBrandName(rs.getString("brand_name"));
+
+	            SubCategory s = new SubCategory();
+	            s.setSubCategoryId(rs.getInt("sub_category_id"));
+	            s.setSubCategoryName(rs.getString("sub_category_name"));
+
+	            TopCategory t = new TopCategory();
+	            t.setTopCategoryId(rs.getInt("top_category_id"));
+	            t.setTopCategoryName(rs.getString("top_category_name"));
+
+	            // 계층 관계 설정
+	            s.setTopCategory(t);
+	            b.setSubCategory(s);
+	            l.setBrand(b);
+	            p.setLocation(l);
+	            pd.setProduct(p);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        dbManager.release(pstmt, rs);
+	    }
+
+	    return pd;
 	}
 }

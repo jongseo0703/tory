@@ -1,7 +1,6 @@
-package com.sinse.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodification.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -15,10 +14,7 @@ final class TableData extends JPanel
 	private JPanel titlePanel;
 	private JLabel titleLabel;
 	
-	
-	
-	TableData(String title, JComponent content)
-	{
+	TableData(String title, JComponent content) {
 		titlePanel = new JPanel();
 		titleLabel = new JLabel(title);
 		setLayout(new GridLayout(1, 2));

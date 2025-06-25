@@ -2,14 +2,9 @@ package com.sinse.tory.rightpage.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.sinse.tory.db.common.util.DBManager;
-import com.sinse.tory.db.model.ProductDetail;
-import com.sinse.tory.db.repository.ProductDAO;
-import com.sinse.tory.db.repository.ProductDetailDAO;
-import com.sinse.tory.db.repository.ProductImageDAO;
 
 public class UpdateCount {
 	DBManager dbManager = DBManager.getInstance();

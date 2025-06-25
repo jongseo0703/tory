@@ -11,11 +11,9 @@ import com.sinse.tory.db.common.util.DBManager;
 import com.sinse.tory.db.model.Location;
 import com.sinse.tory.db.repository.BrandDAO;
 
-public final class RightPageLocationDAO
-{
+public final class RightPageLocationDAO {
 	
-	public static List<Location> selectAllName()
-	{
+	public static List<Location> selectAllName() {
 		DBManager dBManager = DBManager.getInstance();
 		Connection con = dBManager.getConnection();
 		PreparedStatement pstmt = null; //sql 문을 실행하기 위한 PreparedStatement 객체 초기화
@@ -28,16 +26,14 @@ public final class RightPageLocationDAO
 		//선택된 Brand 에 매칭되는 정보만을 가져오기 위한 쿼리문
 		sql.append("select * from Location;");
 		
-		try
-		{
+		try {
 			//만든 쿼리를 실행.
 			pstmt = con.prepareStatement(sql.toString());
 			//바인딩 변수인 ? = brand 에 매칭되는 brand_id 즉, 브랜드 선택
 			rs = pstmt.executeQuery();
 			
 			//rs 인스턴스(테이블)에서 한 줄씩 데이터를 꺼내서 location 인스턴스에 넣어서 list 에저장
-			while(rs.next())
-			{
+			while(rs.next()) {
 				Location location = new Location(); //레코드 한 건을 담기위한 객체
 				//location_id컬럼의 데이터를 가져와서 저장
 				location.setLocationId(rs.getInt("location_id"));
@@ -47,12 +43,10 @@ public final class RightPageLocationDAO
 				locations.add(location);
 			}
 		}
-		catch(SQLException e)
-		{
+		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		finally
-		{
+		finally {
 			//db 자원 반납
 			dBManager.release(pstmt, rs);
 		}

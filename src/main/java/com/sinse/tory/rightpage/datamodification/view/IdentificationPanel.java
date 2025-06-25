@@ -1,4 +1,4 @@
-package com.sinse.tory.rightpage.datamodificationpage;
+package com.sinse.tory.rightpage.datamodification.view;
 
 import java.awt.Dimension;
 import javax.swing.Box;
@@ -7,18 +7,12 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.sinse.tory.db.model.Location;
-import com.sinse.tory.db.model.Product;
-import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.SubCategory;
 import com.sinse.tory.db.model.TopCategory;
-import com.sinse.tory.db.repository.LocationDAO;
-import com.sinse.tory.db.repository.ProductDAO;
 import com.sinse.tory.db.repository.SubCategoryDAO;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameField;
 
-final class IdentificationPanel extends JPanel
-{
+final class IdentificationPanel extends JPanel {
 	// #region 상품 식별 정보 UI
 	private JComboBox<TopCategory> topCategoryComboBox;
 	private JComboBox<SubCategory> subCategoryComboBox;
@@ -33,8 +27,7 @@ final class IdentificationPanel extends JPanel
 	private IdentifierUpdateWithNameField identifierUpdateWithNameField;
 	// #endregion
 	
-	IdentificationPanel()
-	{
+	IdentificationPanel() {
 		topCategoryComboBox = new JComboBox<TopCategory>();
 		subCategoryComboBox = new JComboBox<SubCategory>();
 		nameField = new JTextField();
@@ -56,8 +49,7 @@ final class IdentificationPanel extends JPanel
 	/**
 	 * 매개변수 데이터들로 UI들을 초기화하는 함수.
 	 * */ 
-	void insertProductIdentifier(int topCategoryID, int subCategoryID, String name)
-	{
+	void insertProductIdentifier(int topCategoryID, int subCategoryID, String name) {
 		selectTopCategoryById(topCategoryID);
 		selectSubCategoryById(subCategoryID);
 		nameField.setText(name);
@@ -89,17 +81,14 @@ final class IdentificationPanel extends JPanel
 	        }
 	    }
 	}
-	boolean isSelectAll()
-	{
+	boolean isSelectAll() {
 		return nameField.getText().isEmpty() == false;
 	}
-	SubCategory createSubCategoryFromInputted()
-	{
+	SubCategory createSubCategoryFromInputted() {
 		TopCategory selectedTopCategory = (TopCategory)topCategoryComboBox.getSelectedItem();
 		SubCategory selectedSubCategory = (SubCategory)subCategoryComboBox.getSelectedItem();
 		TopCategory topCategory = new TopCategory();
 		SubCategory subCategory = new SubCategory();
-		SubCategoryDAO subCategoryDAO = new SubCategoryDAO();
 		
 		topCategory.setTopCategoryId(selectedTopCategory.getTopCategoryId());
 		topCategory.setTopCategoryName(selectedTopCategory.getTopCategoryName());
@@ -109,8 +98,7 @@ final class IdentificationPanel extends JPanel
 		
 		return subCategory;
 	}
-	String getProductName()
-	{
+	String getProductName() {
 		return nameField.getText();
 	}
 	/**
