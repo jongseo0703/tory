@@ -170,7 +170,7 @@ public class ProductDAO {
 		//선택된 location 에 매칭되는 정보만을 가져오기 위한 쿼리문
 		//select 절
 		sql.append("select");
-		sql.append(" p.product_id, p.product_name,");
+		sql.append(" p.product_id, p.product_name, p.product_price,");
 		sql.append(" l.location_id, l.location_name,");
 		sql.append(" b.brand_id, b.brand_name,");
 		sql.append(" s.sub_category_id, s.sub_category_name,");
@@ -208,6 +208,8 @@ public class ProductDAO {
 					product.setProductId(rs.getInt("product_id"));
 					//product_name컬럼의 데이터를 가져와서 저장
 					product.setProductName(rs.getString("product_name"));
+					//product_price컬럼의 데이터를 가져와서 저장
+					product.setProductPrice(rs.getInt("product_price"));
 					
 					Location location = new Location();
 					//location_id컬럼의 데이터를 가져와서 저장
