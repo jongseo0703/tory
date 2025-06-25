@@ -12,6 +12,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -56,6 +59,7 @@ public class ProductShip extends Pages{
 	ProductDetailDAO productDetailDAO;
 	ProductImageDAO imageDAO;
 	int itemId =0;
+	int num =0;//t_count 글자 초기화
 	public ProductShip(Testmain testmain) {
 		super(testmain);
 		t_count = new JTextField();
@@ -225,7 +229,6 @@ public class ProductShip extends Pages{
 		 //location[2]의 수량라벨, 텍스트박스,입고 및 출고 버튼 위치 정의
 		 location[2].setBorder(new EmptyBorder(10,10,10,10));
 		 location[2].setLayout(new BoxLayout(location[2], BoxLayout.Y_AXIS));
-//		 location[2].add(la[3]);
 		 location[2].add(t_count);
 		 location[2].add(Box.createRigidArea(new Dimension(0,30)));
 		 Box btSpace = Box.createHorizontalBox();
@@ -248,6 +251,17 @@ public class ProductShip extends Pages{
 			}
 		});
 		 
+		 //t_count에 숫자만 입력했는지 확인
+		 t_count.addKeyListener(new KeyAdapter() {
+			 @Override
+			 public void keyReleased(KeyEvent e) {
+				 if(e.getKeyCode() !=KeyEvent.VK_ENTER && e.getKeyCode() !=KeyEvent.VK_BACK_SPACE) {
+					 if(t_count.getText() != null) {
+						 checkNumber(t_count.getText());		 
+					 }
+				 }
+			 }
+		 });
 		 UpdateCount updateCount = new UpdateCount();
 		 //t_count 안에 원하는 입출고 수량을 입력
 			 bt[2].addActionListener(e->{
@@ -261,35 +275,38 @@ public class ProductShip extends Pages{
 					 //보유한 수량보다 출고수량이 크거나 출고가 0이 아닐때만 수행하도록 조건부여
 					 if(productDetail.getProductQuantity() != 0
 							 &&productDetail.getProductQuantity()>=Integer.parseInt(t_count.getText())
-							 &&Integer.parseInt(t_count.getText())!=0 ) {
-						 count = productDetail.getProductQuantity()- Integer.parseInt(t_count.getText());						 
+							 &&num!=0 ) {
+						 count = productDetail.getProductQuantity()-num;						 							 
 						 updateCount.update(count, itemId);
-						 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
-						 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
+						 updateCount.dateInsert(inOut, num, itemId);
+						 //상위 카테고리 초기화하면서 입출고 버튼 비활성화
+						 resetCombo();
+						 
 					}else if (Integer.parseInt(t_count.getText())==0) {
 						JOptionPane.showMessageDialog(this, "출고 수량을 다시 입력해 주세요");
 					}
 					 else {
-						JOptionPane.showMessageDialog(this, "재고부족");
+						JOptionPane.showMessageDialog(this, "재고부족\n 현재 재고량:" + productDetail.getProductQuantity());
 					}
+					 System.out.println(itemId);
 				 }
 			 });
 			 bt[3].addActionListener(e->{
 				 boolean resutle = ShowMessage.showConfirm(testmain,"입고하기","입고하기겠습니까?");
-				 
 				 // 확인 눌렀을때
 				 if(resutle) {
 					 //change_type 중 IN
 					 String inOut = "IN";
 					 // 입고수량이 0이 아닐때만 수행하도록 조건부여
-					 if(Integer.parseInt(t_count.getText()) !=0) {
-						 int count = productDetail.getProductQuantity()+ Integer.parseInt(t_count.getText());
+					 if(num !=0) {
+						 int count = productDetail.getProductQuantity()+ num;
 						 updateCount.update(count, itemId);
-						 updateCount.dateInsert(inOut, Integer.parseInt(t_count.getText()), itemId);
-						 t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));						 
+						 updateCount.dateInsert(inOut, num, itemId);
+						 resetCombo();
 					 }else {
 						 JOptionPane.showMessageDialog(this, "입고 수량을 다시 입력해 주세요");						
 					}
+					 System.out.println(itemId);
 				 }
 			 });
 		 
@@ -305,7 +322,36 @@ public class ProductShip extends Pages{
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(Color.white);
-	   	//setPreferredSize(new Dimension(PageUtil.InputOutput_Width,PageUtil.Tory_Hieght));
+	}
+	
+	/*
+	 * 상위 콤보박스의 index를 0으로 돌아게 하고 다른 기능들 비활성화
+	 * 이미지 경로도 초기화
+	 * */
+	public void resetCombo() {
+		box[0].setSelectedIndex(0);
+		t_count.setText("");
+		if(box[0].getSelectedIndex()==0) {
+			bt[2].setEnabled(false);
+			bt[3].setEnabled(false);
+			t_count.setEnabled(false);
+			productImage = null;
+			p_img.repaint();
+		}
+	}
+	/*
+	 * t_count에 숫자만 입력할 수 있도록 제안을 둔다
+	 * */
+	public boolean checkNumber(String text) {
+		try {
+			num = Integer.parseInt(text);
+			return true;
+		}catch (NumberFormatException e1) {
+			JOptionPane.showMessageDialog(this,"숫자를 입력해 주세요");
+			t_count.setText("");
+			return false;
+		}
+		
 	}
 
 }
