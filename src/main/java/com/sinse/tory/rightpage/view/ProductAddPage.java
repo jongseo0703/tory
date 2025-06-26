@@ -52,6 +52,7 @@ public class ProductAddPage extends Pages {
 
     // 이미지 관련
     private JLabel imageLabel;
+    private JLabel placeholderTextLabel;
     private JButton imageUploadButton;
     private String selectedImagePath = null;
 
@@ -134,7 +135,7 @@ public class ProductAddPage extends Pages {
         quantityField = new JFormattedTextField();
         quantityField.setValue(0);
 
-        descriptionArea = new JTextArea(3, 20);
+        descriptionArea = new JTextArea(2, 20);
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
 
@@ -176,6 +177,11 @@ public class ProductAddPage extends Pages {
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
         titleLabel.setForeground(new Color(50, 50, 50));
 
+        // 제목을 감싸는 패널 (가운데 정렬용)
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        titlePanel.setBackground(Color.WHITE);
+        titlePanel.add(titleLabel);
+
         // 버튼 패널
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setBackground(Color.WHITE);
@@ -190,7 +196,7 @@ public class ProductAddPage extends Pages {
         buttonPanel.add(saveButton);
 
         headerPanel.add(backButton, BorderLayout.WEST);
-        headerPanel.add(titleLabel, BorderLayout.CENTER);
+        headerPanel.add(titlePanel, BorderLayout.CENTER);
         headerPanel.add(buttonPanel, BorderLayout.EAST);
 
         System.out.println("✅ 헤더 패널 설정 완료!");
@@ -223,31 +229,26 @@ public class ProductAddPage extends Pages {
         imagePanel.setBackground(Color.WHITE);
         imagePanel.setBorder(createTitledBorder("상품 이미지"));
 
-        JPanel imageContainer = new JPanel(new BorderLayout());
-        imageContainer.setBackground(Color.WHITE);
-        imageContainer.add(imageLabel, BorderLayout.CENTER);
+        imageLabel = new JLabel();
+        imageLabel.setPreferredSize(new Dimension(280, 280));
+        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // 이미지 업로드 안내 텍스트
-        JLabel uploadGuideLabel = new JLabel("상품의 대표 이미지를 업로드해주세요");
-        uploadGuideLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        uploadGuideLabel.setForeground(new Color(108, 117, 125));
-        uploadGuideLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        JPanel buttonContainer = new JPanel();
-        buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.Y_AXIS));
-        buttonContainer.setBackground(Color.WHITE);
-        buttonContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // 안내 텍스트와 버튼을 중앙 정렬
-        uploadGuideLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        imageUploadButton = createStyledButton("사진 넣기", PRIMARY_COLOR, Color.WHITE);
         imageUploadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        buttonContainer.add(uploadGuideLabel);
-        buttonContainer.add(Box.createRigidArea(new Dimension(0, 8)));
-        buttonContainer.add(imageUploadButton);
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBackground(Color.WHITE);
+        centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        imagePanel.add(imageContainer, BorderLayout.CENTER);
-        imagePanel.add(buttonContainer, BorderLayout.SOUTH);
+        centerPanel.add(Box.createVerticalGlue());
+        centerPanel.add(imageLabel);
+        centerPanel.add(imageUploadButton);
+        centerPanel.add(Box.createVerticalGlue());
+
+        imagePanel.add(centerPanel, BorderLayout.CENTER);
     }
 
     /**
@@ -279,6 +280,8 @@ public class ProductAddPage extends Pages {
         descPanel.setBorder(createTitledBorder("상품 설명"));
 
         JScrollPane scrollPane = new JScrollPane(descriptionArea);
+        scrollPane.setPreferredSize(new Dimension(0, 92)); // 높이 조정
+        scrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 92));
         scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         descPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -288,9 +291,9 @@ public class ProductAddPage extends Pages {
         formContainer.setBackground(Color.WHITE);
 
         formContainer.add(basicInfoPanel);
-        formContainer.add(Box.createRigidArea(new Dimension(0, 15)));
+        formContainer.add(Box.createRigidArea(new Dimension(0, 5)));
         formContainer.add(detailInfoPanel);
-        formContainer.add(Box.createRigidArea(new Dimension(0, 15)));
+        formContainer.add(Box.createRigidArea(new Dimension(0, 5)));
         formContainer.add(descPanel);
 
         formPanel.add(formContainer, BorderLayout.NORTH);
@@ -308,7 +311,7 @@ public class ProductAddPage extends Pages {
         for (Object[] field : fields) {
             JPanel row = new JPanel(new BorderLayout(10, 0));
             row.setBackground(Color.WHITE);
-            row.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+            row.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 
             JLabel label = new JLabel((String) field[0]);
             label.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
@@ -435,7 +438,7 @@ public class ProductAddPage extends Pages {
         // 중복 제거된 브랜드만 추가
         for (Brand brand : uniqueBrands) {
             brandCombo.addItem(brand);
-        }    
+        }
     }
 
     /**
@@ -477,9 +480,10 @@ public class ProductAddPage extends Pages {
             Image scaledImage = originalImage.getScaledInstance(280, 280, Image.SCALE_SMOOTH);
             imageLabel.setIcon(new ImageIcon(scaledImage));
             imageLabel.setText("");
+            placeholderTextLabel.setText(""); // 이미지가 로드되면 안내문 제거
         } catch (IOException e) {
             ShowMessage.showAlert(this, "이미지 로드 실패", "이미지를 불러올 수 없습니다.");
-            e.printStackTrace();
+            setPlaceholderImage(); // 실패 시 placeholder로 복귀
         }
     }
 
@@ -503,18 +507,38 @@ public class ProductAddPage extends Pages {
     }
 
     /**
-     * 플레이스홀더 이미지 설정
+     * 플레이스홀더 이미지 설정 (x_x 이미지 사용)
      */
     private void setPlaceholderImage() {
-        imageLabel.setIcon(null);
-        imageLabel.setText("<html><div style='text-align: center;'>" +
-                "<div style='font-size: 48px; color: #dee2e6;'>📷</div>" +
-                "<div style='font-size: 14px; color: #6c757d; margin-top: 10px;'>" +
-                "이미지를 선택해주세요</div></html>");
-        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imageLabel.setVerticalAlignment(SwingConstants.CENTER);
-        imageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-        imageLabel.setForeground(new Color(108, 117, 125));
+        try {
+            URL url = getClass().getClassLoader().getResource("images/placeholder.png");
+            if (url != null) {
+                ImageIcon placeholderIcon = new ImageIcon(url);
+                Image scaledImage = placeholderIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageLabel.setPreferredSize(new Dimension(280, 280)); // 라벨 크기
+                imageLabel.setIcon(new ImageIcon(scaledImage));
+
+                // 안내문은 이미지 아래쪽에 함께 표시
+                imageLabel.setText(
+                        "<html><div style='text-align: center;'>"
+                                + "<div style='margin-top: 8px; font-size: 12px; color: #6c757d;'>"
+                                + "상품의 대표 이미지를 업로드해주세요"
+                                + "</div></div></html>");
+
+                imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+                // 텍스트 위치 조정
+                imageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+                imageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
+            } else {
+                imageLabel.setIcon(null);
+                imageLabel.setText("이미지 없음");
+            }
+        } catch (Exception e) {
+            imageLabel.setIcon(null);
+            imageLabel.setText("이미지 로드 실패");
+        }
     }
 
     /**
@@ -563,7 +587,7 @@ public class ProductAddPage extends Pages {
             }
 
             // 저장 후 폼 초기화 여부 확인
-            if (ShowMessage.showConfirm(this, "저장 완료", "새로운 상품을 계속 등록하시겠습니까?\n(아니오를 선택하면 입력 내용이 유지됩니다)")) {
+            if (ShowMessage.showConfirmAfterSave(this, "저장 완료")) {
                 clearFormWithoutConfirm();
             }
 
@@ -580,7 +604,7 @@ public class ProductAddPage extends Pages {
     /**
      * 확인 대화상자 없이 폼 초기화 (저장 후 사용)
      */
-    private void clearFormWithoutConfirm() {
+    public void clearFormWithoutConfirm() {
         // 콤보박스 초기화
         topCategoryCombo.setSelectedIndex(0);
         subCategoryCombo.removeAllItems();
@@ -860,7 +884,10 @@ public class ProductAddPage extends Pages {
      */
     private void clearForm() {
         // 확인 대화상자 표시
-        if (!ShowMessage.showConfirm(this, "폼 초기화", "입력한 모든 내용이 사라집니다. 계속하시겠습니까?")) {
+        if (!ShowMessage.showConfirm(
+                this,
+                "폼 초기화",
+                "입력한 모든 내용이 사라집니다. \n계속하시겠습니까?")) {
             return;
         }
 
@@ -890,7 +917,7 @@ public class ProductAddPage extends Pages {
         loadDefaultImage();
 
         // 성공 메시지
-        ShowMessage.showAlert(this, "초기화 완료", "✅ 모든 입력 내용이 초기화되었습니다.");
+        ShowMessage.showAlert(this, "초기화 완료", "모든 입력 내용이 초기화되었습니다.");
 
         System.out.println("✅ 폼 초기화 완료");
     }
