@@ -26,6 +26,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,7 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -135,10 +136,10 @@ public class ProductShip extends Pages {
 				@Override
 				public void updateUI() {
 					super.updateUI();
+					setBorder(BorderFactory.createEmptyBorder());
 					setOpaque(false);
 				}
 			};
-			box[i].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		}
 
 		// 상품이미지 출력
@@ -188,8 +189,9 @@ public class ProductShip extends Pages {
 						// 이미지 테두리 그리기
 						g2.setColor(new Color(220, 220, 220));
 						g2.setStroke(new BasicStroke(2));
-						g2.drawRoundRect(x - 2, y - 2, scaledWidth + 4, scaledHeight + 4, 10, 10);
-
+						g2.drawRoundRect(x-2, y-2, scaledWidth+4, scaledHeight+4, 10, 10);
+						repaint();
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -220,9 +222,6 @@ public class ProductShip extends Pages {
 		for (int i = 0; i < box.length; i++) {
 			box[i].setFont(labelFont);
 			box[i].setBackground(Color.WHITE);
-			box[i].setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-					BorderFactory.createEmptyBorder(8, 12, 8, 12)));
 		}
 
 		// 버튼 스타일링
@@ -269,11 +268,8 @@ public class ProductShip extends Pages {
 		la[3].setPreferredSize(new Dimension(80, 40));
 		t_count.setPreferredSize(new Dimension(120, 40));
 		t_count.setMaximumSize(new Dimension(120, 40));
-
-		// 버튼들의 크기 설정 (더 현대적인 크기)
-		bt[0].setPreferredSize(new Dimension(120, 35));
-		bt[1].setPreferredSize(new Dimension(100, 35));
-
+		
+		// 버튼들의 크기 설정 (더 현대적인 크기)		
 		Dimension actionButtonSize = new Dimension(80, 40);
 		bt[2].setPreferredSize(actionButtonSize);
 		bt[2].setMaximumSize(actionButtonSize);
@@ -424,28 +420,32 @@ public class ProductShip extends Pages {
 		t_count.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() != KeyEvent.VK_ENTER && e.getKeyCode() != KeyEvent.VK_BACK_SPACE) {
-					if (t_count.getText() != null) {
-						checkNumber(t_count.getText());
+				if(e.getKeyCode() !=KeyEvent.VK_ENTER && e.getKeyCode() !=KeyEvent.VK_BACK_SPACE) {
+					if(t_count.getText() != null) {
+						checkNumber(t_count.getText());	
 					}
 				}
 			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(t_count.getText().length()>8) e.consume();
+			}
 		});
 		UpdateCount updateCount = new UpdateCount();
-		// t_count 안에 원하는 입출고 수량을 입력
-		bt[2].addActionListener(e -> {
-			// 출고버튼
-			boolean resutle = ShowMessage.showConfirm(ProductShip.this, "출고하기", "📤출고 하시겠습니까?");
-			int count = 0;
-			// 확인 눌렀을때
-			if (resutle) {
-				// change_type 중 OUT
-				String inOut = "OUT";
-				// 보유한 수량보다 출고수량이 크거나 출고가 0이 아닐때만 수행하도록 조건부여
-				if (productDetail.getProductQuantity() != 0
-						&& productDetail.getProductQuantity() >= Integer.parseInt(t_count.getText())
-						&& num != 0) {
-					count = productDetail.getProductQuantity() - num;
+		//t_count 안에 원하는 입출고 수량을 입력
+			bt[2].addActionListener(e->{
+				//출고버튼
+				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"출고하기","출고 하시겠습니까?");
+				int count =0;
+				// 확인 눌렀을때
+				if(resutle) {
+					//change_type 중 OUT
+					String inOut = "OUT";
+					//보유한 수량보다 출고수량이 크거나 출고가 0이 아닐때만 수행하도록 조건부여
+					if(productDetail.getProductQuantity() != 0
+							&&productDetail.getProductQuantity()>=Integer.parseInt(t_count.getText())
+							&&num!=0 ) {
+											count = productDetail.getProductQuantity()-num;						 							 
 					updateCount.update(count, itemId);
 					updateCount.dateInsert(inOut, num, itemId);
 
@@ -459,24 +459,24 @@ public class ProductShip extends Pages {
 					// 상위 카테고리 초기화하면서 입출고 버튼 비활성화
 					resetCombo();
 
-				} else if (Integer.parseInt(t_count.getText()) == 0) {
-					JOptionPane.showMessageDialog(ProductShip.this, "출고 수량을 다시 입력해 주세요");
-				} else {
-					JOptionPane.showMessageDialog(ProductShip.this,
-							"재고부족\n 현재 재고량:" + productDetail.getProductQuantity());
+					} else if (Integer.parseInt(t_count.getText())==0) {
+						JOptionPane.showMessageDialog(ProductShip.this, "출고 수량을 다시 입력해 주세요");
+					}
+					else {
+						JOptionPane.showMessageDialog(ProductShip.this, "재고부족\n 현재 재고량:" + productDetail.getProductQuantity());
+					}
+					System.out.println(itemId);
 				}
-				System.out.println(itemId);
-			}
-		});
-		bt[3].addActionListener(e -> {
-			boolean resutle = ShowMessage.showConfirm(ProductShip.this, "입고하기", "📥입고 하시겠습니까?");
-			// 확인 눌렀을때
-			if (resutle) {
-				// change_type 중 IN
-				String inOut = "IN";
-				// 입고수량이 0이 아닐때만 수행하도록 조건부여
-				if (num != 0) {
-					int count = productDetail.getProductQuantity() + num;
+			 });
+			 bt[3].addActionListener(e->{
+				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"입고하기","입고 하시겠습니까?");
+				// 확인 눌렀을때
+				if(resutle) {
+					//change_type 중 IN
+					String inOut = "IN";
+					// 입고수량이 0이 아닐때만 수행하도록 조건부여
+					if(num !=0) {
+					 					 	int count = productDetail.getProductQuantity()+ num;
 					updateCount.update(count, itemId);
 					updateCount.dateInsert(inOut, num, itemId);
 
