@@ -1,6 +1,7 @@
 package com.sinse.tory.rightpage.view;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -341,23 +342,26 @@ public class ProductShip extends Pages {
 		// 각 입력 필드를 위한 개별 패널 생성
 		for (int i = 0; i < box.length; i++) {
 			JPanel fieldPanel = new JPanel();
+			JPanel[] boxRow = new JPanel[box.length];
+			boxRow[i] = new JPanel();
 			fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.Y_AXIS));
 			fieldPanel.setBackground(Color.WHITE);
 			fieldPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-			la[i].setAlignmentX(Component.LEFT_ALIGNMENT);
-			box[i].setAlignmentX(Component.LEFT_ALIGNMENT);
-
+			la[i].setAlignmentX(Component.LEFT_ALIGNMENT);	
+			boxRow[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+			boxRow[i].add(box[i]);
+			boxRow[i].setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 20));
+			boxRow[i].setMaximumSize(new Dimension(location[1].getPreferredSize().width/2,box[i].getPreferredSize().height));
+			boxRow[i].setBackground(null);
 			fieldPanel.add(la[i]);
 			fieldPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-			fieldPanel.add(box[i]);
+			fieldPanel.add(boxRow[i]);
 
 			p_form.add(fieldPanel);
 			if (i < box.length - 1) {
 				p_form.add(Box.createRigidArea(new Dimension(0, 20)));
 			}
 		}
-
 		location[1].add(p_img);
 		location[1].add(p_form);
 
