@@ -135,7 +135,7 @@ public class ProductAddPage extends Pages {
         quantityField = new JFormattedTextField();
         quantityField.setValue(0);
 
-        descriptionArea = new JTextArea(3, 20);
+        descriptionArea = new JTextArea(2, 20);
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
 
@@ -275,7 +275,8 @@ public class ProductAddPage extends Pages {
         descPanel.setBorder(createTitledBorder("상품 설명"));
 
         JScrollPane scrollPane = new JScrollPane(descriptionArea);
-        scrollPane.setPreferredSize(new Dimension(0, 100)); // 높이 조정
+        scrollPane.setPreferredSize(new Dimension(0, 92)); // 높이 조정
+        scrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 92));
         scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         descPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -285,9 +286,9 @@ public class ProductAddPage extends Pages {
         formContainer.setBackground(Color.WHITE);
 
         formContainer.add(basicInfoPanel);
-        formContainer.add(Box.createRigidArea(new Dimension(0, 15)));
+        formContainer.add(Box.createRigidArea(new Dimension(0, 5)));
         formContainer.add(detailInfoPanel);
-        formContainer.add(Box.createRigidArea(new Dimension(0, 15)));
+        formContainer.add(Box.createRigidArea(new Dimension(0, 5)));
         formContainer.add(descPanel);
 
         formPanel.add(formContainer, BorderLayout.NORTH);
@@ -305,7 +306,7 @@ public class ProductAddPage extends Pages {
         for (Object[] field : fields) {
             JPanel row = new JPanel(new BorderLayout(10, 0));
             row.setBackground(Color.WHITE);
-            row.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+            row.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 
             JLabel label = new JLabel((String) field[0]);
             label.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
