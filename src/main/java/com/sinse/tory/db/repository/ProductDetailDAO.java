@@ -1,5 +1,7 @@
 package com.sinse.tory.db.repository;
 
+import java.security.Timestamp;
+
 /*
  * 임포트 순서 static 임포트 패키지 -> java 패키지 -> javax 패키지 -> 외부라이브러리
  */
@@ -90,7 +92,16 @@ public class ProductDetailDAO {
 					log.setChangeType(InventoryLog.ChangeType.OUT);
 				}
 				log.setQuantity(rs.getInt("quantity"));
-				log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime().toLocalDate());
+				
+				java.sql.Timestamp ts = rs.getTimestamp("changed_at");
+				if (ts != null) {
+					log.setChangedAt(ts.toLocalDateTime().toLocalDate());
+				} else {
+					log.setChangedAt(null);
+				}
+				
+				
+//				log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime().toLocalDate());
 				
 				inventoryLogs.add(log);
 			}

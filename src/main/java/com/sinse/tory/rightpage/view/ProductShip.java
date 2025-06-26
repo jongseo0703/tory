@@ -435,10 +435,10 @@ public class ProductShip extends Pages {
 		//t_count 안에 원하는 입출고 수량을 입력
 			bt[2].addActionListener(e->{
 				//출고버튼
-				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"출고하기","출고 하시겠습니까?");
+				boolean result = ShowMessage.showConfirm(ProductShip.this,"출고하기","출고 하시겠습니까?");
 				int count =0;
 				// 확인 눌렀을때
-				if(resutle) {
+				if(result) {
 					//change_type 중 OUT
 					String inOut = "OUT";
 					//보유한 수량보다 출고수량이 크거나 출고가 0이 아닐때만 수행하도록 조건부여

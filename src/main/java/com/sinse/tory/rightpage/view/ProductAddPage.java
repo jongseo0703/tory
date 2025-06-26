@@ -1216,11 +1216,11 @@ public class ProductAddPage extends Pages {
             Product product = new Product();
             product.setProductId(productId);
             productImage.setProduct(product);
-
+            
             // 데이터베이스에 저장
             com.sinse.tory.rightpage.util.ProductImageDAO imageDAO = new com.sinse.tory.rightpage.util.ProductImageDAO();
             imageDAO.insert(productImage);
-
+            
             System.out.println("📷 이미지 경로 DB 저장 완료: " + imagePath);
 
         } catch (Exception e) {

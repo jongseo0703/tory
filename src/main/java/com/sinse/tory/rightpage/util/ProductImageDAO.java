@@ -51,11 +51,12 @@ public class ProductImageDAO {
 		String sql = "INSERT INTO ProductImage (image_url, product_id) VALUES (?, ?)";
 		
 		try {
+			con.setAutoCommit(false);
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, productImage.getImageURL());
 			pstmt.setInt(2, productImage.getProduct().getProductId());
-			
 			int result = pstmt.executeUpdate();
+			con.setAutoCommit(true);
 			if (result > 0) {
 				System.out.println("✅ ProductImage 저장 성공");
 			} else {
