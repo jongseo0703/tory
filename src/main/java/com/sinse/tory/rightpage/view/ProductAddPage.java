@@ -435,7 +435,7 @@ public class ProductAddPage extends Pages {
         // 중복 제거된 브랜드만 추가
         for (Brand brand : uniqueBrands) {
             brandCombo.addItem(brand);
-        }    
+        }
     }
 
     /**
@@ -527,7 +527,7 @@ public class ProductAddPage extends Pages {
         }
 
         // 저장 확인
-        if (!ShowMessage.showConfirm(this, "상품 저장", "새 상품을 등록하시겠습니까?")) {
+        if (!ShowMessage.showConfirmForRegist(this, "상품 저장", "새 상품을 등록하시겠습니까?")) {
             return;
         }
 
@@ -563,7 +563,7 @@ public class ProductAddPage extends Pages {
             }
 
             // 저장 후 폼 초기화 여부 확인
-            if (ShowMessage.showConfirm(this, "저장 완료", "새로운 상품을 계속 등록하시겠습니까?\n(아니오를 선택하면 입력 내용이 유지됩니다)")) {
+            if (ShowMessage.showConfirmAfterSave(this, "저장 완료")) {
                 clearFormWithoutConfirm();
             }
 
@@ -860,7 +860,7 @@ public class ProductAddPage extends Pages {
      */
     private void clearForm() {
         // 확인 대화상자 표시
-        if (!ShowMessage.showConfirm(this, "폼 초기화", "입력한 모든 내용이 사라집니다. 계속하시겠습니까?")) {
+        if (!ShowMessage.showConfirmForRegist(this, "폼 초기화", "입력한 모든 내용이 사라집니다. 계속하시겠습니까?")) {
             return;
         }
 
@@ -890,7 +890,7 @@ public class ProductAddPage extends Pages {
         loadDefaultImage();
 
         // 성공 메시지
-        ShowMessage.showAlert(this, "초기화 완료", "✅ 모든 입력 내용이 초기화되었습니다.");
+        ShowMessage.showAlert(this, "초기화 완료", "모든 입력 내용이 초기화되었습니다.");
 
         System.out.println("✅ 폼 초기화 완료");
     }
