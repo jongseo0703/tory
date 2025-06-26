@@ -142,7 +142,6 @@ public class ProductShip extends Pages{
 			box[i].setUI(new BasicComboBoxUI() {
 				protected JButton ceateButton() {
 					JButton bt = new JButton("▽");
-					bt.setBorder(null);
 					bt.setContentAreaFilled(false);
 					bt.setFocusPainted(false);
 					bt.setOpaque(false);
@@ -444,9 +443,13 @@ public class ProductShip extends Pages{
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() !=KeyEvent.VK_ENTER && e.getKeyCode() !=KeyEvent.VK_BACK_SPACE) {
 					if(t_count.getText() != null) {
-						checkNumber(t_count.getText());		 
+						checkNumber(t_count.getText());	
 					}
 				}
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(t_count.getText().length()>8) e.consume();
 			}
 		});
 		UpdateCount updateCount = new UpdateCount();
