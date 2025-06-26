@@ -6,6 +6,6 @@ public class Config {
 	 디비 접속 정보 정의
 	 -------------------------------------------*/
 	public static final String url = "jdbc:mysql://localhost:3306/tory";
-	public static final String user = "root";
+	public static final String user = "admin";
 	public static final String pass = "1234";
 }

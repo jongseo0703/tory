@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,12 +17,16 @@ import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.repository.InventoryLogDAO;
 import com.sinse.tory.rightpage.util.Pages;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+
 /**
  * 입출고 내역 조회 페이지
  */
 public class InventoryLogHistoryPage extends Pages {
     
     private JPanel headerPanel;
+    private JPanel headerRightPanel;
     private JPanel filterPanel;
     private JPanel contentPanel;
     private JTable logTable;
@@ -35,8 +40,8 @@ public class InventoryLogHistoryPage extends Pages {
     // 필터링 컴포넌트들
     private JComboBox<String> changeTypeFilter;
     private JTextField productNameFilter;
-    private JTextField startDateFilter;
-    private JTextField endDateFilter;
+    private DatePicker startDatePicker;
+    private DatePicker endDatePicker;
     
     private InventoryLogDAO inventoryLogDAO;
     
@@ -62,16 +67,79 @@ public class InventoryLogHistoryPage extends Pages {
      * 컴포넌트 초기화
      */
     private void initializeComponents() {
+    	productNameFilter = new JTextField();
+        productNameFilter.setPreferredSize(new Dimension(150, 40));
+        addPlaceholder(productNameFilter, "상품명 검색...");
+    	
+    	DatePickerSettings startSettings = new DatePickerSettings(Locale.KOREA);
+    	startSettings.setFormatForDatesCommonEra("yyyy-MM-dd");
+    	startDatePicker = new DatePicker(startSettings);
+    	startDatePicker.setPreferredSize(new Dimension(200, 30));
+    	JTextField startTxt = startDatePicker.getComponentDateTextField();
+    	startTxt.setBorder(productNameFilter.getBorder());
+
+    	startTxt.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 0)); // 안쪽 패딩 (왼쪽 8px)
+    	startTxt.setBackground(Color.WHITE);
+    	startTxt.setFont(new Font("맑은 고딕", Font.PLAIN, 14));         // productNameFilter 와 동일 폰트
+    	startTxt.setCaretColor(new Color(52, 144, 220));                // 커서 색도 맞춰주기
+
+    	
+    	// ── startDatePicker 달력 아이콘 축소 적용 ─────────────
+    	ImageIcon rawIcon = new ImageIcon(getClass().getResource("/images/calender.png"));
+
+    	// 원하는 최종 크기(px)
+    	int iconW = 18;
+    	int iconH = 18;
+
+    	// 고품질 축소
+    	Image scaledImg = rawIcon.getImage().getScaledInstance(iconW, iconH, Image.SCALE_SMOOTH);
+
+    	ImageIcon scaledIcon = new ImageIcon(scaledImg);
+
+    	JButton startCalBtn = startDatePicker.getComponentToggleCalendarButton();
+    	startCalBtn.setText(""); // “…” 제거
+    	startCalBtn.setIcon(scaledIcon); // 아이콘 적용
+    	startCalBtn.setPreferredSize(new Dimension(iconW + 6, iconH + 6)); // 약간의 패딩
+    	startCalBtn.setBorderPainted(false);
+    	startCalBtn.setContentAreaFilled(false);
+    	startCalBtn.setFocusable(false);
+
+    	DatePickerSettings endSettings = new DatePickerSettings(Locale.KOREA);
+    	endSettings.setFormatForDatesCommonEra("yyyy-MM-dd");
+    	endDatePicker = new DatePicker(endSettings);
+    	endDatePicker.setPreferredSize(new Dimension(200, 30));
+    	// 종료일 DatePicker 스타일 설정
+    	JTextField endTxt = endDatePicker.getComponentDateTextField();
+    	endTxt.setBorder(productNameFilter.getBorder());
+
+    	endTxt.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 0)); // 안쪽 패딩 (왼쪽 8px)
+    	endTxt.setBackground(Color.WHITE);
+    	endTxt.setFont(new Font("맑은 고딕", Font.PLAIN, 14));        // productNameFilter 와 동일 폰트
+    	endTxt.setCaretColor(new Color(52, 144, 220));               // 커서 색도 맞춰주기
+    	
+    	JButton endCalBtn = endDatePicker.getComponentToggleCalendarButton();
+    	endCalBtn.setText("");
+    	endCalBtn.setIcon(scaledIcon);
+    	endCalBtn.setPreferredSize(new Dimension(iconW + 6, iconH + 6));
+    	endCalBtn.setBorderPainted(false);
+    	endCalBtn.setContentAreaFilled(false);
+    	endCalBtn.setFocusable(false);
+    	
         // 헤더 패널
         headerPanel = new JPanel();
         headerPanel.setBackground(PRIMARY_COLOR);
         headerPanel.setPreferredSize(new Dimension(0, 80));
         
+        // 빈 패널
+        headerRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        headerRightPanel.setBackground(PRIMARY_COLOR);
+        headerRightPanel.setPreferredSize(new Dimension(120, 0));
+        
         // 뒤로가기 버튼
         backButton = createStyledButton("← 뒤로", LIGHT_GRAY, new Color(70, 70, 70));
         
         // 제목 라벨
-        titleLabel = new JLabel("📋 입출고 내역 조회");
+        titleLabel = new JLabel("입출고 내역 조회");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         
@@ -81,25 +149,13 @@ public class InventoryLogHistoryPage extends Pages {
         filterPanel.setPreferredSize(new Dimension(0, 80));
         
         // 필터링 컴포넌트들
-        changeTypeFilter = new JComboBox<>(new String[]{"전체", "📥 입고", "📤 출고"});
-        changeTypeFilter.setPreferredSize(new Dimension(100, 30));
+        changeTypeFilter = new JComboBox<>(new String[]{"전체", "입고", "출고"});
+        changeTypeFilter.setPreferredSize(new Dimension(100, 40));
         
-        productNameFilter = new JTextField();
-        productNameFilter.setPreferredSize(new Dimension(150, 30));
-        addPlaceholder(productNameFilter, "상품명 검색...");
-        
-        startDateFilter = new JTextField();
-        startDateFilter.setPreferredSize(new Dimension(120, 30));
-        addPlaceholder(startDateFilter, "YYYY-MM-DD");
-        
-        endDateFilter = new JTextField();
-        endDateFilter.setPreferredSize(new Dimension(120, 30));
-        addPlaceholder(endDateFilter, "YYYY-MM-DD");
-        
-        searchButton = createStyledButton("🔍 검색", PRIMARY_COLOR, Color.WHITE);
+        searchButton = createStyledButton("검색", PRIMARY_COLOR, Color.WHITE);
         searchButton.setPreferredSize(new Dimension(80, 30));
         
-        resetButton = createStyledButton("🔄 초기화", WARNING_COLOR, Color.WHITE);
+        resetButton = createStyledButton("초기화", WARNING_COLOR, Color.WHITE);
         resetButton.setPreferredSize(new Dimension(80, 30));
         
         // 컨텐츠 패널
@@ -152,30 +208,35 @@ public class InventoryLogHistoryPage extends Pages {
         
         headerPanel.add(headerLeftPanel, BorderLayout.WEST);
         headerPanel.add(headerCenterPanel, BorderLayout.CENTER);
+        headerPanel.add(headerRightPanel, BorderLayout.EAST);
         
-        // 필터 패널 레이아웃
-        filterPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 25));
+        // 필터 패널 레이아웃을 2행 1열 GridLayout으로 변경 (행 간격 5px)
+        filterPanel.setLayout(new GridLayout(2, 1, 0, 10));
         filterPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_COLOR),
-            BorderFactory.createEmptyBorder(0, 10, 0, 10)
+            BorderFactory.createEmptyBorder(0, 30, 0, 30)
         ));
         
-        filterPanel.add(new JLabel("구분:"));
-        filterPanel.add(changeTypeFilter);
-        filterPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        // 1행 패널: 구분, 상품명
+        JPanel filterRow1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        filterRow1.setBackground(LIGHT_GRAY);
+        filterRow1.add(new JLabel("구분:"));
+        filterRow1.add(changeTypeFilter);
+        filterRow1.add(new JLabel("상품명:"));
+        filterRow1.add(productNameFilter);
         
-        filterPanel.add(new JLabel("상품명:"));
-        filterPanel.add(productNameFilter);
-        filterPanel.add(Box.createRigidArea(new Dimension(20, 0)));
+        // 2행 패널: 시작일, 종료일, 검색, 초기화
+        JPanel filterRow2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        filterRow2.setBackground(LIGHT_GRAY);
+        filterRow2.add(new JLabel("시작일:"));
+        filterRow2.add(startDatePicker);
+        filterRow2.add(new JLabel("종료일:"));
+        filterRow2.add(endDatePicker);
+        filterRow2.add(searchButton);
+        filterRow2.add(resetButton);
         
-        filterPanel.add(new JLabel("시작일:"));
-        filterPanel.add(startDateFilter);
-        filterPanel.add(new JLabel("종료일:"));
-        filterPanel.add(endDateFilter);
-        filterPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-        
-        filterPanel.add(searchButton);
-        filterPanel.add(resetButton);
+        filterPanel.add(filterRow1);
+        filterPanel.add(filterRow2);
         
         // 컨텐츠 패널 레이아웃
         contentPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
@@ -269,7 +330,7 @@ public class InventoryLogHistoryPage extends Pages {
      * 전체 입출고 내역 로드 (모든 상품)
      */
     public void loadAllInventoryHistory() {
-        titleLabel.setText("📋 전체 입출고 내역");
+        titleLabel.setText("전체 입출고 내역");
         
         try {
             // 전체 입출고 내역 조회
@@ -293,15 +354,17 @@ public class InventoryLogHistoryPage extends Pages {
             
             String changeTypeSelected = (String) changeTypeFilter.getSelectedItem();
             String productNameText = getTextFieldValue(productNameFilter, "상품명 검색...");
-            String startDateText = getTextFieldValue(startDateFilter, "YYYY-MM-DD");
-            String endDateText = getTextFieldValue(endDateFilter, "YYYY-MM-DD");
+            LocalDate startDate = startDatePicker.getDate();
+            LocalDate endDate   = endDatePicker.getDate();
             
             for (InventoryLog log : allLogs) {
                 boolean matches = true;
                 
+                LocalDate logDate = log.getChangedAt();
+                
                 // 구분 필터
                 if (!changeTypeSelected.equals("전체")) {
-                    String logType = log.getChangeType().name().equals("IN") ? "📥 입고" : "📤 출고";
+                    String logType = log.getChangeType().name().equals("IN") ? "입고" : "출고";
                     if (!logType.equals(changeTypeSelected)) {
                         matches = false;
                     }
@@ -316,31 +379,8 @@ public class InventoryLogHistoryPage extends Pages {
                 }
                 
                 // 날짜 필터
-                if (!startDateText.isEmpty() || !endDateText.isEmpty()) {
-                    LocalDate logDate = log.getChangedAt();
-                    
-                    if (!startDateText.isEmpty()) {
-                        try {
-                            LocalDate startDate = LocalDate.parse(startDateText);
-                            if (logDate.isBefore(startDate)) {
-                                matches = false;
-                            }
-                        } catch (Exception e) {
-                            // 잘못된 날짜 형식은 무시
-                        }
-                    }
-                    
-                    if (!endDateText.isEmpty()) {
-                        try {
-                            LocalDate endDate = LocalDate.parse(endDateText);
-                            if (logDate.isAfter(endDate)) {
-                                matches = false;
-                            }
-                        } catch (Exception e) {
-                            // 잘못된 날짜 형식은 무시
-                        }
-                    }
-                }
+                if (startDate != null && logDate.isBefore(startDate)) { matches = false; }
+                if (endDate   != null && logDate.isAfter(endDate))   { matches = false; }
                 
                 if (matches) {
                     filteredLogs.add(log);
@@ -364,11 +404,8 @@ public class InventoryLogHistoryPage extends Pages {
         productNameFilter.setText("상품명 검색...");
         productNameFilter.setForeground(new Color(150, 150, 150));
         
-        startDateFilter.setText("YYYY-MM-DD");
-        startDateFilter.setForeground(new Color(150, 150, 150));
-        
-        endDateFilter.setText("YYYY-MM-DD");
-        endDateFilter.setForeground(new Color(150, 150, 150));
+        startDatePicker.clear();
+        endDatePicker.clear();
         
         // 전체 내역 다시 로드
         loadAllInventoryHistory();
@@ -396,7 +433,7 @@ public class InventoryLogHistoryPage extends Pages {
             
             Object[] rowData = {
                 log.getChangedAt().toString(), // 날짜
-                log.getChangeType().name().equals("IN") ? "📥 입고" : "📤 출고", // 구분
+                log.getChangeType().name().equals("IN") ? "입고" : "출고", // 구분
                 log.getQuantity() + "개", // 수량
                 product.getProductName(), // 상품명
                 detail.getProductSizeName(), // 사이즈

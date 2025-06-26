@@ -28,7 +28,7 @@ public class DBManager {
 	private DBManager() {
 		try {
 			//pom.xml파일에서 의존성 주입한 jdbc 위치
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			//디비 접속
 			con = DriverManager.getConnection(Config.url, Config.user, Config.pass);
