@@ -396,6 +396,7 @@ public class ProductShip extends Pages {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 바로 입출고 내역 페이지로 이동
+				resetCombo();
 				showInventoryLogHistoryPage();
 			}
 		});
@@ -407,6 +408,7 @@ public class ProductShip extends Pages {
 				if (testmain != null) {
 					try {
 						testmain.getClass().getMethod("showProductAddPage").invoke(testmain);
+						resetCombo();
 						System.out.println("✅ ProductAddPage로 전환됨");
 					} catch (Exception ex) {
 						ex.printStackTrace();
