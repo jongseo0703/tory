@@ -52,6 +52,7 @@ public class ProductAddPage extends Pages {
 
     // 이미지 관련
     private JLabel imageLabel;
+    private JLabel placeholderTextLabel;
     private JButton imageUploadButton;
     private String selectedImagePath = null;
 
@@ -223,31 +224,26 @@ public class ProductAddPage extends Pages {
         imagePanel.setBackground(Color.WHITE);
         imagePanel.setBorder(createTitledBorder("상품 이미지"));
 
-        JPanel imageContainer = new JPanel(new BorderLayout());
-        imageContainer.setBackground(Color.WHITE);
-        imageContainer.add(imageLabel, BorderLayout.CENTER);
+        imageLabel = new JLabel();
+        imageLabel.setPreferredSize(new Dimension(280, 280));
+        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // 이미지 업로드 안내 텍스트
-        JLabel uploadGuideLabel = new JLabel("상품의 대표 이미지를 업로드해주세요");
-        uploadGuideLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-        uploadGuideLabel.setForeground(new Color(108, 117, 125));
-        uploadGuideLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        JPanel buttonContainer = new JPanel();
-        buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.Y_AXIS));
-        buttonContainer.setBackground(Color.WHITE);
-        buttonContainer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // 안내 텍스트와 버튼을 중앙 정렬
-        uploadGuideLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        imageUploadButton = createStyledButton("사진 넣기", PRIMARY_COLOR, Color.WHITE);
         imageUploadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        buttonContainer.add(uploadGuideLabel);
-        buttonContainer.add(Box.createRigidArea(new Dimension(0, 8)));
-        buttonContainer.add(imageUploadButton);
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBackground(Color.WHITE);
+        centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        imagePanel.add(imageContainer, BorderLayout.CENTER);
-        imagePanel.add(buttonContainer, BorderLayout.SOUTH);
+        centerPanel.add(Box.createVerticalGlue());
+        centerPanel.add(imageLabel);
+        centerPanel.add(imageUploadButton);
+        centerPanel.add(Box.createVerticalGlue());
+
+        imagePanel.add(centerPanel, BorderLayout.CENTER);
     }
 
     /**
@@ -478,9 +474,10 @@ public class ProductAddPage extends Pages {
             Image scaledImage = originalImage.getScaledInstance(280, 280, Image.SCALE_SMOOTH);
             imageLabel.setIcon(new ImageIcon(scaledImage));
             imageLabel.setText("");
+            placeholderTextLabel.setText(""); // 이미지가 로드되면 안내문 제거
         } catch (IOException e) {
             ShowMessage.showAlert(this, "이미지 로드 실패", "이미지를 불러올 수 없습니다.");
-            e.printStackTrace();
+            setPlaceholderImage(); // 실패 시 placeholder로 복귀
         }
     }
 
@@ -504,18 +501,38 @@ public class ProductAddPage extends Pages {
     }
 
     /**
-     * 플레이스홀더 이미지 설정
+     * 플레이스홀더 이미지 설정 (x_x 이미지 사용)
      */
     private void setPlaceholderImage() {
-        imageLabel.setIcon(null);
-        imageLabel.setText("<html><div style='text-align: center;'>" +
-                "<div style='font-size: 48px; color: #dee2e6;'>📷</div>" +
-                "<div style='font-size: 14px; color: #6c757d; margin-top: 10px;'>" +
-                "이미지를 선택해주세요</div></html>");
-        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imageLabel.setVerticalAlignment(SwingConstants.CENTER);
-        imageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-        imageLabel.setForeground(new Color(108, 117, 125));
+        try {
+            URL url = getClass().getClassLoader().getResource("images/placeholder.png");
+            if (url != null) {
+                ImageIcon placeholderIcon = new ImageIcon(url);
+                Image scaledImage = placeholderIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                imageLabel.setPreferredSize(new Dimension(280, 280));  // 라벨 크기
+                imageLabel.setIcon(new ImageIcon(scaledImage));
+
+                // 안내문은 이미지 아래쪽에 함께 표시
+                imageLabel.setText(
+                        "<html><div style='text-align: center;'>"
+                                + "<div style='margin-top: 8px; font-size: 12px; color: #6c757d;'>"
+                                + "상품의 대표 이미지를 업로드해주세요"
+                                + "</div></div></html>");
+
+                imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+                // 텍스트 위치 조정
+                imageLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+                imageLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
+            } else {
+                imageLabel.setIcon(null);
+                imageLabel.setText("이미지 없음");
+            }
+        } catch (Exception e) {
+            imageLabel.setIcon(null);
+            imageLabel.setText("이미지 로드 실패");
+        }
     }
 
     /**
