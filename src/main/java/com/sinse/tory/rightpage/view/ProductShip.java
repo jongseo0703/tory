@@ -134,25 +134,10 @@ public class ProductShip extends Pages{
 				@Override
 				public void updateUI() {
 					super.updateUI();
+					setBorder(BorderFactory.createEmptyBorder());
 					setOpaque(false);
 				}
 			};
-			int n = i;
-			//커스텀 UI적용해보기
-			box[i].setUI(new BasicComboBoxUI() {
-				protected JButton ceateButton() {
-					JButton bt = new JButton("▽");
-					bt.setContentAreaFilled(false);
-					bt.setFocusPainted(false);
-					bt.setOpaque(false);
-					
-					return bt;
-				}
-				public void installUI(JComponent c) {
-					super.installUI(c);
-					box[n].setBorder(BorderFactory.createEmptyBorder());
-				}
-			});
 		}
 		
 		//상품이미지 출력
@@ -236,10 +221,6 @@ public class ProductShip extends Pages{
 		for(int i=0;i<box.length;i++) {
 			box[i].setFont(labelFont);
 			box[i].setBackground(Color.WHITE);
-			box[i].setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-				BorderFactory.createEmptyBorder(8, 12, 8, 12)
-			));
 		}
 		
 		// 버튼 스타일링
