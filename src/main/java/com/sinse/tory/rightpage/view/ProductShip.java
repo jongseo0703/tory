@@ -21,12 +21,16 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,25 +38,17 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.sinse.tory.db.model.Product;
 import com.sinse.tory.db.model.ProductDetail;
 import com.sinse.tory.db.model.ProductImage;
 import com.sinse.tory.db.repository.ProductDetailDAO;
-
+import com.sinse.tory.leftpage.view.InventoryUI;
 import com.sinse.tory.rightpage.identifier.IdentifierUpdateWithNameComboBox;
 import com.sinse.tory.rightpage.util.PageUtil;
 import com.sinse.tory.rightpage.util.Pages;
 import com.sinse.tory.rightpage.util.ProductImageDAO;
 import com.sinse.tory.rightpage.util.UpdateCount;
-import com.sinse.tory.leftpage.view.InventoryUI;
-
 /*
  * 입고와 출고 기능이 있는 페이지
  * */
@@ -664,7 +660,7 @@ public class ProductShip extends Pages {
 				BorderFactory.createEmptyBorder(20, 30, 20, 30)));
 
 		// 성공 아이콘과 제목
-		JLabel titleLabel = new JLabel("✅ " + action + " 성공!");
+		JLabel titleLabel = new JLabel(action + " 성공!");
 		titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 24));
 		titleLabel.setForeground(Color.WHITE);
 		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
