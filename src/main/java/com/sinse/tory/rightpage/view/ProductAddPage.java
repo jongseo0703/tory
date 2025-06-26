@@ -177,6 +177,11 @@ public class ProductAddPage extends Pages {
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
         titleLabel.setForeground(new Color(50, 50, 50));
 
+        // 제목을 감싸는 패널 (가운데 정렬용)
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        titlePanel.setBackground(Color.WHITE);
+        titlePanel.add(titleLabel);
+
         // 버튼 패널
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setBackground(Color.WHITE);
@@ -191,7 +196,7 @@ public class ProductAddPage extends Pages {
         buttonPanel.add(saveButton);
 
         headerPanel.add(backButton, BorderLayout.WEST);
-        headerPanel.add(titleLabel, BorderLayout.CENTER);
+        headerPanel.add(titlePanel, BorderLayout.CENTER);
         headerPanel.add(buttonPanel, BorderLayout.EAST);
 
         System.out.println("✅ 헤더 패널 설정 완료!");
@@ -510,7 +515,7 @@ public class ProductAddPage extends Pages {
             if (url != null) {
                 ImageIcon placeholderIcon = new ImageIcon(url);
                 Image scaledImage = placeholderIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                imageLabel.setPreferredSize(new Dimension(280, 280));  // 라벨 크기
+                imageLabel.setPreferredSize(new Dimension(280, 280)); // 라벨 크기
                 imageLabel.setIcon(new ImageIcon(scaledImage));
 
                 // 안내문은 이미지 아래쪽에 함께 표시
