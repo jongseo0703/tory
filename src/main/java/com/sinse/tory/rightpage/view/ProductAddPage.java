@@ -279,6 +279,7 @@ public class ProductAddPage extends Pages {
         descPanel.setBorder(createTitledBorder("상품 설명"));
 
         JScrollPane scrollPane = new JScrollPane(descriptionArea);
+        scrollPane.setPreferredSize(new Dimension(0, 100)); // 높이 조정
         scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         descPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -580,7 +581,7 @@ public class ProductAddPage extends Pages {
     /**
      * 확인 대화상자 없이 폼 초기화 (저장 후 사용)
      */
-    private void clearFormWithoutConfirm() {
+    public void clearFormWithoutConfirm() {
         // 콤보박스 초기화
         topCategoryCombo.setSelectedIndex(0);
         subCategoryCombo.removeAllItems();

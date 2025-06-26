@@ -151,6 +151,7 @@ public class MainPage extends JFrame{
 	 * ProductAddPage로 전환하는 편의 메서드
 	 */
 	public void showProductAddPage() {
+		productAddPage.clearFormWithoutConfirm(); // 폼 초기화
 		showSpecificPage(1); // ProductAddPage 보이기
 		System.out.println("✅ ProductAddPage로 전환됨");
 	}
