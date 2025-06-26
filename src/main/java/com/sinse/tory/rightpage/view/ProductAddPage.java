@@ -527,7 +527,7 @@ public class ProductAddPage extends Pages {
         }
 
         // 저장 확인
-        if (!ShowMessage.showConfirmForRegist(this, "상품 저장", "새 상품을 등록하시겠습니까?")) {
+        if (!ShowMessage.showConfirm(this, "상품 저장", "새 상품을 등록하시겠습니까?")) {
             return;
         }
 
@@ -860,7 +860,10 @@ public class ProductAddPage extends Pages {
      */
     private void clearForm() {
         // 확인 대화상자 표시
-        if (!ShowMessage.showConfirmForRegist(this, "폼 초기화", "입력한 모든 내용이 사라집니다. 계속하시겠습니까?")) {
+        if (!ShowMessage.showConfirm(
+                this,
+                "폼 초기화",
+                "입력한 모든 내용이 사라집니다. \n계속하시겠습니까?")) {
             return;
         }
 
