@@ -26,6 +26,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,7 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -136,7 +137,23 @@ public class ProductShip extends Pages{
 					setOpaque(false);
 				}
 			};
-			box[i].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+			int n = i;
+			//커스텀 UI적용해보기
+			box[i].setUI(new BasicComboBoxUI() {
+				protected JButton ceateButton() {
+					JButton bt = new JButton("▽");
+					bt.setBorder(null);
+					bt.setContentAreaFilled(false);
+					bt.setFocusPainted(false);
+					bt.setOpaque(false);
+					
+					return bt;
+				}
+				public void installUI(JComponent c) {
+					super.installUI(c);
+					box[n].setBorder(BorderFactory.createEmptyBorder());
+				}
+			});
 		}
 		
 		//상품이미지 출력
@@ -187,6 +204,7 @@ public class ProductShip extends Pages{
 						g2.setColor(new Color(220, 220, 220));
 						g2.setStroke(new BasicStroke(2));
 						g2.drawRoundRect(x-2, y-2, scaledWidth+4, scaledHeight+4, 10, 10);
+						repaint();
 						
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -271,10 +289,7 @@ public class ProductShip extends Pages{
 		t_count.setPreferredSize(new Dimension(120, 40));
 		t_count.setMaximumSize(new Dimension(120, 40));
 		
-		// 버튼들의 크기 설정 (더 현대적인 크기)
-		bt[0].setPreferredSize(new Dimension(120, 35));
-		bt[1].setPreferredSize(new Dimension(100, 35));
-		
+		// 버튼들의 크기 설정 (더 현대적인 크기)		
 		Dimension actionButtonSize = new Dimension(80, 40);
 		bt[2].setPreferredSize(actionButtonSize);
 		bt[2].setMaximumSize(actionButtonSize);
@@ -438,7 +453,7 @@ public class ProductShip extends Pages{
 		//t_count 안에 원하는 입출고 수량을 입력
 			bt[2].addActionListener(e->{
 				//출고버튼
-				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"출고하기","📤출고 하시겠습니까?");
+				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"출고하기","출고 하시겠습니까?");
 				int count =0;
 				// 확인 눌렀을때
 				if(resutle) {
@@ -472,7 +487,7 @@ public class ProductShip extends Pages{
 				}
 			 });
 			 bt[3].addActionListener(e->{
-				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"입고하기","📥입고 하시겠습니까?");
+				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"입고하기","입고 하시겠습니까?");
 				// 확인 눌렀을때
 				if(resutle) {
 					//change_type 중 IN
