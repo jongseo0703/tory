@@ -153,6 +153,7 @@ public class ProductShip extends Pages {
 					String path = productImage.getImageURL();
 					// 이미지경로에서 맨 앞에 있는 '/'제거
 					path = path.replaceFirst("^/", "");
+					System.out.println("-----------상품 이미지 경로"+path);
 					url = this.getClass().getClassLoader().getResource(path); // 상품이미지 위치
 				}
 				if (url == null) {
