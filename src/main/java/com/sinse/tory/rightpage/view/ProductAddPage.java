@@ -52,7 +52,6 @@ public class ProductAddPage extends Pages {
 
     // 이미지 관련
     private JLabel imageLabel;
-    private JLabel placeholderTextLabel;
     private JButton imageUploadButton;
     private String selectedImagePath = null;
 
@@ -480,7 +479,6 @@ public class ProductAddPage extends Pages {
             Image scaledImage = originalImage.getScaledInstance(280, 280, Image.SCALE_SMOOTH);
             imageLabel.setIcon(new ImageIcon(scaledImage));
             imageLabel.setText("");
-            placeholderTextLabel.setText(""); // 이미지가 로드되면 안내문 제거
         } catch (IOException e) {
             ShowMessage.showAlert(this, "이미지 로드 실패", "이미지를 불러올 수 없습니다.");
             setPlaceholderImage(); // 실패 시 placeholder로 복귀
