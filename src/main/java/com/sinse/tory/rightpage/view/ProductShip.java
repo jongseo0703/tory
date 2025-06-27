@@ -252,7 +252,8 @@ public class ProductShip extends Pages {
 		for (int i = 0; i < box.length; i++) {
 			la[i].setPreferredSize(labelSize);
 			la[i].setMaximumSize(labelSize);
-			box[i].setPreferredSize(comboSize);
+			box[i].setPreferredSize(new Dimension(location[1].getPreferredSize().width,30));
+			box[i].setBorder(BorderFactory.createEmptyBorder(0, 200, 0, 200));
 			box[i].setMaximumSize(comboSize);
 		}
 
@@ -346,8 +347,7 @@ public class ProductShip extends Pages {
 			la[i].setAlignmentX(Component.LEFT_ALIGNMENT);	
 			boxRow[i].setAlignmentX(Component.LEFT_ALIGNMENT);
 			boxRow[i].add(box[i]);
-			boxRow[i].setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 20));
-			boxRow[i].setMaximumSize(new Dimension(location[1].getPreferredSize().width/2,box[i].getPreferredSize().height));
+			boxRow[i].setMaximumSize(new Dimension(location[1].getPreferredSize().width,box[i].getPreferredSize().height));
 			boxRow[i].setBackground(null);
 			fieldPanel.add(la[i]);
 			fieldPanel.add(Box.createRigidArea(new Dimension(0, 5)));
