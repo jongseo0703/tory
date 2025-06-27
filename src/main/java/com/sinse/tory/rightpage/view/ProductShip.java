@@ -148,16 +148,11 @@ public class ProductShip extends Pages {
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 				URL url = null;
-
 				if (productImage != null && productImage.getImageURL() != null) {
 					String path = productImage.getImageURL();
 					// 이미지경로에서 맨 앞에 있는 '/'제거
 					path = path.replaceFirst("^/", "");
-					System.out.println("-----------상품 이미지 경로"+path);
 					url = this.getClass().getClassLoader().getResource(path); // 상품이미지 위치
-				}
-				if (url == null) {
-					url = this.getClass().getClassLoader().getResource("images/not-found.png");// 이미지가 없을 경우
 				}
 
 				if (url != null) {
@@ -188,7 +183,7 @@ public class ProductShip extends Pages {
 						g2.setColor(new Color(220, 220, 220));
 						g2.setStroke(new BasicStroke(2));
 						g2.drawRoundRect(x-2, y-2, scaledWidth+4, scaledHeight+4, 10, 10);
-						repaint();
+
 						
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -196,7 +191,6 @@ public class ProductShip extends Pages {
 				}
 			}
 		};
-
 		// 이미지 패널 스타일링
 		p_img.setBackground(Color.WHITE);
 		p_img.setBorder(BorderFactory.createCompoundBorder(
@@ -312,6 +306,7 @@ public class ProductShip extends Pages {
 				t_count.setText(Integer.toString(productDetailDAO.selectCurrentQuantity(itemId)));
 				bt[2].setEnabled(true);
 				bt[3].setEnabled(true);
+				p_img.updateUI();
 			}
 
 		});
@@ -526,7 +521,6 @@ public class ProductShip extends Pages {
 			bt[3].setEnabled(false);
 			t_count.setEnabled(false);
 			productImage = null;
-			p_img.repaint();
 		}
 	}
 
@@ -604,9 +598,6 @@ public class ProductShip extends Pages {
 						t_count.setEnabled(true);
 						bt[2].setEnabled(true); // 출고 버튼
 						bt[3].setEnabled(true); // 입고 버튼
-
-						// 이미지 패널 새로고침
-						p_img.repaint();
 
 						System.out.println("✅ 상품 정보 자동 채우기 완료: " + productName);
 					}
