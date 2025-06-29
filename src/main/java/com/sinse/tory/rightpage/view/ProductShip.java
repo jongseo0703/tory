@@ -246,14 +246,22 @@ public class ProductShip extends Pages {
 		location[1].setPreferredSize(new Dimension(PageUtil.InputOutput_Width, 350));
 		location[2].setPreferredSize(new Dimension(PageUtil.InputOutput_Width, 80));
 
-		// 콤보박스와 라벨의 크기 (적절하게 조정)
-		Dimension comboSize = new Dimension(280, 40);
-		Dimension labelSize = new Dimension(120, 30);
+		// 폼 패널의 실제 사용 가능한 너비 계산 (이미지 패널과 50:50 분할, 여백 고려)
+		int formPanelWidth = (PageUtil.InputOutput_Width - 40) / 2 - 40; // 전체에서 여백 제외하고 절반, 폼 내부 여백 고려
+		
+		// 콤보박스와 라벨의 크기 (비례적으로 조정)
+		int comboWidth = Math.max(200, Math.min(350, (int)(formPanelWidth * 0.85))); // 폼 너비의 85%, 최소 200px, 최대 350px
+		int comboHeight = 35; // 적절한 높이
+		int comboSideMargin = Math.max(5, (formPanelWidth - comboWidth) / 2); // 좌우 균등 여백, 최소 5px
+		
+		Dimension comboSize = new Dimension(comboWidth, comboHeight);
+		Dimension labelSize = new Dimension(120, 25);
+		
 		for (int i = 0; i < box.length; i++) {
 			la[i].setPreferredSize(labelSize);
 			la[i].setMaximumSize(labelSize);
-			box[i].setPreferredSize(new Dimension(location[1].getPreferredSize().width,30));
-			box[i].setBorder(BorderFactory.createEmptyBorder(0, 200, 0, 200));
+			box[i].setPreferredSize(comboSize);
+			box[i].setBorder(BorderFactory.createEmptyBorder(0, comboSideMargin, 0, comboSideMargin));
 			box[i].setMaximumSize(comboSize);
 		}
 
@@ -347,10 +355,12 @@ public class ProductShip extends Pages {
 			la[i].setAlignmentX(Component.LEFT_ALIGNMENT);	
 			boxRow[i].setAlignmentX(Component.LEFT_ALIGNMENT);
 			boxRow[i].add(box[i]);
-			boxRow[i].setMaximumSize(new Dimension(location[1].getPreferredSize().width,box[i].getPreferredSize().height));
+			// 콤보박스 컨테이너 크기를 폼 패널 너비에 맞춤
+			boxRow[i].setMaximumSize(new Dimension(formPanelWidth, comboHeight));
+			boxRow[i].setPreferredSize(new Dimension(formPanelWidth, comboHeight));
 			boxRow[i].setBackground(null);
 			fieldPanel.add(la[i]);
-			fieldPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+			fieldPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 			fieldPanel.add(boxRow[i]);
 
 			p_form.add(fieldPanel);

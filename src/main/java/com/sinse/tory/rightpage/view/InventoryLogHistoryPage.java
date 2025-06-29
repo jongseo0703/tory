@@ -78,13 +78,13 @@ public class InventoryLogHistoryPage extends Pages {
      */
     private void initializeComponents() {
     	productNameFilter = new JTextField();
-        productNameFilter.setPreferredSize(new Dimension(150, 40));
+        productNameFilter.setPreferredSize(new Dimension(140, 35)); // 다른 컴포넌트와 일관성
         addPlaceholder(productNameFilter, "상품명 검색...");
     	
     	DatePickerSettings startSettings = new DatePickerSettings(Locale.KOREA);
     	startSettings.setFormatForDatesCommonEra("yyyy-MM-dd");
     	startDatePicker = new DatePicker(startSettings);
-    	startDatePicker.setPreferredSize(new Dimension(200, 30));
+    	startDatePicker.setPreferredSize(new Dimension(140, 35)); // 크기 축소
     	JTextField startTxt = startDatePicker.getComponentDateTextField();
     	startTxt.setBorder(productNameFilter.getBorder());
 
@@ -117,7 +117,7 @@ public class InventoryLogHistoryPage extends Pages {
     	DatePickerSettings endSettings = new DatePickerSettings(Locale.KOREA);
     	endSettings.setFormatForDatesCommonEra("yyyy-MM-dd");
     	endDatePicker = new DatePicker(endSettings);
-    	endDatePicker.setPreferredSize(new Dimension(200, 30));
+    	endDatePicker.setPreferredSize(new Dimension(140, 35)); // 크기 축소
     	// 종료일 DatePicker 스타일 설정
     	JTextField endTxt = endDatePicker.getComponentDateTextField();
     	endTxt.setBorder(productNameFilter.getBorder());
@@ -147,26 +147,27 @@ public class InventoryLogHistoryPage extends Pages {
         
         // 뒤로가기 버튼
         backButton = createStyledButton("← 뒤로", LIGHT_GRAY, new Color(70, 70, 70));
+        backButton.setPreferredSize(new Dimension(90, 35)); // 약간 더 넓게
         
         // 제목 라벨
         titleLabel = new JLabel("입출고 내역 조회");
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         
-        // 필터 패널
+        // 필터 패널 (동적 높이)
         filterPanel = new JPanel();
         filterPanel.setBackground(LIGHT_GRAY);
-        filterPanel.setPreferredSize(new Dimension(0, 80));
+        // 고정 높이 제거 - 내용에 따라 자동 조정
         
-        // 필터링 컴포넌트들
+        // 필터링 컴포넌트들 (일관된 크기)
         changeTypeFilter = new JComboBox<>(new String[]{"전체", "입고", "출고"});
-        changeTypeFilter.setPreferredSize(new Dimension(100, 40));
+        changeTypeFilter.setPreferredSize(new Dimension(90, 35));
         
         searchButton = createStyledButton("검색", PRIMARY_COLOR, Color.WHITE);
-        searchButton.setPreferredSize(new Dimension(80, 30));
+        searchButton.setPreferredSize(new Dimension(70, 35));
         
         resetButton = createStyledButton("초기화", WARNING_COLOR, Color.WHITE);
-        resetButton.setPreferredSize(new Dimension(80, 30));
+        resetButton.setPreferredSize(new Dimension(70, 35));
         
         // 컨텐츠 패널
         contentPanel = new JPanel();
@@ -220,32 +221,39 @@ public class InventoryLogHistoryPage extends Pages {
         headerPanel.add(headerCenterPanel, BorderLayout.CENTER);
         headerPanel.add(headerRightPanel, BorderLayout.EAST);
         
-        // 필터 패널 레이아웃을 2행 1열 GridLayout으로 변경 (행 간격 5px)
-        filterPanel.setLayout(new GridLayout(2, 1, 0, 10));
+        // 필터 패널 레이아웃을 BoxLayout으로 변경 (유연한 높이)
+        filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.Y_AXIS));
         filterPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_COLOR),
-            BorderFactory.createEmptyBorder(0, 30, 0, 30)
+            BorderFactory.createEmptyBorder(15, 30, 15, 30) // 상하 여백 확보
         ));
         
-        // 1행 패널: 구분, 상품명
-        JPanel filterRow1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        // 1행 패널: 구분, 상품명 (높이 45px)
+        JPanel filterRow1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         filterRow1.setBackground(LIGHT_GRAY);
+        filterRow1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         filterRow1.add(new JLabel("구분:"));
         filterRow1.add(changeTypeFilter);
+        filterRow1.add(Box.createRigidArea(new Dimension(20, 0))); // 간격
         filterRow1.add(new JLabel("상품명:"));
         filterRow1.add(productNameFilter);
         
-        // 2행 패널: 시작일, 종료일, 검색, 초기화
-        JPanel filterRow2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        // 2행 패널: 시작일, 종료일, 검색, 초기화 (높이 45px)
+        JPanel filterRow2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         filterRow2.setBackground(LIGHT_GRAY);
+        filterRow2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         filterRow2.add(new JLabel("시작일:"));
         filterRow2.add(startDatePicker);
+        filterRow2.add(Box.createRigidArea(new Dimension(10, 0))); // 간격
         filterRow2.add(new JLabel("종료일:"));
         filterRow2.add(endDatePicker);
+        filterRow2.add(Box.createRigidArea(new Dimension(20, 0))); // 간격
         filterRow2.add(searchButton);
+        filterRow2.add(Box.createRigidArea(new Dimension(10, 0))); // 간격
         filterRow2.add(resetButton);
         
         filterPanel.add(filterRow1);
+        filterPanel.add(Box.createRigidArea(new Dimension(0, 5))); // 행 간격
         filterPanel.add(filterRow2);
         
         // 컨텐츠 패널 레이아웃
@@ -485,7 +493,7 @@ public class InventoryLogHistoryPage extends Pages {
         button.setBorderPainted(false);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
-        button.setPreferredSize(new Dimension(100, 35));
+        button.setPreferredSize(new Dimension(80, 35));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         // 호버 효과

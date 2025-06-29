@@ -163,8 +163,6 @@ public class ProductAddPage extends Pages {
      * 헤더 패널 설정
      */
     private void setupHeaderPanel() {
-        System.out.println("🏗️ 헤더 패널 설정 시작...");
-
         headerPanel.setLayout(new BorderLayout());
         headerPanel.setBackground(Color.WHITE);
         headerPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -185,21 +183,13 @@ public class ProductAddPage extends Pages {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setBackground(Color.WHITE);
 
-        System.out.println("   - 초기화 버튼 추가: " + clearButton.getText());
-        System.out.println("   - 초기화 버튼 크기: " + clearButton.getPreferredSize());
         buttonPanel.add(clearButton);
 
-        System.out.println("   - 저장 버튼 추가: " + saveButton.getText());
-        System.out.println("   - 저장 버튼 크기: " + saveButton.getPreferredSize());
-        System.out.println("   - 저장 버튼 활성화: " + saveButton.isEnabled());
         buttonPanel.add(saveButton);
 
         headerPanel.add(backButton, BorderLayout.WEST);
         headerPanel.add(titlePanel, BorderLayout.CENTER);
         headerPanel.add(buttonPanel, BorderLayout.EAST);
-
-        System.out.println("✅ 헤더 패널 설정 완료!");
-        System.out.println("   - 버튼 패널 컴포넌트 수: " + buttonPanel.getComponentCount());
     }
 
     /**
@@ -329,12 +319,7 @@ public class ProductAddPage extends Pages {
      * 이벤트 리스너 설정
      */
     private void setupEventListeners() {
-        System.out.println("🔧 이벤트 리스너 설정 시작...");
-
-        // 뒤로가기 버튼
-        System.out.println("   - 뒤로가기 버튼 리스너 설정");
         backButton.addActionListener(e -> {
-            System.out.println("🔙 뒤로가기 버튼 클릭됨!");
             goBack();
         });
 
@@ -553,6 +538,12 @@ public class ProductAddPage extends Pages {
             return;
         }
 
+        // 버튼 비활성화 (중복 클릭 방지)
+        saveButton.setEnabled(false);
+        clearButton.setEnabled(false);
+        backButton.setEnabled(false);
+        saveButton.setText("저장 중...");
+
         try {
             // ProductDetail 객체 생성
             ProductDetail productDetail = createProductDetailFromForm();
@@ -572,31 +563,52 @@ public class ProductAddPage extends Pages {
             // 상품 추가 음성 재생
             playAudioFile("추가.wav");
 
-            // 성공 알림
-            showSuccessNotification();
-
-            // 왼쪽 InventoryUI 실시간 업데이트 (충분한 지연으로 DB 커밋 완료 보장)
-            if (inventoryUI != null) {
-                Timer updateTimer = new Timer(200, e -> {
-                    inventoryUI.refreshInventoryData();
-                    ((Timer) e.getSource()).stop(); // 한 번만 실행하고 정지
-                });
-                updateTimer.start();
-            }
-
-            // 저장 후 폼 초기화 여부 확인
-            if (ShowMessage.showConfirmAfterSave(this, "저장 완료")) {
-                clearFormWithoutConfirm();
-            }
+                         // SwingUtilities를 사용해 UI 안전하게 업데이트
+             SwingUtilities.invokeLater(() -> {
+                 // 버튼들 다시 활성화
+                 enableButtons();
+                 
+                 // 성공 알림 (토스트 스타일)
+                 showToastSuccessNotification();
+                 
+                 // 왼쪽 InventoryUI 실시간 업데이트
+                 if (inventoryUI != null) {
+                     SwingUtilities.invokeLater(() -> {
+                         inventoryUI.refreshInventoryData();
+                     });
+                 }
+                 
+                 // 저장 후 폼 초기화 여부 확인 (약간의 지연 후)
+                 Timer confirmTimer = new Timer(100, e -> {
+                     if (ShowMessage.showConfirmAfterSave(ProductAddPage.this, "저장 완료")) {
+                         clearFormWithoutConfirm();
+                     }
+                     ((Timer) e.getSource()).stop();
+                 });
+                 confirmTimer.start();
+             });
 
         } catch (Exception e) {
             e.printStackTrace();
+            
+            // 오류 발생 시에도 버튼 다시 활성화
+            enableButtons();
 
             ShowMessage.showAlert(this, "저장 실패",
                     "❌ 상품 저장 중 오류가 발생했습니다.\n\n" +
                             "오류 내용: " + e.getMessage() + "\n\n" +
                             "입력 내용을 확인하고 다시 시도해주세요.");
         }
+    }
+
+    /**
+     * 버튼들 활성화
+     */
+    private void enableButtons() {
+        saveButton.setEnabled(true);
+        clearButton.setEnabled(true);
+        backButton.setEnabled(true);
+        saveButton.setText("저장하기");
     }
 
     /**
@@ -790,7 +802,81 @@ public class ProductAddPage extends Pages {
     }
 
     /**
-     * 성공 알림 표시
+     * 토스트 스타일 성공 알림 표시 (ProductShip 스타일 동일)
+     */
+    private void showToastSuccessNotification() {
+        String productName = productNameField.getText().trim();
+        int quantity = Integer.parseInt(quantityField.getText());
+        
+        JWindow notification = new JWindow();
+        notification.setAlwaysOnTop(true);
+
+        // 메인 패널 생성
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(new Color(40, 167, 69)); // ProductShip과 동일한 녹색
+        mainPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(34, 139, 58), 3),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)));
+
+        // 성공 아이콘과 제목
+        JLabel titleLabel = new JLabel("등록 성공!");
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // 상품 정보
+        JLabel productLabel = new JLabel(productName);
+        productLabel.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+        productLabel.setForeground(new Color(240, 255, 240));
+        productLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // 수량 정보
+        JLabel quantityLabel = new JLabel("수량: " + quantity + "개");
+        quantityLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        quantityLabel.setForeground(new Color(200, 255, 200));
+        quantityLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // 구성 요소 추가
+        mainPanel.add(titleLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        mainPanel.add(productLabel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        mainPanel.add(quantityLabel);
+
+        notification.add(mainPanel);
+        notification.pack();
+
+        // 화면 중앙 상단에 표시
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - notification.getWidth()) / 2;
+        int y = 100; // 상단에서 100px 아래
+        notification.setLocation(x, y);
+
+        // 슬라이드 다운 애니메이션
+        slideDownAnimation(notification, y);
+
+        // 4초 후 슬라이드 업 애니메이션과 함께 사라짐
+        Timer timer = new Timer(4000, e -> slideUpAnimation(notification, y));
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    /**
+     * 간단한 성공 알림 표시 (사용 안함)
+     */
+    private void showSimpleSuccessNotification() {
+        String productName = productNameField.getText().trim();
+        int quantity = Integer.parseInt(quantityField.getText());
+        
+        ShowMessage.showAlert(this, "등록 완료", 
+            "✅ 상품이 성공적으로 등록되었습니다!\n\n" +
+            "상품명: " + productName + "\n" +
+            "수량: " + quantity + "개");
+    }
+
+    /**
+     * 성공 알림 표시 (애니메이션 버전 - 사용 안함)
      */
     private void showSuccessNotification() {
         String productName = productNameField.getText().trim();
@@ -981,6 +1067,50 @@ public class ProductAddPage extends Pages {
         });
 
         return button;
+    }
+
+    /**
+     * 슬라이드 다운 애니메이션 (ProductShip에서 복사)
+     */
+    private void slideDownAnimation(JWindow notification, int targetY) {
+        notification.setVisible(true);
+        int startY = targetY - 100; // 위에서 시작
+        notification.setLocation(notification.getX(), startY);
+
+        Timer slideTimer = new Timer(20, null);
+        final int[] currentY = { startY };
+
+        slideTimer.addActionListener(e -> {
+            currentY[0] += 5;
+            if (currentY[0] >= targetY) {
+                currentY[0] = targetY;
+                slideTimer.stop();
+            }
+            notification.setLocation(notification.getX(), currentY[0]);
+        });
+
+        slideTimer.start();
+    }
+
+    /**
+     * 슬라이드 업 애니메이션 (ProductShip에서 복사)
+     */
+    private void slideUpAnimation(JWindow notification, int startY) {
+        Timer slideTimer = new Timer(20, null);
+        final int[] currentY = { startY };
+        int targetY = startY - 100; // 위로 사라짐
+
+        slideTimer.addActionListener(e -> {
+            currentY[0] -= 5;
+            if (currentY[0] <= targetY) {
+                slideTimer.stop();
+                notification.dispose();
+            } else {
+                notification.setLocation(notification.getX(), currentY[0]);
+            }
+        });
+
+        slideTimer.start();
     }
 
     /**

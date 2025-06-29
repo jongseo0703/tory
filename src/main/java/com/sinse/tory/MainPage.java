@@ -55,13 +55,6 @@ public class MainPage extends JFrame{
 		add(rightPanel);
 	
 		setVisible(true);
-		
-		System.out.println("✅ 완전 통합된 MainPage 실행됨");
-		System.out.println("🎯 특징:");
-		System.out.println("   - 왼쪽: InventoryUI (깔끔한 UI + 완전한 기능)");
-		System.out.println("   - 오른쪽: ProductShip + ProductAddPage + InventoryLogHistoryPage + MicrophoneForm");
-		System.out.println("   - 정렬 기능: 재고량순, 출고순, 입고일순");
-		System.out.println("   - 페이지 전환: CardLayout으로 동적 전환");
 	}
 	
 	/**
@@ -183,8 +176,4 @@ public class MainPage extends JFrame{
 			cardLayout.show(rightPageContent, String.valueOf(pageIndex));
 		}
 	}
-	
-    public static void main( String[] args ){
-    	new MainPage();
-    }
 }
