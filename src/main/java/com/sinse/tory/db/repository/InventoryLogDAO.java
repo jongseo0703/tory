@@ -48,7 +48,7 @@ public class InventoryLogDAO {
                 log.setInventoryLogId(rs.getInt("inventory_log_id"));
                 log.setChangeType(ChangeType.valueOf(rs.getString("change_type")));
                 log.setQuantity(rs.getInt("quantity"));
-                log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime().toLocalDate());
+                log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime());
                 log.setProductDetail(productDetail);
                 
                 logList.add(log);
@@ -107,7 +107,7 @@ public class InventoryLogDAO {
                 log.setInventoryLogId(rs.getInt("inventory_log_id"));
                 log.setChangeType(ChangeType.valueOf(rs.getString("change_type")));
                 log.setQuantity(rs.getInt("quantity"));
-                log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime().toLocalDate());
+                log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime());
                 log.setProductDetail(productDetail);
                 
                 logList.add(log);
@@ -206,7 +206,7 @@ public class InventoryLogDAO {
                 log.setInventoryLogId(rs.getInt("inventory_log_id"));
                 log.setChangeType(ChangeType.valueOf(rs.getString("change_type")));
                 log.setQuantity(rs.getInt("quantity"));
-                log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime().toLocalDate());
+                log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime());
                 log.setProductDetail(productDetail);
                 
                 logList.add(log);

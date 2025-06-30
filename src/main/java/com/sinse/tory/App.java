@@ -14,7 +14,7 @@ public class App {
 		System.out.println("📊 데이터베이스 초기화 중...");
 		
 		// 프로그램이 실행할때 필요한 테이블들을 만들어주고 임시 데이터들을 넣어줌.(CREATE TABLE + INSERT)
-		DatabaseInitializer.initializeSchema();
+		//DatabaseInitializer.initializeSchema();
 
 		new MainPage();
 	}

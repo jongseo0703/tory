@@ -341,7 +341,7 @@ public class InventoryUI extends JPanel {
 				refreshGrid(sortedCategoryOrder);
 			}
 			else if("입고일순".equals(selected)) {
-				SortStrategy sortStrategy = new SortByRecentShipment(products, inventoryLogs, InventoryLog.ChangeType.IN, true);
+				SortStrategy sortStrategy = new SortByRecentShipment(products, inventoryLogs, InventoryLog.ChangeType.IN, false);
 				List<String> sortedCategoryOrder = sortStrategy.sort(categoryOrder, products);
 				refreshGrid(sortedCategoryOrder);
 			}

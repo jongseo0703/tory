@@ -95,7 +95,7 @@ public class ProductDetailDAO {
 				
 				java.sql.Timestamp ts = rs.getTimestamp("changed_at");
 				if (ts != null) {
-					log.setChangedAt(ts.toLocalDateTime().toLocalDate());
+					log.setChangedAt(ts.toLocalDateTime());
 				} else {
 					log.setChangedAt(null);
 				}
@@ -147,7 +147,7 @@ public class ProductDetailDAO {
 	                log.setChangeType(InventoryLog.ChangeType.OUT);
 	            }
 	            log.setQuantity(rs.getInt("quantity"));
-	            log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime().toLocalDate());
+	            log.setChangedAt(rs.getTimestamp("changed_at").toLocalDateTime());
 
 	            // Product 및 ProductDetail 정보 세팅
 	            Product product = new Product();

@@ -378,7 +378,7 @@ public class InventoryLogHistoryPage extends Pages {
             for (InventoryLog log : allLogs) {
                 boolean matches = true;
                 
-                LocalDate logDate = log.getChangedAt();
+                LocalDate logDate = log.getChangedAt().toLocalDate();
                 
                 // 구분 필터
                 if (!changeTypeSelected.equals("전체")) {
@@ -450,7 +450,7 @@ public class InventoryLogHistoryPage extends Pages {
             Product product = detail.getProduct();
             
             Object[] rowData = {
-                log.getChangedAt().toString(), // 날짜
+                log.getChangedAt().toLocalDate().toString(), // 날짜
                 log.getChangeType().name().equals("IN") ? "입고" : "출고", // 구분
                 log.getQuantity() + "개", // 수량
                 product.getProductName(), // 상품명

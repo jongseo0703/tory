@@ -5,6 +5,7 @@ package com.sinse.tory.db.model;
  */
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class InventoryLog {
 	/**
@@ -27,7 +28,7 @@ public class InventoryLog {
 	private int quantity;
 	
 	//Column(name = "changedAt") 실제 디비 컬럼명
-	private LocalDate changedAt;
+	private LocalDateTime changedAt;
 	
 	//Store 모델은 ProductDetail 모델의 자식 엔터티
 	private ProductDetail productDetail;
@@ -36,7 +37,7 @@ public class InventoryLog {
 	public InventoryLog() {};
 	
 	//한 줄로 객체를 초기화 가능하게하는 생성자
-	public InventoryLog(int inventoryLogId, ChangeType changeType, int quantity, LocalDate changedAt, ProductDetail productDetail) {
+	public InventoryLog(int inventoryLogId, ChangeType changeType, int quantity, LocalDateTime changedAt, ProductDetail productDetail) {
 		this.inventoryLogId = inventoryLogId;
 		this.changeType = changeType;
 		this.quantity = quantity;
@@ -75,12 +76,12 @@ public class InventoryLog {
 	}
 
 	//접근제한자가 private 인 changedAt을 반환해주기 위한 getter 메서드
-	public LocalDate getChangedAt() {
+	public LocalDateTime getChangedAt() {
 		return changedAt;
 	}
 
 	//접근제한자가 private 인 changedAt을 바꿔주기 위한 setter 메서드
-	public void setChangedAt(LocalDate changedAt) {
+	public void setChangedAt(LocalDateTime changedAt) {
 		this.changedAt = changedAt;
 	}
 
