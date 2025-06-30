@@ -1,7 +1,6 @@
 package com.sinse.tory.rightpage.view;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -443,65 +442,156 @@ public class ProductShip extends Pages {
 		//t_count 안에 원하는 입출고 수량을 입력
 			bt[2].addActionListener(e->{
 				//출고버튼
-				boolean result = ShowMessage.showConfirm(ProductShip.this,"출고하기","출고 하시겠습니까?");
-				int count =0;
-				// 확인 눌렀을때
+				// 먼저 입력값 검증
+				String inputText = t_count.getText().trim();
+				int requestedQuantity = 0;
+				
+				// 입력값이 비어있거나 숫자가 아닌 경우
+				if (inputText.isEmpty()) {
+					JOptionPane.showMessageDialog(ProductShip.this, "출고 수량을 입력해 주세요");
+					return;
+				}
+				
+				try {
+					requestedQuantity = Integer.parseInt(inputText);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(ProductShip.this, "올바른 숫자를 입력해 주세요");
+					t_count.setText("");
+					return;
+				}
+				
+				// 출고 수량이 0 이하인 경우
+				if (requestedQuantity <= 0) {
+					JOptionPane.showMessageDialog(ProductShip.this, "출고 수량은 1개 이상이어야 합니다");
+					return;
+				}
+				
+				// 현재 재고량 다시 조회 (최신 상태 확인)
+				int currentStock = productDetailDAO.selectCurrentQuantity(itemId);
+				productDetail = productDetailDAO.selectDetailInfo(itemId); // 최신 정보로 업데이트
+				
+				// 재고가 없는 경우
+				if (currentStock <= 0) {
+					JOptionPane.showMessageDialog(ProductShip.this, 
+						"재고가 없습니다\n현재 재고량: " + currentStock + "개");
+					return;
+				}
+				
+				// 출고 요청량이 현재 재고량보다 많은 경우
+				if (requestedQuantity > currentStock) {
+					JOptionPane.showMessageDialog(ProductShip.this, 
+						"재고가 부족합니다\n" +
+						"요청 수량: " + requestedQuantity + "개\n" +
+						"현재 재고량: " + currentStock + "개");
+					return;
+				}
+				
+				// 확인 대화상자 표시
+				boolean result = ShowMessage.showConfirm(ProductShip.this,
+					"출고하기",
+					"출고하시겠습니까?\n" +
+					"상품: " + box[2].getSelectedItem().toString() + "\n" +
+					"출고수량: " + requestedQuantity + "개\n" +
+					"남은재고: " + (currentStock - requestedQuantity) + "개");
+				
+				// 확인 눌렀을때만 실행
 				if(result) {
-					//change_type 중 OUT
-					String inOut = "OUT";
-					//보유한 수량보다 출고수량이 크거나 출고가 0이 아닐때만 수행하도록 조건부여
-					if(productDetail.getProductQuantity() != 0
-							&&productDetail.getProductQuantity()>=Integer.parseInt(t_count.getText())
-							&&num!=0 ) {
-											count = productDetail.getProductQuantity()-num;						 							 
-					updateCount.update(count, itemId);
-					updateCount.dateInsert(inOut, num, itemId);
+					try {
+						//change_type 중 OUT
+						String inOut = "OUT";
+						int remainingStock = currentStock - requestedQuantity;
+						
+						// DB 업데이트
+						updateCount.update(remainingStock, itemId);
+						updateCount.dateInsert(inOut, requestedQuantity, itemId);
 
-					// 출고 음성 재생
-					playAudioFile("출고.wav");
+						// 출고 음성 재생
+						playAudioFile("출고.wav");
 
-					// 왼쪽 InventoryUI 실시간 업데이트
-					String productName = box[2].getSelectedItem().toString();
-					notifyInventoryUpdate("출고", num, productName);
+						// 왼쪽 InventoryUI 실시간 업데이트
+						String productName = box[2].getSelectedItem().toString();
+						notifyInventoryUpdate("출고", requestedQuantity, productName);
 
-					// 상위 카테고리 초기화하면서 입출고 버튼 비활성화
-					resetCombo();
-
-					} else if (Integer.parseInt(t_count.getText())==0) {
-						JOptionPane.showMessageDialog(ProductShip.this, "출고 수량을 다시 입력해 주세요");
+						// 상위 카테고리 초기화하면서 입출고 버튼 비활성화
+						resetCombo();
+						
+						System.out.println("✅ 출고 완료 - 상품ID: " + itemId + ", 출고량: " + requestedQuantity + ", 남은재고: " + remainingStock);
+						
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(ProductShip.this, 
+							"출고 처리 중 오류가 발생했습니다: " + ex.getMessage());
 					}
-					else {
-						JOptionPane.showMessageDialog(ProductShip.this, "재고부족\n 현재 재고량:" + productDetail.getProductQuantity());
-					}
-					System.out.println(itemId);
 				}
 			 });
 			 bt[3].addActionListener(e->{
-				boolean resutle = ShowMessage.showConfirm(ProductShip.this,"입고하기","입고 하시겠습니까?");
-				// 확인 눌렀을때
-				if(resutle) {
-					//change_type 중 IN
-					String inOut = "IN";
-					// 입고수량이 0이 아닐때만 수행하도록 조건부여
-					if(num !=0) {
-					 					 	int count = productDetail.getProductQuantity()+ num;
-					updateCount.update(count, itemId);
-					updateCount.dateInsert(inOut, num, itemId);
-
-					// 입고 음성 재생
-					playAudioFile("입고.wav");
-
-					// 왼쪽 InventoryUI 실시간 업데이트
-					String productName = box[2].getSelectedItem().toString();
-					notifyInventoryUpdate("입고", num, productName);
-
-					resetCombo();
-				} else {
-					JOptionPane.showMessageDialog(ProductShip.this, "입고 수량을 다시 입력해 주세요");
+				//입고버튼
+				// 먼저 입력값 검증
+				String inputText = t_count.getText().trim();
+				int requestedQuantity = 0;
+				
+				// 입력값이 비어있거나 숫자가 아닌 경우
+				if (inputText.isEmpty()) {
+					JOptionPane.showMessageDialog(ProductShip.this, "입고 수량을 입력해 주세요");
+					return;
 				}
-				System.out.println(itemId);
-			}
-		});
+				
+				try {
+					requestedQuantity = Integer.parseInt(inputText);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(ProductShip.this, "올바른 숫자를 입력해 주세요");
+					t_count.setText("");
+					return;
+				}
+				
+				// 입고 수량이 0 이하인 경우
+				if (requestedQuantity <= 0) {
+					JOptionPane.showMessageDialog(ProductShip.this, "입고 수량은 1개 이상이어야 합니다");
+					return;
+				}
+				
+				// 현재 재고량 다시 조회 (최신 상태 확인)
+				int currentStock = productDetailDAO.selectCurrentQuantity(itemId);
+				productDetail = productDetailDAO.selectDetailInfo(itemId); // 최신 정보로 업데이트
+				
+				// 확인 대화상자 표시
+				boolean result = ShowMessage.showConfirm(ProductShip.this,
+					"입고하기",
+					"입고하시겠습니까?\n" +
+					"상품: " + box[2].getSelectedItem().toString() + "\n" +
+					"입고수량: " + requestedQuantity + "개\n" +
+					"입고 후 재고: " + (currentStock + requestedQuantity) + "개");
+				
+				// 확인 눌렀을때만 실행
+				if(result) {
+					try {
+						//change_type 중 IN
+						String inOut = "IN";
+						int newStock = currentStock + requestedQuantity;
+						
+						// DB 업데이트
+						updateCount.update(newStock, itemId);
+						updateCount.dateInsert(inOut, requestedQuantity, itemId);
+
+						// 입고 음성 재생
+						playAudioFile("입고.wav");
+
+						// 왼쪽 InventoryUI 실시간 업데이트
+						String productName = box[2].getSelectedItem().toString();
+						notifyInventoryUpdate("입고", requestedQuantity, productName);
+
+						// 상위 카테고리 초기화하면서 입출고 버튼 비활성화
+						resetCombo();
+						
+						System.out.println("✅ 입고 완료 - 상품ID: " + itemId + ", 입고량: " + requestedQuantity + ", 총재고: " + newStock);
+						
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(ProductShip.this, 
+							"입고 처리 중 오류가 발생했습니다: " + ex.getMessage());
+					}
+				}
+			});
 
 		add(Box.createRigidArea(new Dimension(0, 40)));
 		for (int i = 0; i < location.length; i++) {
