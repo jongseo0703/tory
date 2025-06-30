@@ -52,13 +52,9 @@ public class Brand {
 		this.subCategory = subCategory;
 	}
 	
-	//디버깅용 toString() 메서드 오버라이딩
+	//toString() 메서드 오버라이딩
 	@Override
 	public String toString() {
-		return "Brand{id=" + brandId +
-				", name='" + brandName + "'" +
-				", subCategory=" + subCategory.getSubCategoryName() +
-				", topCategory=" + subCategory.getTopCategory().getTopCategoryName() + "}";
-	}
-	
+		return this.brandName; // 콤보박스에 표시될 문자열
+	} 
 }

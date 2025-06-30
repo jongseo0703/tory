@@ -33,7 +33,7 @@ public class TopCategoryDAO {
 		
 		//String 으로 sql 을 만들면 객체의 낭비가 생기기때문에 StringBuilder 객체 이용.
 		StringBuilder sql = new StringBuilder();
-		sql.append("select topcategory_id, topcategory_name from TopCategory"); //TopCategory 테이블의 전체 데이터 조회
+		sql.append("select top_category_id, top_category_name from TopCategory"); //TopCategory 테이블의 전체 데이터 조회
 		
 		try {
 			//만든 쿼리를 실행.
@@ -44,9 +44,9 @@ public class TopCategoryDAO {
 			while(rs.next()) {
 				TopCategory topCategory = new TopCategory(); //레코드 한 건을 담기위한 객체
 				//topcategory_id컬럼의 데이터를 가져와서 저장
-				topCategory.setTopCategoryId(rs.getInt("topcategory_id"));
+				topCategory.setTopCategoryId(rs.getInt("top_category_id"));
 				//topcategory_name컬럼의 데이터를 가져와서 저장
-				topCategory.setTopCategoryName(rs.getString("topcategory_name"));
+				topCategory.setTopCategoryName(rs.getString("top_category_name"));
 				//레코드 한 건 list 에 저장
 				list.add(topCategory);
 			}

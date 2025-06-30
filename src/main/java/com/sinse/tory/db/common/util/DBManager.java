@@ -7,6 +7,7 @@ package com.sinse.tory.db.common.util;
 //디비 관련 파일 임포트
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,7 +28,7 @@ public class DBManager {
 	private DBManager() {
 		try {
 			//pom.xml파일에서 의존성 주입한 jdbc 위치
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			//디비 접속
 			con = DriverManager.getConnection(Config.url, Config.user, Config.pass);
@@ -40,7 +41,7 @@ public class DBManager {
 	
 	public static DBManager getInstance() {
 		//싱글톤 패턴의 핵심 만들어진 객체가 없으면 만들어지게 함(한번만).
-		if(instance == null) { //첫번째 검사 (락 없이 빠르게 체크함)
+		if(instance == null) {
 			instance = new DBManager();
 		}
 		//만들어진 객체 반환.
@@ -57,6 +58,17 @@ public class DBManager {
 		if(con != null) {
 			try {
 				con.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	//데이터베이스 관련 자원 해제하는 메서드(Connection)
+	public void release(Statement st) {
+		if(st != null) {
+			try {
+				st.close();
 			} catch(SQLException e) {
 				e.printStackTrace();
 			}

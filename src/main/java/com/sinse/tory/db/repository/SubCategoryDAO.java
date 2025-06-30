@@ -36,7 +36,7 @@ public class SubCategoryDAO {
 		//String 으로 sql 을 만들면 객체의 낭비가 생기기때문에 StringBuilder 객체 이용.
 		StringBuilder sql = new StringBuilder();
 		//선택된 TopCategory 에 매칭되는 정보만을 가져오기 위한 쿼리문
-		sql.append("select subcategory_id, subcategory_name, topcategory_id from SubCategory where topcategory_id = ?");
+		sql.append("select sub_category_id, sub_category_name, top_category_id from SubCategory where top_category_id = ?");
 		
 		try {
 			//만든 쿼리를 실행.
@@ -49,9 +49,9 @@ public class SubCategoryDAO {
 			while(rs.next()) {
 				SubCategory subCategory = new SubCategory(); //레코드 한 건을 담기위한 객체
 				//subcategory_id컬럼의 데이터를 가져와서 저장
-				subCategory.setSubCategoryId(rs.getInt("subcategory_id"));
+				subCategory.setSubCategoryId(rs.getInt("sub_category_id"));
 				//subcategory_name컬럼의 데이터를 가져와서 저장
-				subCategory.setSubCategoryName(rs.getString("subcategory_name"));
+				subCategory.setSubCategoryName(rs.getString("sub_category_name"));
 				//subCategory와 topCategory 연결
 				subCategory.setTopCategory(topCategory);
 				//레코드 한 건 list 에저장
