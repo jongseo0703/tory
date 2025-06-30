@@ -366,6 +366,16 @@ public class InventoryUI extends JPanel {
 		p_grid.repaint();
 	}
 	
+	/** 
+	 * 현재 필터를 다시 적용해 ActionListener를 강제로 실행 
+	 */
+	public void reapplyCurrentFilter() {
+	    int idx = cb_filter.getSelectedIndex();
+	    if (idx >= 0) {                    // 유효 인덱스일 때
+	        cb_filter.setSelectedIndex(idx);   // 같은 항목을 다시 선택
+	    }
+	}
+	
 	/**
 	 * 레이아웃 구성
 	 */
@@ -445,8 +455,7 @@ public class InventoryUI extends JPanel {
 					inventoryLogs = new ArrayList<>(); // 빈 리스트로 초기화
 				}
 				
-				// 격자 새로고침 (애니메이션 포함)
-				refreshGridWithAnimation();
+				reapplyCurrentFilter();
 				
 			} catch (Exception e) {
 				e.printStackTrace();
