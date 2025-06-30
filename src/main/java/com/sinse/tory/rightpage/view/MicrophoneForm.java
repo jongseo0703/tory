@@ -567,7 +567,11 @@ public class MicrophoneForm extends Pages{
 		// 로딩 애니메이션 타이머 초기화
 		loadingTimer = new javax.swing.Timer(500, e -> {
 			loadingDots = (loadingDots + 1) % 4;
-			String dots = ".".repeat(loadingDots);
+			StringBuilder dotsBuilder = new StringBuilder();
+			for (int i = 0; i < loadingDots; i++) {
+				dotsBuilder.append(".");
+			}
+			String dots = dotsBuilder.toString();
 			loadingLabel.setText("🔄 DB 조회 중" + dots);
 		});
 	}
